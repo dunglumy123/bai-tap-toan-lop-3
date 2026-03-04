@@ -609,7 +609,7 @@ function nxtF(){
     $('fNxt').classList.add('hidden');$('fReplay').classList.add('hidden');
     $('fChk').classList.remove('hidden');
     $('fOk').textContent=fOk;$('fAll').textContent=fAl;
-    $('fInst').innerHTML='Hình chữ nhật được chia thành <b>'+fDen+'</b> phần bằng nhau, đã tô màu <b>'+fNum+'</b> phần.<br>Viết phân số chỉ phần đã tô màu:';
+    $('fInst').innerHTML='Viết phân số chỉ phần đã tô màu:';
 
     let h='<div class="frac-rect"><div class="frac-cells">';
     for(let i=0;i<fDen;i++) h+='<div class="frac-cell'+(fColored.has(i)?' colored':'')+'"></div>';
