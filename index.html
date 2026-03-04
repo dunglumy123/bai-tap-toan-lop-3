@@ -239,10 +239,12 @@ function renMF1(){
     let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
     h+=S.repeat(mx-rStr.length);
     for(let i=0;i<rStr.length;i++){
-        h+='<input type="number" class="q-free" id="fm'+i+'">';
+        // tabindex: rightmost=1, next=2... so Tab goes right-to-left
+        h+='<input type="number" class="q-free" id="fm'+i+'" tabindex="'+(rStr.length-i)+'">';
     }
     h+='</div></div>';
     $('mBoard').innerHTML=h;
+    $('mInst').innerHTML='Dien tu <b>phai sang trai</b>, xong bam <b>Kiem tra</b>';
     setTimeout(()=>{const f=$('fm'+(rStr.length-1));if(f)f.focus()},50);
 }
 
