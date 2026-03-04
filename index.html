@@ -137,6 +137,7 @@ let mOk=0,mAl=0,mFirst=true,mNoErr=true,mChecked=false;
 let mResult,mDigits,mSI; // 1-digit multiplier state
 let mType; // 1 or 2 (multiplier digits)
 let mPP1,mPP2,mPhase; // 2-digit multiplier state
+let mFD=[],mFI=0; // free-form: entered digits (indexed by pos from right), current index
 
 // Compute result digits right-to-left for 1-digit multiplier
 function compMDigits(a,b){
@@ -175,10 +176,16 @@ function nxtM(){
         }
     }else{
         $('mMode').textContent='Tu trinh bay phep nhan';
-        $('mInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';
         mChecked=false;
-        $('mChk').classList.remove('hidden');
-        if(mType===1) renMF1(); else renMF2();
+        if(mType===1){
+            mFD=[];mFI=0;
+            $('mInst').innerHTML='';
+            renMF1();
+        }else{
+            $('mInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';
+            $('mChk').classList.remove('hidden');
+            renMF2();
+        }
     }
 }
 
@@ -236,16 +243,29 @@ function chkMG1(){
 function renMF1(){
     const aStr=cA+'',bStr=cB+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
+    const allFilled=mFI>=rStr.length;
     let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
     h+=S.repeat(mx-rStr.length);
     for(let i=0;i<rStr.length;i++){
-        // tabindex: rightmost=1, next=2... so Tab goes right-to-left
-        h+='<input type="number" class="q-free" id="fm'+i+'" tabindex="'+(rStr.length-i)+'">';
+        const pfr=rStr.length-1-i;
+        if(pfr<mFI) h+='<span>'+mFD[pfr]+'</span>';
+        else if(pfr===mFI&&!allFilled) h+='<input type="number" id="ai" class="q-free" oninput="advMF()">';
+        else h+='<span class="q-blank">_</span>';
     }
     h+='</div></div>';
     $('mBoard').innerHTML=h;
-    $('mInst').innerHTML='Dien tu <b>phai sang trai</b>, xong bam <b>Kiem tra</b>';
-    setTimeout(()=>{const f=$('fm'+(rStr.length-1));if(f)f.focus()},50);
+    if(allFilled&&!mChecked) $('mChk').classList.remove('hidden');
+    setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
+}
+
+function advMF(){
+    const inp=$('ai');
+    if(!inp||inp.value==='')return;
+    const d=parseInt(inp.value.slice(-1));
+    if(isNaN(d)){inp.value='';return}
+    mFD[mFI]=d;
+    mFI++;
+    renMF1();
 }
 
 // ===== 2-DIGIT MULTIPLIER =====
@@ -342,12 +362,18 @@ function chkMF(){
     mChecked=true;
     let allOk=true;
     if(mType===1){
-        const rStr=mResult+'';
+        const rStr=mResult+'',aStr=cA+'',bStr=cB+'';
+        const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
+        let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
+        h+=S.repeat(mx-rStr.length);
         for(let i=0;i<rStr.length;i++){
-            const inp=$('fm'+i),v=parseInt(inp.value);
-            if(v===parseInt(rStr[i])){inp.classList.add('ok')}else{inp.classList.add('err');allOk=false}
-            inp.readOnly=true;
+            const pfr=rStr.length-1-i;
+            const entered=mFD[pfr],correct=parseInt(rStr[i]);
+            if(entered===correct) h+='<span style="color:#2e7d32;background:#e8f5e9;padding:0 1px;border-radius:3px">'+entered+'</span>';
+            else{h+='<span style="color:#c62828;background:#ffebee;padding:0 1px;border-radius:3px;text-decoration:line-through">'+entered+'</span>';allOk=false}
         }
+        h+='</div></div>';
+        $('mBoard').innerHTML=h;
     }else{
         const p1=$('fpp1'),p2=$('fpp2'),sm=$('fsum');
         if(parseInt(p1.value)===mPP1){p1.classList.add('ok')}else{p1.classList.add('err');allOk=false}
@@ -579,7 +605,8 @@ document.addEventListener('keydown',e=>{
             if($('ai'))chkMG();
             else if(!$('mNxt').classList.contains('hidden'))nxtM();
         }else{
-            if(!mChecked&&!$('mChk').classList.contains('hidden'))chkMF();
+            if(mType===1&&$('ai')&&$('ai').value!=='')advMF();
+            else if(!mChecked&&!$('mChk').classList.contains('hidden'))chkMF();
             else if(!$('mNxt').classList.contains('hidden'))nxtM();
         }
     }
