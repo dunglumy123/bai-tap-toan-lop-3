@@ -115,6 +115,27 @@
         .geo-inp:focus{outline:none;border-color:#1565c0;background:#fff}
         .geo-formula{text-align:center;font-size:.85em;color:#888;margin-top:4px}
 
+        .tt-tabs{display:flex;gap:0;margin-bottom:12px}
+        .tt-tab{flex:1;padding:10px;border:2px solid #e91e63;background:#fff;font-size:1em;font-weight:600;cursor:pointer;text-align:center}
+        .tt-tab:first-child{border-radius:8px 0 0 8px}
+        .tt-tab:last-child{border-radius:0 8px 8px 0}
+        .tt-tab.active{background:#e91e63;color:#fff}
+        .tt-table{width:100%;border-collapse:collapse;font-size:.95em}
+        .tt-table td,.tt-table th{padding:6px 4px;text-align:center;border:1px solid #e0e0e0}
+        .tt-table th{background:#f3e5f5;font-weight:600;color:#7b1fa2}
+        .tt-table tr:nth-child(even){background:#fce4ec}
+        .tt-quiz{text-align:center;font-size:1.4em;font-weight:700;margin:20px 0;line-height:2}
+        .tt-quiz-inp{width:2.5em;text-align:center;font-size:1em;font-weight:700;border:2px solid #e91e63;border-radius:6px;padding:4px;background:#fff9c4;margin:0 4px}
+        .tt-quiz-inp:focus{outline:none;border-color:#1565c0;background:#fff}
+        .tt-quiz-inp.ok{border-color:#4caf50;background:#e8f5e9;color:#2e7d32}
+        .tt-quiz-inp.err{border-color:#f44336;background:#ffebee;color:#c62828}
+        .tt-select{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+        .tt-select button{padding:8px 16px;border:2px solid #1565c0;border-radius:8px;background:#fff;font-size:1em;font-weight:600;cursor:pointer}
+        .tt-select button.active{background:#1565c0;color:#fff}
+        .tt-select button:hover{background:#e3f2fd}
+        .tt-score{text-align:center;font-size:.95em;color:#666;margin:8px 0}
+        .tt-streak{text-align:center;font-size:1em;font-weight:600;color:#e91e63;margin:4px 0}
+
         @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}.mult-inner{font-size:1.3em}header h1{font-size:1.5em}.score-box{font-size:.8em;gap:8px}.frac-cell{width:40px;height:48px}.meas-q{font-size:1.1em}}
     </style>
 </head>
@@ -130,6 +151,7 @@
             <button class="menu-btn" onclick="startEx('frac')"><span class="icon">&#189;</span>Phân số</button>
             <button class="menu-btn" onclick="startEx('meas')"><span class="icon">&#9878;</span>Đại lượng</button>
             <button class="menu-btn" onclick="startEx('geo')"><span class="icon">&#9645;</span>Hình học</button>
+            <button class="menu-btn" onclick="openTT()"><span class="icon">&#128214;</span>Bảng cửu chương</button>
         </div>
     </div>
 
@@ -225,6 +247,19 @@
         </div>
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
     </div>
+
+    <div id="ttPage" class="card hidden">
+        <div class="exercise-header">
+            <h2>Bảng cửu chương</h2>
+        </div>
+        <div class="tt-tabs">
+            <button class="tt-tab active" id="ttTabMult" onclick="ttSwitchTab('mult')">Bảng nhân</button>
+            <button class="tt-tab" id="ttTabDiv" onclick="ttSwitchTab('div')">Bảng chia</button>
+            <button class="tt-tab" id="ttTabQuiz" onclick="ttSwitchTab('quiz')">Dò bài</button>
+        </div>
+        <div id="ttContent"></div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
+    </div>
 </div>
 
 <script>
@@ -253,7 +288,7 @@ function fmtTime(){
     return (m<10?'0'+m:m)+':'+(ss<10?'0'+ss:ss);
 }
 
-function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden');$('fracPage').classList.add('hidden');$('measPage').classList.add('hidden');$('geoPage').classList.add('hidden')}
+function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden');$('fracPage').classList.add('hidden');$('measPage').classList.add('hidden');$('geoPage').classList.add('hidden');$('ttPage').classList.add('hidden')}
 
 function startEx(t){
     cType=t;
@@ -1100,6 +1135,133 @@ function chkGeo(){
         $('gReplay').classList.remove('hidden');
     }
     $('gOk').textContent=gOk;
+}
+
+// ============ BẢNG CỬU CHƯƠNG ============
+let ttMode='mult'; // mult | div | quiz
+let ttQuizN=0,ttQuizTable=2,ttQuizType='mult',ttQuizQ=null,ttQuizOk=0,ttQuizTotal=0;
+
+function openTT(){
+    $('menuPage').classList.add('hidden');
+    $('ttPage').classList.remove('hidden');
+    ttMode='mult';
+    ttSwitchTab('mult');
+}
+
+function ttSwitchTab(tab){
+    ttMode=tab;
+    $('ttTabMult').classList.toggle('active',tab==='mult');
+    $('ttTabDiv').classList.toggle('active',tab==='div');
+    $('ttTabQuiz').classList.toggle('active',tab==='quiz');
+    if(tab==='mult') ttShowMultTable();
+    else if(tab==='div') ttShowDivTable();
+    else ttShowQuizSetup();
+}
+
+function ttShowMultTable(){
+    let h='<div style="overflow-x:auto"><table class="tt-table"><tr><th>×</th>';
+    for(let j=1;j<=10;j++) h+='<th>'+j+'</th>';
+    h+='</tr>';
+    for(let i=2;i<=9;i++){
+        h+='<tr><th>'+i+'</th>';
+        for(let j=1;j<=10;j++) h+='<td>'+i*j+'</td>';
+        h+='</tr>';
+    }
+    h+='</table></div>';
+    $('ttContent').innerHTML=h;
+}
+
+function ttShowDivTable(){
+    let h='<div style="overflow-x:auto"><table class="tt-table"><tr><th>÷</th>';
+    for(let j=1;j<=10;j++) h+='<th>kq='+j+'</th>';
+    h+='</tr>';
+    for(let i=2;i<=9;i++){
+        h+='<tr><th>'+i+'</th>';
+        for(let j=1;j<=10;j++) h+='<td>'+i*j+' ÷ '+i+' = '+j+'</td>';
+        h+='</tr>';
+    }
+    h+='</table></div>';
+    $('ttContent').innerHTML=h;
+}
+
+function ttShowQuizSetup(){
+    let h='<div style="text-align:center">';
+    h+='<p style="font-weight:600;margin:8px 0">Chọn bảng muốn dò:</p>';
+    h+='<div class="tt-select" id="ttTableSel">';
+    for(let i=2;i<=9;i++) h+='<button onclick="ttSelectTable('+i+')" '+(i===ttQuizTable?'class="active"':'')+'>'+i+'</button>';
+    h+='</div>';
+    h+='<p style="font-weight:600;margin:12px 0">Loại:</p>';
+    h+='<div class="tt-select">';
+    h+='<button id="ttTypeMult" onclick="ttSelectType(\'mult\')" '+(ttQuizType==='mult'?'class="active"':'')+'>Nhân</button>';
+    h+='<button id="ttTypeDiv" onclick="ttSelectType(\'div\')" '+(ttQuizType==='div'?'class="active"':'')+'>Chia</button>';
+    h+='<button id="ttTypeMix" onclick="ttSelectType(\'mix\')" '+(ttQuizType==='mix'?'class="active"':'')+'>Trộn</button>';
+    h+='</div>';
+    h+='<div style="margin-top:16px"><button class="btn btn-primary" onclick="ttStartQuiz()">Bắt đầu dò bài</button></div>';
+    h+='</div>';
+    $('ttContent').innerHTML=h;
+}
+
+function ttSelectTable(n){
+    ttQuizTable=n;
+    document.querySelectorAll('#ttTableSel button').forEach(b=>{b.classList.toggle('active',parseInt(b.textContent)===n)});
+}
+function ttSelectType(t){
+    ttQuizType=t;
+    $('ttTypeMult').classList.toggle('active',t==='mult');
+    $('ttTypeDiv').classList.toggle('active',t==='div');
+    $('ttTypeMix').classList.toggle('active',t==='mix');
+}
+
+function ttStartQuiz(){
+    ttQuizOk=0;ttQuizTotal=0;ttQuizN=0;
+    ttNextQ();
+}
+
+function ttNextQ(){
+    const n=ttQuizTable;
+    const j=ri(1,10);
+    let type=ttQuizType;
+    if(type==='mix') type=Math.random()<0.5?'mult':'div';
+    let question,ans;
+    if(type==='mult'){
+        question=n+' × '+j+' = ';
+        ans=n*j;
+    }else{
+        question=(n*j)+' ÷ '+n+' = ';
+        ans=j;
+    }
+    ttQuizQ={question,ans};
+
+    let h='<div class="tt-score">Câu '+(ttQuizTotal+1)+' | Đúng: '+ttQuizOk+'/'+ttQuizTotal+'</div>';
+    if(ttQuizOk>=5) h+='<div class="tt-streak">&#127775; Chuỗi '+ttQuizOk+' câu đúng liên tiếp!</div>';
+    h+='<div class="tt-quiz">'+question+'<input type="number" class="tt-quiz-inp" id="ttInp" onkeydown="if(event.key===\'Enter\')ttCheckQ()"></div>';
+    h+='<div style="text-align:center"><button class="btn btn-green" onclick="ttCheckQ()">Trả lời</button>';
+    h+=' <button class="btn btn-back" onclick="ttShowQuizSetup()" style="font-size:.85em">Đổi bảng</button></div>';
+    $('ttContent').innerHTML=h;
+    setTimeout(()=>{const inp=$('ttInp');if(inp)inp.focus()},50);
+}
+
+function ttCheckQ(){
+    const inp=$('ttInp');if(!inp)return;
+    const v=parseInt(inp.value);if(isNaN(v)){inp.focus();return}
+    inp.readOnly=true;
+    ttQuizTotal++;
+
+    if(v===ttQuizQ.ans){
+        ttQuizOk++;
+        inp.classList.add('ok');
+        setTimeout(ttNextQ,600);
+    }else{
+        ttQuizOk=0; // reset chuỗi
+        inp.classList.add('err');
+        // Hiện đáp án đúng
+        let h='<div class="tt-score">Câu '+ttQuizTotal+' | Đúng: '+ttQuizOk+'/'+ttQuizTotal+'</div>';
+        h+='<div class="tt-quiz">'+ttQuizQ.question+'<span style="color:#c62828;text-decoration:line-through">'+v+'</span> → <span style="color:#2e7d32;font-size:1.2em">'+ttQuizQ.ans+'</span></div>';
+        h+='<div style="text-align:center;color:#e91e63;font-weight:600;margin:8px 0">Sai rồi! Đáp án đúng là '+ttQuizQ.ans+'</div>';
+        h+='<div style="text-align:center"><button class="btn btn-primary" onclick="ttNextQ()">Câu tiếp</button>';
+        h+=' <button class="btn btn-back" onclick="ttShowQuizSetup()" style="font-size:.85em">Đổi bảng</button></div>';
+        $('ttContent').innerHTML=h;
+    }
 }
 
 // ========== KEYBOARD ==========
