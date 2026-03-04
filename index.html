@@ -593,16 +593,21 @@ function showDSol(){
 
 // ============ FRACTION ============
 let fOk=0,fAl=0,fGameOver=false,fChecked=false;
-let fNum,fDen,fColored;
+let fNum,fDen,fColored,fPrevNum=-1,fPrevDen=-1;
 
 function nxtF(){
     if(fGameOver)return;
-    // difficulty increases with fOk
-    if(fOk<5) fDen=ri(2,4);
-    else if(fOk<10) fDen=ri(3,6);
-    else if(fOk<15) fDen=ri(5,8);
-    else fDen=ri(6,10);
-    fNum=ri(1,fDen-1);
+    // difficulty increases with fOk, avoid repeating same fraction
+    let tries=0;
+    do{
+        if(fOk<5) fDen=ri(2,4);
+        else if(fOk<10) fDen=ri(3,6);
+        else if(fOk<15) fDen=ri(5,8);
+        else fDen=ri(6,10);
+        fNum=ri(1,fDen-1);
+        tries++;
+    }while(fNum===fPrevNum&&fDen===fPrevDen&&tries<20);
+    fPrevNum=fNum;fPrevDen=fDen;
     // random which cells are colored (pick fNum positions)
     let pos=[];for(let i=0;i<fDen;i++)pos.push(i);
     for(let i=pos.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pos[i],pos[j]]=[pos[j],pos[i]]}
