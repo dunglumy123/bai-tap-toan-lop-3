@@ -173,14 +173,13 @@
             <h2 id="meT">Đại lượng đo lường</h2>
             <div class="score-box"><span>Đúng: <span id="meOk">0</span></span><span class="timer" id="meTime">00:00</span></div>
         </div>
-        <button class="meas-toggle" onclick="toggleRef()">Xem bảng quy tắc</button>
-        <div class="meas-ref" id="measRef">
+        <button class="meas-toggle" id="meToggle" onclick="toggleRef()">Ẩn bảng quy tắc</button>
+        <div class="meas-ref open" id="measRef">
             <table>
                 <tr><td>Độ dài</td><td>1km = 1000m, 1m = 10dm = 100cm, 1dm = 10cm, 1cm = 10mm</td></tr>
                 <tr><td>Khối lượng</td><td>1kg = 1000g</td></tr>
                 <tr><td>Dung tích</td><td>1l = 1000ml</td></tr>
                 <tr><td>Thời gian</td><td>1 giờ = 60 phút, 1 phút = 60 giây, 1 ngày = 24 giờ, 1 tuần = 7 ngày</td></tr>
-                <tr><td>Tiền VN</td><td>1000đ, 2000đ, 5000đ, 10000đ, 20000đ, 50000đ, 100000đ</td></tr>
                 <tr><td>Nhiệt độ</td><td>Đo bằng °C. Bình thường 37°C, trên 37°C là sốt</td></tr>
             </table>
         </div>
@@ -712,7 +711,7 @@ function chkFrac(){
 let meOk=0,meAl=0,meGameOver=false,meChecked=false;
 let meCurQ=null,meCmpSel='';
 
-function toggleRef(){const r=$('measRef');r.classList.toggle('open')}
+function toggleRef(){const r=$('measRef');r.classList.toggle('open');$('meToggle').textContent=r.classList.contains('open')?'Ẩn bảng quy tắc':'Xem bảng quy tắc'}
 
 function genMeasQ(){
     const lvl=meOk;
@@ -770,10 +769,7 @@ function genConvert2(){
 }
 
 function genTimeMoney(){
-    const bills=[1000,2000,5000,10000,20000,50000];
     const types=[
-        ()=>{const b1=bills[ri(0,3)],n1=ri(1,5),b2=bills[ri(0,3)],n2=ri(1,5);const total=n1*b1+n2*b2;return{q:n1+' tờ '+(b1)+'đ + '+n2+' tờ '+(b2)+'đ = <INP> đồng',ans:[total]}},
-        ()=>{const b1=bills[ri(0,4)],n1=ri(2,5);return{q:n1+' tờ '+(b1)+'đ = <INP> đồng',ans:[n1*b1]}},
         ()=>{const temp=ri(35,40);return{q:'Nhiệt kế chỉ '+temp+'°C. Người này bị sốt hay bình thường? <CMP2>',ans:temp>37?'sốt':'bình thường',type:'temp'}},
         ()=>{const a=ri(1,4),b=ri(1,59);return{q:a+' ngày '+b+' giờ = <INP> giờ',ans:[a*24+b]}},
         ()=>{const w=ri(2,5),d=ri(1,6);return{q:w+' tuần '+d+' ngày = <INP> ngày',ans:[w*7+d]}},
