@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bai Tap Toan Lop 3</title>
+    <title>Bài Tập Toán Lớp 3</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#f093fb,#f5576c,#4facfe);min-height:100vh;padding:16px}
@@ -78,50 +78,50 @@
 </head>
 <body>
 <div class="container">
-    <header><h1>Bai Tap Toan Lop 3</h1><p>Luyen tap phep nhan va phep chia</p></header>
+    <header><h1>Bài Tập Toán Lớp 3</h1><p>Luyện tập phép nhân và phép chia</p></header>
 
     <div id="menuPage" class="card">
-        <h2>Chon bai tap</h2>
+        <h2>Chọn bài tập</h2>
         <div class="menu-grid">
-            <button class="menu-btn" onclick="startEx('mult')"><span class="icon">&#10006;</span>Phep nhan<span class="desc">3-5 chu so &times; 1-2 chu so</span></button>
-            <button class="menu-btn" onclick="startEx('div')"><span class="icon">&#247;</span>Phep chia<span class="desc">4-5 chu so &divide; 1 chu so</span></button>
+            <button class="menu-btn" onclick="startEx('mult')"><span class="icon">&#10006;</span>Phép nhân<span class="desc">3-5 chữ số &times; 1-2 chữ số</span></button>
+            <button class="menu-btn" onclick="startEx('div')"><span class="icon">&#247;</span>Phép chia<span class="desc">4-5 chữ số &divide; 1 chữ số</span></button>
         </div>
     </div>
 
     <div id="multPage" class="card hidden">
         <div class="exercise-header">
-            <h2 id="mT">Phep nhan</h2>
-            <div class="score-box"><span>Dung: <span id="mOk">0</span>/<span id="mAll">0</span></span><span class="timer" id="mTime">00:00</span></div>
+            <h2 id="mT">Phép nhân</h2>
+            <div class="score-box"><span>Đúng: <span id="mOk">0</span>/<span id="mAll">0</span></span><span class="timer" id="mTime">00:00</span></div>
         </div>
         <div class="div-mode-label" id="mMode"></div>
         <div class="div-instruction" id="mInst"></div>
         <div class="div-board" id="mBoard"></div>
         <div id="mDone" class="hidden"></div>
         <div class="btn-row">
-            <button class="btn btn-green hidden" id="mChk" onclick="chkMF()">Kiem tra</button>
-            <button class="btn btn-blue hidden" id="mSolBtn" onclick="showMSol()">Xem dap an</button>
-            <button class="btn btn-primary hidden" id="mNxt" onclick="nxtM()">Bai tiep</button>
-            <button class="btn btn-orange hidden" id="mReplay" onclick="startEx('mult')">Choi lai</button>
+            <button class="btn btn-green hidden" id="mChk" onclick="chkMF()">Kiểm tra</button>
+            <button class="btn btn-blue hidden" id="mSolBtn" onclick="showMSol()">Xem đáp án</button>
+            <button class="btn btn-primary hidden" id="mNxt" onclick="nxtM()">Bài tiếp</button>
+            <button class="btn btn-orange hidden" id="mReplay" onclick="startEx('mult')">Chơi lại</button>
         </div>
-        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai</button></div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
     </div>
 
     <div id="divPage" class="card hidden">
         <div class="exercise-header">
-            <h2 id="dT">Phep chia</h2>
-            <div class="score-box"><span>Dung: <span id="dOk">0</span>/<span id="dAll">0</span></span><span class="timer" id="dTime">00:00</span></div>
+            <h2 id="dT">Phép chia</h2>
+            <div class="score-box"><span>Đúng: <span id="dOk">0</span>/<span id="dAll">0</span></span><span class="timer" id="dTime">00:00</span></div>
         </div>
         <div class="div-mode-label" id="dMode"></div>
         <div class="div-instruction" id="dInst"></div>
         <div class="div-board" id="dBoard"></div>
         <div id="dDone" class="hidden"></div>
         <div class="btn-row">
-            <button class="btn btn-green hidden" id="dChk" onclick="chkDFree()">Kiem tra</button>
-            <button class="btn btn-blue hidden" id="dSolBtn" onclick="showDSol()">Xem dap an</button>
-            <button class="btn btn-primary hidden" id="dNxt" onclick="nxtD()">Bai tiep</button>
-            <button class="btn btn-orange hidden" id="dReplay" onclick="startEx('div')">Choi lai</button>
+            <button class="btn btn-green hidden" id="dChk" onclick="chkDFree()">Kiểm tra</button>
+            <button class="btn btn-blue hidden" id="dSolBtn" onclick="showDSol()">Xem đáp án</button>
+            <button class="btn btn-primary hidden" id="dNxt" onclick="nxtD()">Bài tiếp</button>
+            <button class="btn btn-orange hidden" id="dReplay" onclick="startEx('div')">Chơi lại</button>
         </div>
-        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai</button></div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
     </div>
 </div>
 
@@ -158,12 +158,12 @@ function startEx(t){
     $('menuPage').classList.add('hidden');
     if(t==='mult'){
         mOk=0;mAl=0;mFirst=true;mGameOver=false;
-        $('mT').textContent='Phep nhan';$('multPage').classList.remove('hidden');
+        $('mT').textContent='Phép nhân';$('multPage').classList.remove('hidden');
         $('mReplay').classList.add('hidden');
         startTimer();nxtM();
     }else{
         dOk=0;dAl=0;dFirst=true;dGameOver=false;
-        $('dT').textContent='Phep chia';$('divPage').classList.remove('hidden');
+        $('dT').textContent='Phép chia';$('divPage').classList.remove('hidden');
         $('dReplay').classList.add('hidden');
         startTimer();nxtD();
     }
@@ -200,15 +200,15 @@ function nxtM(){
     $('mOk').textContent=mOk;$('mAll').textContent=mAl;
 
     if(mFirst){
-        $('mMode').textContent='Bai mau - lam theo huong dan';
+        $('mMode').textContent='Bài mẫu - làm theo hướng dẫn';
         mNoErr=true;
         if(mType===1){mDigits=compMDigits(cA,cB);mSI=0;renMG1()}
         else{const bS=cB+'';mPP1=cA*(+bS[1]);mPP2=cA*(+bS[0]);mPhase='pp1';renMG2()}
     }else{
-        $('mMode').textContent='Tu trinh bay phep nhan';
+        $('mMode').textContent='Tự trình bày phép nhân';
         mChecked=false;
         if(mType===1){mFD=[];mFI=0;$('mInst').innerHTML='';renMF1()}
-        else{$('mInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';$('mChk').classList.remove('hidden');renMF2()}
+        else{$('mInst').innerHTML='Điền vào các ô trống, xong bấm <b>Kiểm tra</b>';$('mChk').classList.remove('hidden');renMF2()}
     }
 }
 
@@ -232,8 +232,8 @@ function renMG1(){
     h+='</div></div>';$('mBoard').innerHTML=h;
     let inst='';
     if(!done){const st=mDigits[mSI];
-        if(st.d!==null){inst=cB+' &times; '+st.d;if(st.prevCarry>0)inst+=' + '+st.prevCarry+'(nho)';inst+=' = ?, viet <strong>may</strong>?'}
-        else inst='Con nho <strong>may</strong>? Viet so nho';
+        if(st.d!==null){inst=cB+' &times; '+st.d;if(st.prevCarry>0)inst+=' + '+st.prevCarry+'(nhớ)';inst+=' = ?, viết <strong>mấy</strong>?'}
+        else inst='Còn nhớ <strong>mấy</strong>? Viết số nhớ';
     }
     $('mInst').innerHTML=inst;
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
@@ -325,9 +325,9 @@ function chkMG(){if(mType===1)chkMG1();else chkMG2()}
 function finMG(){
     mAl++;if(mNoErr)mOk++;
     let m='<div class="div-done-msg">';
-    m+=mNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
+    m+=mNoErr?'Giỏi lắm! &#127881;<br>':'Hoàn thành! &#128170;<br>';
     m+='<span style="font-size:.8em">'+cA+' &times; '+cB+' = <b>'+mResult+'</b></span>';
-    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span></div>';
+    m+='<br><span style="font-size:.75em;color:#1565c0">Các bài sau con tự làm nhé!</span></div>';
     $('mDone').innerHTML=m;$('mDone').classList.remove('hidden');
     $('mNxt').classList.remove('hidden');$('mInst').innerHTML='';
     $('mOk').textContent=mOk;$('mAll').textContent=mAl;
@@ -361,7 +361,7 @@ function chkMF(){
     $('mOk').textContent=mOk;$('mAll').textContent=mAl;
 
     if(allOk){
-        $('mDone').innerHTML='<div class="div-done-msg">Dung roi! &#127881; '+cA+' &times; '+cB+' = <b>'+mResult+'</b></div>';
+        $('mDone').innerHTML='<div class="div-done-msg">Đúng rồi! &#127881; '+cA+' &times; '+cB+' = <b>'+mResult+'</b></div>';
         $('mDone').classList.remove('hidden');
         $('mNxt').classList.remove('hidden');
     }else{
@@ -369,11 +369,11 @@ function chkMF(){
         stopTimer();mGameOver=true;
         const t=fmtTime();
         let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
-        m+='<div class="go-title">Sai roi! Dung lai!</div>';
+        m+='<div class="go-title">Sai rồi! Dừng lại!</div>';
         m+='<div class="go-answer">'+cA+' &times; '+cB+' = <b>'+mResult+'</b></div>';
         m+='<div class="go-stats">';
-        m+='Dung: <b>'+mOk+'</b> / '+mAl+' bai<br>';
-        m+='Thoi gian: <b>'+t+'</b></div></div>';
+        m+='Đúng: <b>'+mOk+'</b> / '+mAl+' bài<br>';
+        m+='Thời gian: <b>'+t+'</b></div></div>';
         $('mDone').innerHTML=m;$('mDone').classList.remove('hidden');
         $('mSolBtn').classList.remove('hidden');
         $('mReplay').classList.remove('hidden');
@@ -430,11 +430,11 @@ function nxtD(){
     $('dOk').textContent=dOk;$('dAll').textContent=dAl;
 
     if(dFirst){
-        $('dMode').textContent='Bai mau - lam theo huong dan';
+        $('dMode').textContent='Bài mẫu - làm theo hướng dẫn';
         dSI=0;dPh='q';dNoErr=true;renGuided();
     }else{
-        $('dMode').textContent='Tu trinh bay phep chia';
-        $('dInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';
+        $('dMode').textContent='Tự trình bày phép chia';
+        $('dInst').innerHTML='Điền vào các ô trống, xong bấm <b>Kiểm tra</b>';
         dChecked=false;$('dChk').classList.remove('hidden');renFree();
     }
 }
@@ -461,8 +461,8 @@ function renGuided(){
     $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
     let inst='';
     if(!done){const s=dSteps[dSI];
-        if(dPh==='q') inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
-        else{inst=s.take+' &minus; ('+s.q+'&times;'+cB+') = <strong>?</strong>';if(s.nd!==null)inst+=' va ha = <strong>?</strong>'}
+        if(dPh==='q') inst=s.take+' chia '+cB+' được <strong>mấy</strong>?';
+        else{inst=s.take+' &minus; ('+s.q+'&times;'+cB+') = <strong>?</strong>';if(s.nd!==null)inst+=' và hạ = <strong>?</strong>'}
     }
     $('dInst').innerHTML=inst;
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
@@ -481,12 +481,12 @@ function finGuided(){
     dAl++;const q=Math.floor(cA/cB),r=cA%cB;
     if(dNoErr)dOk++;
     let m='<div class="div-done-msg">';
-    m+=dNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
+    m+=dNoErr?'Giỏi lắm! &#127881;<br>':'Hoàn thành! &#128170;<br>';
     m+='<span style="font-size:.8em">'+cA+' : '+cB+' = <b>'+q+'</b>';
-    if(r>0)m+=' (du <b>'+r+'</b>)';
-    m+='</span><br><span style="font-size:.65em;color:#888">Thu lai: '+q+'&times;'+cB+'='+q*cB;
+    if(r>0)m+=' (dư <b>'+r+'</b>)';
+    m+='</span><br><span style="font-size:.65em;color:#888">Thử lại: '+q+'&times;'+cB+'='+q*cB;
     if(r>0)m+='+'+r+'='+cA;m+=' &#10004;</span>';
-    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span></div>';
+    m+='<br><span style="font-size:.75em;color:#1565c0">Các bài sau con tự làm nhé!</span></div>';
     $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
     $('dNxt').classList.remove('hidden');$('dInst').innerHTML='';
     $('dOk').textContent=dOk;$('dAll').textContent=dAl;
@@ -525,20 +525,20 @@ function chkDFree(){
     $('dOk').textContent=dOk;$('dAll').textContent=dAl;
 
     if(allOk){
-        let m='<div class="div-done-msg">Dung roi! &#127881; '+cA+' : '+cB+' = <b>'+q+'</b>';
-        if(r>0)m+=' (du <b>'+r+'</b>)';m+='</div>';
+        let m='<div class="div-done-msg">Đúng rồi! &#127881; '+cA+' : '+cB+' = <b>'+q+'</b>';
+        if(r>0)m+=' (dư <b>'+r+'</b>)';m+='</div>';
         $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
         $('dNxt').classList.remove('hidden');
     }else{
         stopTimer();dGameOver=true;
         const t=fmtTime();
         let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
-        m+='<div class="go-title">Sai roi! Dung lai!</div>';
+        m+='<div class="go-title">Sai rồi! Dừng lại!</div>';
         m+='<div class="go-answer">'+cA+' : '+cB+' = <b>'+q+'</b>';
-        if(r>0)m+=' (du <b>'+r+'</b>)';m+='</div>';
+        if(r>0)m+=' (dư <b>'+r+'</b>)';m+='</div>';
         m+='<div class="go-stats">';
-        m+='Dung: <b>'+dOk+'</b> / '+dAl+' bai<br>';
-        m+='Thoi gian: <b>'+t+'</b></div></div>';
+        m+='Đúng: <b>'+dOk+'</b> / '+dAl+' bài<br>';
+        m+='Thời gian: <b>'+t+'</b></div></div>';
         $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
         $('dSolBtn').classList.remove('hidden');
         $('dReplay').classList.remove('hidden');
