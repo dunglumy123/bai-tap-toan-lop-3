@@ -257,7 +257,7 @@ function startEx(t){
 let mOk=0,mAl=0,mFirst=true,mNoErr=true,mChecked=false,mGameOver=false;
 let mResult,mDigits,mSI,mType;
 let mPP1,mPP2,mPhase;
-let mFD=[],mFI=0;
+let mFD=[],mFI=0,mCarry=[];
 
 function compMDigits(a,b){
     const digs=(a+'').split('').map(Number).reverse();
@@ -291,7 +291,7 @@ function nxtM(){
     }else{
         $('mMode').textContent='Tự trình bày phép nhân';
         mChecked=false;
-        if(mType===1){mFD=[];mFI=0;$('mInst').innerHTML='';renMF1()}
+        if(mType===1){mFD=[];mFI=0;mCarry=[];$('mInst').innerHTML='';renMF1()}
         else{$('mInst').innerHTML='Điền vào các ô trống, xong bấm <b>Kiểm tra</b>';$('mChk').classList.remove('hidden');renMF2()}
     }
 }
@@ -335,12 +335,15 @@ function renMF1(){
     const aStr=cA+'',bStr=cB+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
     const allFilled=mFI>=rStr.length;
-    // Carry row (ô nhớ) - không chấm điểm, chỉ giúp bé ghi nhớ
+    // Lưu carry cũ trước khi re-render
+    let ci=0;
+    document.querySelectorAll('.carry-inp').forEach((el,idx)=>{mCarry[idx]=el.value});
+    // Carry row (ô nhớ)
     let cH='<div class="carry-row">'+S.repeat(mx-rStr.length);
     for(let i=0;i<rStr.length;i++){
         const pfr=rStr.length-1-i;
-        if(pfr===0) cH+=S; // vị trí đầu không cần nhớ
-        else cH+='<input type="tel" maxlength="1" class="carry-inp" tabindex="-1">';
+        if(pfr===0) cH+=S;
+        else{const cv=mCarry[ci]||'';cH+='<input type="tel" maxlength="1" class="carry-inp" tabindex="-1" value="'+cv+'">';ci++}
     }
     cH+='</div>';
     let h=mHead(mx,aStr,bStr)+cH+'<div class="m-line">'+S.repeat(mx-rStr.length);
