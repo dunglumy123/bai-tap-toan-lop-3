@@ -20,17 +20,18 @@
         .menu-btn:hover .desc{color:#ffcdd2}
         .exercise-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
         .exercise-header h2{margin-bottom:0;text-align:left}
-        .score-box{background:#fff3e0;border-radius:10px;padding:8px 14px;font-weight:600;color:#e65100;font-size:.95em}
+        .score-box{background:#fff3e0;border-radius:10px;padding:8px 14px;font-weight:600;color:#e65100;font-size:.95em;display:flex;gap:12px;align-items:center}
+        .timer{color:#1565c0;font-family:'Courier New',monospace}
         .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0}
         .btn{padding:12px 24px;border:none;border-radius:12px;font-size:1em;font-weight:600;cursor:pointer;transition:all .2s}
         .btn:hover{transform:translateY(-2px)}
         .btn-primary{background:#e91e63;color:#fff}
         .btn-green{background:#4caf50;color:#fff}
         .btn-blue{background:#2196f3;color:#fff}
+        .btn-orange{background:#ff9800;color:#fff}
         .btn-back{background:#9e9e9e;color:#fff}
         .hidden{display:none!important}
 
-        /* Board (shared by mult and div) */
         .div-board{background:#fffde7;border:3px solid #ffd54f;border-radius:16px;padding:24px;margin-bottom:12px;display:flex;justify-content:center;overflow-x:auto}
         .div-frame{display:inline-flex;align-items:stretch;font-family:'Courier New',monospace;font-size:1.7em;font-weight:700;line-height:2.2}
         .div-left{text-align:left;padding-right:2px}
@@ -46,13 +47,9 @@
 
         .q-done{color:#e91e63}
         .q-blank{color:#ccc}
-
-        /* Guided mode inputs */
         .q-inp,.w-inp{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:2px dashed #e91e63;border-radius:4px;background:#fff9c4;text-align:center;padding:0;height:1.3em}
         .q-inp{width:1.1em}
         .q-inp:focus,.w-inp:focus{outline:none;border-style:solid;background:#fff}
-
-        /* Free-form mode inputs */
         .q-free,.w-free{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:none;border-bottom:2px solid #999;border-radius:0;background:transparent;text-align:center;padding:0;height:1.3em}
         .q-free{width:1.1em}
         .w-free{text-align:right}
@@ -70,14 +67,19 @@
         .div-done-msg{text-align:center;font-size:1.3em;font-weight:700;color:#2e7d32;background:#e8f5e9;padding:16px;border-radius:12px;margin:12px 0}
         .div-mode-label{text-align:center;font-size:.9em;color:#888;margin-bottom:10px;font-style:italic}
 
-        @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}.mult-inner{font-size:1.3em}header h1{font-size:1.5em}}
+        .game-over{text-align:center;padding:24px;border-radius:16px;margin:12px 0}
+        .game-over .go-title{font-size:1.4em;font-weight:700;margin-bottom:16px}
+        .game-over .go-stats{display:inline-block;background:rgba(255,255,255,.7);border-radius:12px;padding:16px 24px;margin:8px 0;font-size:1.1em;line-height:2}
+        .game-over .go-stats b{font-size:1.2em}
+        .game-over .go-answer{font-size:.95em;margin-top:12px;color:#555}
+
+        @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}.mult-inner{font-size:1.3em}header h1{font-size:1.5em}.score-box{font-size:.8em;gap:8px}}
     </style>
 </head>
 <body>
 <div class="container">
     <header><h1>Bai Tap Toan Lop 3</h1><p>Luyen tap phep nhan va phep chia</p></header>
 
-    <!-- MENU -->
     <div id="menuPage" class="card">
         <h2>Chon bai tap</h2>
         <div class="menu-grid">
@@ -86,32 +88,38 @@
         </div>
     </div>
 
-    <!-- MULT PAGE -->
     <div id="multPage" class="card hidden">
-        <div class="exercise-header"><h2 id="mT">Phep nhan</h2><div class="score-box">Dung: <span id="mOk">0</span>/<span id="mAll">0</span></div></div>
+        <div class="exercise-header">
+            <h2 id="mT">Phep nhan</h2>
+            <div class="score-box"><span>Dung: <span id="mOk">0</span>/<span id="mAll">0</span></span><span class="timer" id="mTime">00:00</span></div>
+        </div>
         <div class="div-mode-label" id="mMode"></div>
         <div class="div-instruction" id="mInst"></div>
         <div class="div-board" id="mBoard"></div>
-        <div id="mDone" class="div-done-msg hidden"></div>
+        <div id="mDone" class="hidden"></div>
         <div class="btn-row">
             <button class="btn btn-green hidden" id="mChk" onclick="chkMF()">Kiem tra</button>
             <button class="btn btn-blue hidden" id="mSolBtn" onclick="showMSol()">Xem dap an</button>
             <button class="btn btn-primary hidden" id="mNxt" onclick="nxtM()">Bai tiep</button>
+            <button class="btn btn-orange hidden" id="mReplay" onclick="startEx('mult')">Choi lai</button>
         </div>
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai</button></div>
     </div>
 
-    <!-- DIV PAGE -->
     <div id="divPage" class="card hidden">
-        <div class="exercise-header"><h2 id="dT">Phep chia</h2><div class="score-box">Dung: <span id="dOk">0</span>/<span id="dAll">0</span></div></div>
+        <div class="exercise-header">
+            <h2 id="dT">Phep chia</h2>
+            <div class="score-box"><span>Dung: <span id="dOk">0</span>/<span id="dAll">0</span></span><span class="timer" id="dTime">00:00</span></div>
+        </div>
         <div class="div-mode-label" id="dMode"></div>
         <div class="div-instruction" id="dInst"></div>
         <div class="div-board" id="dBoard"></div>
-        <div id="dDone" class="div-done-msg hidden"></div>
+        <div id="dDone" class="hidden"></div>
         <div class="btn-row">
             <button class="btn btn-green hidden" id="dChk" onclick="chkDFree()">Kiem tra</button>
             <button class="btn btn-blue hidden" id="dSolBtn" onclick="showDSol()">Xem dap an</button>
             <button class="btn btn-primary hidden" id="dNxt" onclick="nxtD()">Bai tiep</button>
+            <button class="btn btn-orange hidden" id="dReplay" onclick="startEx('div')">Choi lai</button>
         </div>
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai</button></div>
     </div>
@@ -121,25 +129,52 @@
 let cType,cA,cB;
 const $=id=>document.getElementById(id);
 const S='\u00A0';
-function goMenu(){$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden')}
 function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function pad(s,n){return s.padStart(n,S)}
+
+// ========== TIMER ==========
+let tmInterval=null,tmStart=0;
+function startTimer(){
+    tmStart=Date.now();
+    if(tmInterval)clearInterval(tmInterval);
+    tmInterval=setInterval(updTimer,1000);
+    updTimer();
+}
+function stopTimer(){if(tmInterval){clearInterval(tmInterval);tmInterval=null}}
+function updTimer(){
+    const el=cType==='mult'?$('mTime'):$('dTime');
+    if(el)el.textContent=fmtTime();
+}
+function fmtTime(){
+    const s=Math.floor((Date.now()-tmStart)/1000);
+    const m=Math.floor(s/60),ss=s%60;
+    return (m<10?'0'+m:m)+':'+(ss<10?'0'+ss:ss);
+}
+
+function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden')}
 
 function startEx(t){
     cType=t;
     $('menuPage').classList.add('hidden');
-    if(t==='mult'){mOk=0;mAl=0;mFirst=true;$('mT').textContent='Phep nhan';$('multPage').classList.remove('hidden');nxtM()}
-    else{dOk=0;dAl=0;dFirst=true;$('dT').textContent='Phep chia';$('divPage').classList.remove('hidden');nxtD()}
+    if(t==='mult'){
+        mOk=0;mAl=0;mFirst=true;mGameOver=false;
+        $('mT').textContent='Phep nhan';$('multPage').classList.remove('hidden');
+        $('mReplay').classList.add('hidden');
+        startTimer();nxtM();
+    }else{
+        dOk=0;dAl=0;dFirst=true;dGameOver=false;
+        $('dT').textContent='Phep chia';$('divPage').classList.remove('hidden');
+        $('dReplay').classList.add('hidden');
+        startTimer();nxtD();
+    }
 }
 
 // ============ MULTIPLICATION ============
-let mOk=0,mAl=0,mFirst=true,mNoErr=true,mChecked=false;
-let mResult,mDigits,mSI; // 1-digit multiplier state
-let mType; // 1 or 2 (multiplier digits)
-let mPP1,mPP2,mPhase; // 2-digit multiplier state
-let mFD=[],mFI=0; // free-form: entered digits (indexed by pos from right), current index
+let mOk=0,mAl=0,mFirst=true,mNoErr=true,mChecked=false,mGameOver=false;
+let mResult,mDigits,mSI,mType;
+let mPP1,mPP2,mPhase;
+let mFD=[],mFI=0;
 
-// Compute result digits right-to-left for 1-digit multiplier
 function compMDigits(a,b){
     const digs=(a+'').split('').map(Number).reverse();
     let carry=0,steps=[];
@@ -153,75 +188,52 @@ function compMDigits(a,b){
 }
 
 function nxtM(){
-    // Generate: mix difficulties
+    if(mGameOver)return;
     if(Math.random()<0.5){cA=ri(100,9999);cB=ri(2,9)}
     else{cA=ri(1000,99999);cB=Math.random()<0.6?ri(2,9):ri(11,99)}
-    mResult=cA*cB;
-    mType=(cB+'').length;
+    mResult=cA*cB;mType=(cB+'').length;
 
-    $('mDone').classList.add('hidden');$('mNxt').classList.add('hidden');
-    $('mSolBtn').classList.add('hidden');$('mChk').classList.add('hidden');
+    $('mDone').classList.add('hidden');$('mDone').className='hidden';
+    $('mNxt').classList.add('hidden');$('mSolBtn').classList.add('hidden');
+    $('mChk').classList.add('hidden');$('mReplay').classList.add('hidden');
+    $('mBoard').classList.remove('hidden');
     $('mOk').textContent=mOk;$('mAll').textContent=mAl;
 
     if(mFirst){
         $('mMode').textContent='Bai mau - lam theo huong dan';
         mNoErr=true;
-        if(mType===1){
-            mDigits=compMDigits(cA,cB);mSI=0;
-            renMG1();
-        }else{
-            const bS=cB+'';mPP1=cA*(+bS[1]);mPP2=cA*(+bS[0]);
-            mPhase='pp1';
-            renMG2();
-        }
+        if(mType===1){mDigits=compMDigits(cA,cB);mSI=0;renMG1()}
+        else{const bS=cB+'';mPP1=cA*(+bS[1]);mPP2=cA*(+bS[0]);mPhase='pp1';renMG2()}
     }else{
         $('mMode').textContent='Tu trinh bay phep nhan';
         mChecked=false;
-        if(mType===1){
-            mFD=[];mFI=0;
-            $('mInst').innerHTML='';
-            renMF1();
-        }else{
-            $('mInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';
-            $('mChk').classList.remove('hidden');
-            renMF2();
-        }
+        if(mType===1){mFD=[];mFI=0;$('mInst').innerHTML='';renMF1()}
+        else{$('mInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';$('mChk').classList.remove('hidden');renMF2()}
     }
 }
 
-// Render mult layout header (shared)
 function mHead(mx,aStr,bStr){
-    let h='<div class="mult-inner">';
-    h+='<div>'+pad(aStr,mx)+'</div>';
-    h+='<div>&times;'+pad(bStr,mx-1)+'</div>';
-    return h;
+    let h='<div class="mult-inner"><div>'+pad(aStr,mx)+'</div>';
+    h+='<div>&times;'+pad(bStr,mx-1)+'</div>';return h;
 }
 
-// ===== 1-DIGIT MULTIPLIER =====
+// ===== 1-DIGIT GUIDED =====
 function renMG1(){
     const aStr=cA+'',bStr=cB+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
     const done=mSI>=mDigits.length;
-    let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
-    h+=S.repeat(mx-rStr.length);
+    let h=mHead(mx,aStr,bStr)+'<div class="m-line">'+S.repeat(mx-rStr.length);
     for(let i=0;i<rStr.length;i++){
         const pfr=rStr.length-1-i;
         if(pfr<mSI||done) h+='<span class="q-done">'+rStr[i]+'</span>';
         else if(pfr===mSI) h+='<input type="number" id="ai" class="q-inp">';
         else h+='<span class="q-blank">_</span>';
     }
-    h+='</div></div>';
-    $('mBoard').innerHTML=h;
+    h+='</div></div>';$('mBoard').innerHTML=h;
     let inst='';
-    if(!done){
-        const st=mDigits[mSI];
-        if(st.d!==null){
-            inst=cB+' &times; '+st.d;
-            if(st.prevCarry>0) inst+=' + '+st.prevCarry+'(nho)';
-            inst+=' = ?, viet <strong>may</strong>?';
-        }else{
-            inst='Con nho <strong>may</strong>? Viet so nho';
-        }
+    if(!done){const st=mDigits[mSI];
+        if(st.d!==null){inst=cB+' &times; '+st.d;if(st.prevCarry>0)inst+=' + '+st.prevCarry+'(nho)';inst+=' = ?, viet <strong>may</strong>?'}
+        else inst='Con nho <strong>may</strong>? Viet so nho';
     }
     $('mInst').innerHTML=inst;
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
@@ -230,74 +242,50 @@ function renMG1(){
 function chkMG1(){
     const inp=$('ai');if(!inp)return;
     const v=parseInt(inp.value);if(isNaN(v)||v<0){inp.focus();return}
-    if(v===mDigits[mSI].write){
-        mSI++;
-        if(mSI>=mDigits.length) finMG();
-        renMG1();
-    }else{
-        mNoErr=false;inp.classList.add('input-wrong');
-        setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400);
-    }
+    if(v===mDigits[mSI].write){mSI++;if(mSI>=mDigits.length)finMG();renMG1()}
+    else{mNoErr=false;inp.classList.add('input-wrong');setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400)}
 }
 
+// ===== 1-DIGIT FREE-FORM =====
 function renMF1(){
     const aStr=cA+'',bStr=cB+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
     const allFilled=mFI>=rStr.length;
-    let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
-    h+=S.repeat(mx-rStr.length);
+    let h=mHead(mx,aStr,bStr)+'<div class="m-line">'+S.repeat(mx-rStr.length);
     for(let i=0;i<rStr.length;i++){
         const pfr=rStr.length-1-i;
         if(pfr<mFI) h+='<span>'+mFD[pfr]+'</span>';
         else if(pfr===mFI&&!allFilled) h+='<input type="number" id="ai" class="q-free" oninput="advMF()">';
         else h+='<span class="q-blank">_</span>';
     }
-    h+='</div></div>';
-    $('mBoard').innerHTML=h;
-    if(allFilled&&!mChecked) $('mChk').classList.remove('hidden');
+    h+='</div></div>';$('mBoard').innerHTML=h;
+    if(allFilled&&!mChecked)$('mChk').classList.remove('hidden');
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
 }
-
 function advMF(){
-    const inp=$('ai');
-    if(!inp||inp.value==='')return;
-    const d=parseInt(inp.value.slice(-1));
-    if(isNaN(d)){inp.value='';return}
-    mFD[mFI]=d;
-    mFI++;
-    renMF1();
+    const inp=$('ai');if(!inp||inp.value==='')return;
+    const d=parseInt(inp.value.slice(-1));if(isNaN(d)){inp.value='';return}
+    mFD[mFI]=d;mFI++;renMF1();
 }
 
-// ===== 2-DIGIT MULTIPLIER =====
+// ===== 2-DIGIT GUIDED =====
 function renMG2(){
     const aStr=cA+'',bStr=cB+'',b1=+bStr[1],b0=+bStr[0];
     const pp1S=mPP1+'',pp2S=mPP2+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,pp1S.length,pp2S.length+1,rStr.length);
     const done=mPhase==='done';
     let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
-    // PP1 row
-    if(mPhase==='pp1')
-        h+=S.repeat(mx-pp1S.length)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(pp1S.length+1,3)+'ch">';
-    else
-        h+='<span class="c-blue">'+pad(pp1S,mx)+'</span>';
+    if(mPhase==='pp1') h+=S.repeat(mx-pp1S.length)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(pp1S.length+1,3)+'ch">';
+    else h+='<span class="c-blue">'+pad(pp1S,mx)+'</span>';
     h+='</div><div>';
-    // PP2 row (shifted left by 1)
-    if(mPhase==='pp2')
-        h+=S.repeat(mx-1-pp2S.length)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(pp2S.length+1,3)+'ch">'+S;
-    else if(mPhase==='pp1')
-        h+=pad(S.repeat(pp2S.length),mx-1)+S;
-    else
-        h+='<span class="c-blue">'+pad(pp2S,mx-1)+'</span>'+S;
+    if(mPhase==='pp2') h+=S.repeat(mx-1-pp2S.length)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(pp2S.length+1,3)+'ch">'+S;
+    else if(mPhase==='pp1') h+=pad(S.repeat(pp2S.length),mx-1)+S;
+    else h+='<span class="c-blue">'+pad(pp2S,mx-1)+'</span>'+S;
     h+='</div><div class="m-line">';
-    // Sum row
-    if(mPhase==='sum')
-        h+=S.repeat(mx-rStr.length)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(rStr.length+1,3)+'ch">';
-    else if(done)
-        h+='<span class="q-done">'+pad(rStr,mx)+'</span>';
-    else
-        h+=pad(S.repeat(rStr.length),mx);
-    h+='</div></div>';
-    $('mBoard').innerHTML=h;
+    if(mPhase==='sum') h+=S.repeat(mx-rStr.length)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(rStr.length+1,3)+'ch">';
+    else if(done) h+='<span class="q-done">'+pad(rStr,mx)+'</span>';
+    else h+=pad(S.repeat(rStr.length),mx);
+    h+='</div></div>';$('mBoard').innerHTML=h;
     let inst='';
     if(mPhase==='pp1') inst=aStr+' &times; '+b1+' = <strong>?</strong>';
     else if(mPhase==='pp2') inst=aStr+' &times; '+b0+' = <strong>?</strong>';
@@ -305,30 +293,21 @@ function renMG2(){
     $('mInst').innerHTML=inst;
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
 }
-
 function chkMG2(){
     const inp=$('ai');if(!inp)return;
     const v=parseInt(inp.value);if(isNaN(v)){inp.focus();return}
-    let exp;
-    if(mPhase==='pp1') exp=mPP1;
-    else if(mPhase==='pp2') exp=mPP2;
-    else exp=mResult;
+    let exp=mPhase==='pp1'?mPP1:mPhase==='pp2'?mPP2:mResult;
     if(v===exp){
-        if(mPhase==='pp1') mPhase='pp2';
-        else if(mPhase==='pp2') mPhase='sum';
-        else{mPhase='done';finMG()}
+        if(mPhase==='pp1')mPhase='pp2';else if(mPhase==='pp2')mPhase='sum';else{mPhase='done';finMG()}
         renMG2();
-    }else{
-        mNoErr=false;inp.classList.add('input-wrong');
-        setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400);
-    }
+    }else{mNoErr=false;inp.classList.add('input-wrong');setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400)}
 }
 
+// ===== 2-DIGIT FREE-FORM =====
 function renMF2(){
-    const aStr=cA+'',bStr=cB+'';
-    const pp1S=mPP1+'',pp2S=mPP2+'',rStr=mResult+'';
-    const b1=+bStr[1],b0=+bStr[0];
+    const aStr=cA+'',bStr=cB+'',b1=+bStr[1],b0=+bStr[0];
     mPP1=cA*b1;mPP2=cA*b0;
+    const pp1S=mPP1+'',pp2S=mPP2+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,pp1S.length,pp2S.length+1,rStr.length);
     let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
     h+=S.repeat(mx-pp1S.length)+'<input type="number" class="w-free" id="fpp1" style="width:'+Math.max(pp1S.length+1,3)+'ch">';
@@ -336,44 +315,40 @@ function renMF2(){
     h+=S.repeat(mx-1-pp2S.length)+'<input type="number" class="w-free" id="fpp2" style="width:'+Math.max(pp2S.length+1,3)+'ch">'+S;
     h+='</div><div class="m-line">';
     h+=S.repeat(mx-rStr.length)+'<input type="number" class="w-free" id="fsum" style="width:'+Math.max(rStr.length+1,3)+'ch">';
-    h+='</div></div>';
-    $('mBoard').innerHTML=h;
+    h+='</div></div>';$('mBoard').innerHTML=h;
     setTimeout(()=>{const f=$('fpp1');if(f)f.focus()},50);
 }
 
-// ===== MULT GUIDED DISPATCHERS =====
-function chkMG(){if(mType===1) chkMG1(); else chkMG2()}
+// ===== MULT DISPATCHERS =====
+function chkMG(){if(mType===1)chkMG1();else chkMG2()}
 
 function finMG(){
     mAl++;if(mNoErr)mOk++;
-    let m=mNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
+    let m='<div class="div-done-msg">';
+    m+=mNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
     m+='<span style="font-size:.8em">'+cA+' &times; '+cB+' = <b>'+mResult+'</b></span>';
-    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span>';
+    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span></div>';
     $('mDone').innerHTML=m;$('mDone').classList.remove('hidden');
     $('mNxt').classList.remove('hidden');$('mInst').innerHTML='';
     $('mOk').textContent=mOk;$('mAll').textContent=mAl;
     mFirst=false;
-    if(mType===1) renMG1(); else renMG2();
+    if(mType===1)renMG1();else renMG2();
 }
 
 // ===== MULT FREE-FORM CHECK =====
 function chkMF(){
-    if(mChecked)return;
-    mChecked=true;
+    if(mChecked)return;mChecked=true;
     let allOk=true;
     if(mType===1){
         const rStr=mResult+'',aStr=cA+'',bStr=cB+'';
         const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
-        let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
-        h+=S.repeat(mx-rStr.length);
+        let h=mHead(mx,aStr,bStr)+'<div class="m-line">'+S.repeat(mx-rStr.length);
         for(let i=0;i<rStr.length;i++){
-            const pfr=rStr.length-1-i;
-            const entered=mFD[pfr],correct=parseInt(rStr[i]);
+            const pfr=rStr.length-1-i,entered=mFD[pfr],correct=parseInt(rStr[i]);
             if(entered===correct) h+='<span style="color:#2e7d32;background:#e8f5e9;padding:0 1px;border-radius:3px">'+entered+'</span>';
             else{h+='<span style="color:#c62828;background:#ffebee;padding:0 1px;border-radius:3px;text-decoration:line-through">'+entered+'</span>';allOk=false}
         }
-        h+='</div></div>';
-        $('mBoard').innerHTML=h;
+        h+='</div></div>';$('mBoard').innerHTML=h;
     }else{
         const p1=$('fpp1'),p2=$('fpp2'),sm=$('fsum');
         if(parseInt(p1.value)===mPP1){p1.classList.add('ok')}else{p1.classList.add('err');allOk=false}
@@ -382,28 +357,39 @@ function chkMF(){
         p1.readOnly=p2.readOnly=sm.readOnly=true;
     }
     mAl++;if(allOk)mOk++;
-    let m=allOk?'Dung het! Gioi lam! &#127881;<br>':'Co cho sai (do). Xem dap an de hoc nhe! &#128170;<br>';
-    m+='<span style="font-size:.8em">'+cA+' &times; '+cB+' = <b>'+mResult+'</b></span>';
-    $('mDone').innerHTML=m;$('mDone').classList.remove('hidden');
-    $('mChk').classList.add('hidden');
-    if(!allOk)$('mSolBtn').classList.remove('hidden');
-    $('mNxt').classList.remove('hidden');$('mInst').innerHTML='';
+    $('mChk').classList.add('hidden');$('mInst').innerHTML='';
     $('mOk').textContent=mOk;$('mAll').textContent=mAl;
+
+    if(allOk){
+        $('mDone').innerHTML='<div class="div-done-msg">Dung roi! &#127881; '+cA+' &times; '+cB+' = <b>'+mResult+'</b></div>';
+        $('mDone').classList.remove('hidden');
+        $('mNxt').classList.remove('hidden');
+    }else{
+        // GAME OVER
+        stopTimer();mGameOver=true;
+        const t=fmtTime();
+        let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
+        m+='<div class="go-title">Sai roi! Dung lai!</div>';
+        m+='<div class="go-answer">'+cA+' &times; '+cB+' = <b>'+mResult+'</b></div>';
+        m+='<div class="go-stats">';
+        m+='Dung: <b>'+mOk+'</b> / '+mAl+' bai<br>';
+        m+='Thoi gian: <b>'+t+'</b></div></div>';
+        $('mDone').innerHTML=m;$('mDone').classList.remove('hidden');
+        $('mSolBtn').classList.remove('hidden');
+        $('mReplay').classList.remove('hidden');
+    }
 }
 
 function showMSol(){
     const aStr=cA+'',bStr=cB+'',rStr=mResult+'';
     if(mType===1){
         const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
-        let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
-        h+='<span class="q-done">'+pad(rStr,mx)+'</span>';
-        h+='</div></div>';
+        let h=mHead(mx,aStr,bStr)+'<div class="m-line"><span class="q-done">'+pad(rStr,mx)+'</span></div></div>';
         $('mBoard').innerHTML=h;
     }else{
         const pp1S=mPP1+'',pp2S=mPP2+'';
         const mx=Math.max(aStr.length,bStr.length+1,pp1S.length,pp2S.length+1,rStr.length);
-        let h=mHead(mx,aStr,bStr)+'<div class="m-line">';
-        h+='<span class="c-blue">'+pad(pp1S,mx)+'</span></div><div>';
+        let h=mHead(mx,aStr,bStr)+'<div class="m-line"><span class="c-blue">'+pad(pp1S,mx)+'</span></div><div>';
         h+='<span class="c-blue">'+pad(pp2S,mx-1)+'</span>'+S+'</div><div class="m-line">';
         h+='<span class="q-done">'+pad(rStr,mx)+'</span></div></div>';
         $('mBoard').innerHTML=h;
@@ -413,8 +399,7 @@ function showMSol(){
 
 // ============ DIVISION ============
 let dSteps=[],dSI=0,dPh='q',dNoErr=true,dOk=0,dAl=0;
-let dFirst=true;
-let dChecked=false;
+let dFirst=true,dChecked=false,dGameOver=false;
 
 function compSteps(a,b){
     const digs=(a+'').split('').map(Number);
@@ -431,69 +416,53 @@ function compSteps(a,b){
 }
 
 function genD(){
-    cB=ri(2,9);
-    cA=Math.random()<0.5?ri(1000,9999):ri(1000,99999);
+    cB=ri(2,9);cA=Math.random()<0.5?ri(1000,9999):ri(1000,99999);
     dSteps=compSteps(cA,cB);
 }
 
 function nxtD(){
+    if(dGameOver)return;
     genD();
-    $('dDone').classList.add('hidden');$('dNxt').classList.add('hidden');
-    $('dSolBtn').classList.add('hidden');$('dChk').classList.add('hidden');
+    $('dDone').classList.add('hidden');$('dDone').className='hidden';
+    $('dNxt').classList.add('hidden');$('dSolBtn').classList.add('hidden');
+    $('dChk').classList.add('hidden');$('dReplay').classList.add('hidden');
+    $('dBoard').classList.remove('hidden');
     $('dOk').textContent=dOk;$('dAll').textContent=dAl;
 
     if(dFirst){
         $('dMode').textContent='Bai mau - lam theo huong dan';
-        dSI=0;dPh='q';dNoErr=true;
-        renGuided();
+        dSI=0;dPh='q';dNoErr=true;renGuided();
     }else{
         $('dMode').textContent='Tu trinh bay phep chia';
         $('dInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';
-        dChecked=false;
-        $('dChk').classList.remove('hidden');
-        renFree();
+        dChecked=false;$('dChk').classList.remove('hidden');renFree();
     }
 }
 
-// ========== DIV GUIDED MODE ==========
 function renGuided(){
     const aStr=cA+'',W=aStr.length,done=dSI>=dSteps.length;
     let qH='';
     for(let i=0;i<dSteps.length;i++){
-        if(i<dSI||(i===dSI&&dPh!=='q')||done)
-            qH+='<span class="q-done">'+dSteps[i].q+'</span>';
-        else if(i===dSI&&dPh==='q')
-            qH+='<input type="number" id="ai" class="q-inp">';
+        if(i<dSI||(i===dSI&&dPh!=='q')||done) qH+='<span class="q-done">'+dSteps[i].q+'</span>';
+        else if(i===dSI&&dPh==='q') qH+='<input type="number" id="ai" class="q-inp">';
         else qH+='<span class="q-blank">_</span>';
     }
     let wH='<div class="work-row">'+aStr+'</div>';
     for(let i=0;i<dSteps.length;i++){
         const s=dSteps[i];
         if(i<dSI||done){
-            if(s.nd!==null){
-                const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
-                wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>';
-            }else{
-                wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
-            }
+            if(s.nd!==null){const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>'}
+            else wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
         }else if(i===dSI&&dPh==='r'){
-            if(s.nd!==null){
-                const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
-                wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(rbStr.length,2)*1.2+'ch"></div>';
-            }else{
-                wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.5ch"></div>';
-            }
+            if(s.nd!==null){const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(rbStr.length,2)*1.2+'ch"></div>'}
+            else wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.5ch"></div>';
         }
     }
     $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
     let inst='';
-    if(!done){
-        const s=dSteps[dSI];
-        if(dPh==='q')inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
-        else{
-            inst=s.take+' &minus; ('+s.q+'&times;'+cB+') = <strong>?</strong>';
-            if(s.nd!==null)inst+=' va ha = <strong>?</strong>';
-        }
+    if(!done){const s=dSteps[dSI];
+        if(dPh==='q') inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
+        else{inst=s.take+' &minus; ('+s.q+'&times;'+cB+') = <strong>?</strong>';if(s.nd!==null)inst+=' va ha = <strong>?</strong>'}
     }
     $('dInst').innerHTML=inst;
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
@@ -502,60 +471,43 @@ function renGuided(){
 function chkGuided(){
     const inp=$('ai');if(!inp)return;
     const v=parseInt(inp.value);if(isNaN(v)||v<0){inp.focus();return}
-    const s=dSteps[dSI];
-    let exp;
-    if(dPh==='q'){exp=s.q}
-    else{exp=s.nd!==null?s.r*10+s.nd:s.r}
-    if(v===exp){
-        if(dPh==='q')dPh='r';
-        else{dSI++;dPh='q';if(dSI>=dSteps.length)finGuided()}
-        renGuided();
-    }else{
-        dNoErr=false;inp.classList.add('input-wrong');
-        setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400);
-    }
+    const s=dSteps[dSI];let exp;
+    if(dPh==='q')exp=s.q;else exp=s.nd!==null?s.r*10+s.nd:s.r;
+    if(v===exp){if(dPh==='q')dPh='r';else{dSI++;dPh='q';if(dSI>=dSteps.length)finGuided()}renGuided()}
+    else{dNoErr=false;inp.classList.add('input-wrong');setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400)}
 }
 
 function finGuided(){
     dAl++;const q=Math.floor(cA/cB),r=cA%cB;
     if(dNoErr)dOk++;
-    let m=dNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
+    let m='<div class="div-done-msg">';
+    m+=dNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
     m+='<span style="font-size:.8em">'+cA+' : '+cB+' = <b>'+q+'</b>';
     if(r>0)m+=' (du <b>'+r+'</b>)';
     m+='</span><br><span style="font-size:.65em;color:#888">Thu lai: '+q+'&times;'+cB+'='+q*cB;
     if(r>0)m+='+'+r+'='+cA;m+=' &#10004;</span>';
-    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span>';
+    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span></div>';
     $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
     $('dNxt').classList.remove('hidden');$('dInst').innerHTML='';
     $('dOk').textContent=dOk;$('dAll').textContent=dAl;
-    dFirst=false;
-    renGuided();
+    dFirst=false;renGuided();
 }
 
-// ========== DIV FREE-FORM MODE ==========
 function renFree(){
     const aStr=cA+'',W=aStr.length;
-    let qH='';
-    for(let i=0;i<dSteps.length;i++){
-        qH+='<input type="number" class="q-free" id="fq'+i+'">';
-    }
+    let qH='';for(let i=0;i<dSteps.length;i++) qH+='<input type="number" class="q-free" id="fq'+i+'">';
     let wH='<div class="work-row">'+aStr+'</div>';
     for(let i=0;i<dSteps.length;i++){
         const s=dSteps[i];
-        if(s.nd!==null){
-            const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
-            wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:'+Math.max(rbStr.length,2)*1.1+'ch"></div>';
-        }else{
-            wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:1.5ch"></div>';
-        }
+        if(s.nd!==null){const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:'+Math.max(rbStr.length,2)*1.1+'ch"></div>'}
+        else wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:1.5ch"></div>';
     }
     $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
     setTimeout(()=>{const f=$('fq0');if(f)f.focus()},50);
 }
 
 function chkDFree(){
-    if(dChecked)return;
-    dChecked=true;
+    if(dChecked)return;dChecked=true;
     let allOk=true;
     for(let i=0;i<dSteps.length;i++){
         const s=dSteps[i];
@@ -569,29 +521,38 @@ function chkDFree(){
     }
     dAl++;if(allOk)dOk++;
     const q=Math.floor(cA/cB),r=cA%cB;
-    let m=allOk?'Dung het! Gioi lam! &#127881;<br>':'Co cho sai (do). Xem dap an de hoc nhe! &#128170;<br>';
-    m+='<span style="font-size:.8em">'+cA+' : '+cB+' = <b>'+q+'</b>';
-    if(r>0)m+=' (du <b>'+r+'</b>)';m+='</span>';
-    $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
-    $('dChk').classList.add('hidden');
-    if(!allOk)$('dSolBtn').classList.remove('hidden');
-    $('dNxt').classList.remove('hidden');$('dInst').innerHTML='';
+    $('dChk').classList.add('hidden');$('dInst').innerHTML='';
     $('dOk').textContent=dOk;$('dAll').textContent=dAl;
+
+    if(allOk){
+        let m='<div class="div-done-msg">Dung roi! &#127881; '+cA+' : '+cB+' = <b>'+q+'</b>';
+        if(r>0)m+=' (du <b>'+r+'</b>)';m+='</div>';
+        $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
+        $('dNxt').classList.remove('hidden');
+    }else{
+        stopTimer();dGameOver=true;
+        const t=fmtTime();
+        let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
+        m+='<div class="go-title">Sai roi! Dung lai!</div>';
+        m+='<div class="go-answer">'+cA+' : '+cB+' = <b>'+q+'</b>';
+        if(r>0)m+=' (du <b>'+r+'</b>)';m+='</div>';
+        m+='<div class="go-stats">';
+        m+='Dung: <b>'+dOk+'</b> / '+dAl+' bai<br>';
+        m+='Thoi gian: <b>'+t+'</b></div></div>';
+        $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
+        $('dSolBtn').classList.remove('hidden');
+        $('dReplay').classList.remove('hidden');
+    }
 }
 
 function showDSol(){
     const aStr=cA+'',W=aStr.length;
-    let qH='';
-    for(let i=0;i<dSteps.length;i++) qH+='<span class="q-done">'+dSteps[i].q+'</span>';
+    let qH='';for(let i=0;i<dSteps.length;i++) qH+='<span class="q-done">'+dSteps[i].q+'</span>';
     let wH='<div class="work-row">'+aStr+'</div>';
     for(let i=0;i<dSteps.length;i++){
         const s=dSteps[i];
-        if(s.nd!==null){
-            const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
-            wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>';
-        }else{
-            wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
-        }
+        if(s.nd!==null){const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>'}
+        else wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
     }
     $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
     $('dSolBtn').classList.add('hidden');
@@ -601,20 +562,18 @@ function showDSol(){
 document.addEventListener('keydown',e=>{
     if(e.key!=='Enter')return;
     if(!$('multPage').classList.contains('hidden')){
-        if(mFirst){
-            if($('ai'))chkMG();
-            else if(!$('mNxt').classList.contains('hidden'))nxtM();
-        }else{
+        if(mGameOver){if(!$('mReplay').classList.contains('hidden'))startEx('mult');return}
+        if(mFirst){if($('ai'))chkMG();else if(!$('mNxt').classList.contains('hidden'))nxtM()}
+        else{
             if(mType===1&&$('ai')&&$('ai').value!=='')advMF();
             else if(!mChecked&&!$('mChk').classList.contains('hidden'))chkMF();
             else if(!$('mNxt').classList.contains('hidden'))nxtM();
         }
     }
     if(!$('divPage').classList.contains('hidden')){
-        if(dFirst){
-            if($('ai'))chkGuided();
-            else if(!$('dNxt').classList.contains('hidden'))nxtD();
-        }else{
+        if(dGameOver){if(!$('dReplay').classList.contains('hidden'))startEx('div');return}
+        if(dFirst){if($('ai'))chkGuided();else if(!$('dNxt').classList.contains('hidden'))nxtD()}
+        else{
             if(!dChecked&&!$('dChk').classList.contains('hidden'))chkDFree();
             else if(!$('dNxt').classList.contains('hidden'))nxtD();
         }
