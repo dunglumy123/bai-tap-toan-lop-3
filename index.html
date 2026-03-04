@@ -103,6 +103,18 @@
         .meas-cmp button{width:44px;height:44px;border:2px solid #e91e63;border-radius:10px;background:#fff;font-size:1.3em;font-weight:700;cursor:pointer;transition:all .2s}
         .meas-cmp button:hover,.meas-cmp button.sel{background:#e91e63;color:#fff}
 
+        .geo-wrap{text-align:center;margin:16px 0}
+        .geo-shape{display:inline-block;position:relative;border:3px solid #1565c0;margin:30px 40px}
+        .geo-label{position:absolute;font-weight:700;font-size:.95em;color:#e91e63;white-space:nowrap}
+        .geo-label.top{top:-24px;left:50%;transform:translateX(-50%)}
+        .geo-label.bottom{bottom:-24px;left:50%;transform:translateX(-50%)}
+        .geo-label.left{left:-36px;top:50%;transform:translateY(-50%)}
+        .geo-label.right{right:-36px;top:50%;transform:translateY(-50%)}
+        .geo-q{text-align:center;font-size:1.2em;font-weight:600;margin:12px 0;line-height:1.6}
+        .geo-inp{width:4em;text-align:center;font-size:1.1em;font-weight:700;border:2px solid #e91e63;border-radius:6px;padding:4px;background:#fff9c4;margin:0 4px}
+        .geo-inp:focus{outline:none;border-color:#1565c0;background:#fff}
+        .geo-formula{text-align:center;font-size:.85em;color:#888;margin-top:4px}
+
         @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}.mult-inner{font-size:1.3em}header h1{font-size:1.5em}.score-box{font-size:.8em;gap:8px}.frac-cell{width:40px;height:48px}.meas-q{font-size:1.1em}}
     </style>
 </head>
@@ -117,6 +129,7 @@
             <button class="menu-btn" onclick="startEx('div')"><span class="icon">&#247;</span>Phép chia</button>
             <button class="menu-btn" onclick="startEx('frac')"><span class="icon">&#189;</span>Phân số</button>
             <button class="menu-btn" onclick="startEx('meas')"><span class="icon">&#9878;</span>Đại lượng</button>
+            <button class="menu-btn" onclick="startEx('geo')"><span class="icon">&#9645;</span>Hình học</button>
         </div>
     </div>
 
@@ -197,6 +210,21 @@
         </div>
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
     </div>
+
+    <div id="geoPage" class="card hidden">
+        <div class="exercise-header">
+            <h2>Hình học</h2>
+            <div class="score-box"><span>Đúng: <span id="gOk">0</span></span><span class="timer" id="gTime">00:00</span></div>
+        </div>
+        <div id="gBoard"></div>
+        <div id="gDone" class="hidden"></div>
+        <div class="btn-row">
+            <button class="btn btn-green hidden" id="gChk" onclick="chkGeo()">Kiểm tra</button>
+            <button class="btn btn-primary hidden" id="gNxt" onclick="nxtGeo()">Bài tiếp</button>
+            <button class="btn btn-orange hidden" id="gReplay" onclick="startEx('geo')">Chơi lại</button>
+        </div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
+    </div>
 </div>
 
 <script>
@@ -216,7 +244,7 @@ function startTimer(){
 }
 function stopTimer(){if(tmInterval){clearInterval(tmInterval);tmInterval=null}}
 function updTimer(){
-    const el=cType==='mult'?$('mTime'):cType==='div'?$('dTime'):cType==='frac'?$('fTime'):$('meTime');
+    const el=cType==='mult'?$('mTime'):cType==='div'?$('dTime'):cType==='frac'?$('fTime'):cType==='meas'?$('meTime'):$('gTime');
     if(el)el.textContent=fmtTime();
 }
 function fmtTime(){
@@ -225,7 +253,7 @@ function fmtTime(){
     return (m<10?'0'+m:m)+':'+(ss<10?'0'+ss:ss);
 }
 
-function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden');$('fracPage').classList.add('hidden');$('measPage').classList.add('hidden')}
+function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden');$('fracPage').classList.add('hidden');$('measPage').classList.add('hidden');$('geoPage').classList.add('hidden')}
 
 function startEx(t){
     cType=t;
@@ -245,11 +273,16 @@ function startEx(t){
         $('fracPage').classList.remove('hidden');
         $('fReplay').classList.add('hidden');
         startTimer();nxtF();
-    }else{
+    }else if(t==='meas'){
         meOk=0;meAl=0;meGameOver=false;
         $('measPage').classList.remove('hidden');
         $('meReplay').classList.add('hidden');
         startTimer();nxtMeas();
+    }else if(t==='geo'){
+        gOk=0;gAl=0;gGameOver=false;
+        $('geoPage').classList.remove('hidden');
+        $('gReplay').classList.add('hidden');
+        startTimer();nxtGeo();
     }
 }
 
@@ -918,6 +951,132 @@ function chkMeas(){
     }
 }
 
+// ============ GEOMETRY (CHU VI) ============
+let gOk=0,gAl=0,gGameOver=false,gChecked=false;
+let gQ=null; // {type:'sq_peri'|'rect_peri'|'rect_find_side'|'sq_find_side', a, b, ans, unit}
+
+function genGeoQ(){
+    const lvl=gOk;
+    let type,a,b,ans,unit='cm';
+    if(lvl<5){
+        // Hình vuông đơn giản
+        a=ri(2,20);
+        type='sq_peri';ans=a*4;
+    }else if(lvl<10){
+        // HCN đơn giản
+        a=ri(3,30);b=ri(2,a-1);
+        type='rect_peri';ans=(a+b)*2;
+    }else if(lvl<15){
+        // HCN/HV số lớn hơn
+        if(Math.random()<0.4){a=ri(10,100);type='sq_peri';ans=a*4;}
+        else{a=ri(10,100);b=ri(5,a-1);type='rect_peri';ans=(a+b)*2;}
+    }else{
+        // Mix + tìm cạnh
+        const r=Math.random();
+        if(r<0.25){
+            a=ri(10,100);type='sq_peri';ans=a*4;
+        }else if(r<0.5){
+            a=ri(10,100);b=ri(5,a-1);type='rect_peri';ans=(a+b)*2;
+        }else if(r<0.75){
+            // Cho chu vi HCN + dài, tìm rộng
+            a=ri(10,50);b=ri(5,a-1);
+            type='rect_find_side';ans=b;
+        }else{
+            // Cho chu vi HV, tìm cạnh
+            a=ri(5,50);
+            type='sq_find_side';ans=a;
+        }
+    }
+    gQ={type,a,b,ans,unit};
+}
+
+function nxtGeo(){
+    if(gGameOver)return;
+    genGeoQ();
+    $('gDone').classList.add('hidden');$('gDone').className='hidden';
+    $('gNxt').classList.add('hidden');$('gReplay').classList.add('hidden');
+    gChecked=false;$('gChk').classList.remove('hidden');
+    renGeo();
+    $('gOk').textContent=gOk;
+}
+
+function renGeo(){
+    const q=gQ;
+    let shapeW,shapeH,labelTop,labelLeft,labelRight,labelBottom;
+    let question,formula;
+
+    if(q.type==='sq_peri'){
+        // Tính chu vi HV
+        shapeW=100;shapeH=100;
+        labelTop=q.a+' '+q.unit;labelLeft='';labelRight='';labelBottom='';
+        question='Chu vi hình vuông có cạnh <b>'+q.a+' '+q.unit+'</b> = ?';
+        formula='Chu vi HV = cạnh × 4';
+    }else if(q.type==='rect_peri'){
+        // Tính chu vi HCN
+        shapeW=140;shapeH=80;
+        labelTop=q.a+' '+q.unit;labelLeft=q.b+' '+q.unit;labelRight='';labelBottom='';
+        question='Chu vi hình chữ nhật có chiều dài <b>'+q.a+' '+q.unit+'</b>, chiều rộng <b>'+q.b+' '+q.unit+'</b> = ?';
+        formula='Chu vi HCN = (dài + rộng) × 2';
+    }else if(q.type==='rect_find_side'){
+        // Biết chu vi + dài, tìm rộng
+        const peri=(q.a+q.b)*2;
+        shapeW=140;shapeH=80;
+        labelTop=q.a+' '+q.unit;labelLeft='? '+q.unit;labelRight='';labelBottom='';
+        question='HCN có chu vi <b>'+peri+' '+q.unit+'</b>, chiều dài <b>'+q.a+' '+q.unit+'</b>. Chiều rộng = ?';
+        formula='Nửa chu vi = chu vi ÷ 2. Rộng = nửa chu vi − dài';
+    }else{
+        // Biết chu vi HV, tìm cạnh
+        const peri=q.a*4;
+        shapeW=100;shapeH=100;
+        labelTop='? '+q.unit;labelLeft='';labelRight='';labelBottom='';
+        question='Hình vuông có chu vi <b>'+peri+' '+q.unit+'</b>. Cạnh = ?';
+        formula='Cạnh = chu vi ÷ 4';
+    }
+
+    let h='<div class="geo-wrap">';
+    h+='<div class="geo-shape" style="width:'+shapeW+'px;height:'+shapeH+'px">';
+    if(labelTop) h+='<span class="geo-label top">'+labelTop+'</span>';
+    if(labelLeft) h+='<span class="geo-label left">'+labelLeft+'</span>';
+    if(labelRight) h+='<span class="geo-label right">'+labelRight+'</span>';
+    if(labelBottom) h+='<span class="geo-label bottom">'+labelBottom+'</span>';
+    h+='</div></div>';
+    h+='<div class="geo-q">'+question+'</div>';
+    h+='<div class="geo-formula">'+formula+'</div>';
+    h+='<div style="text-align:center;margin:12px 0"><input type="number" class="geo-inp" id="gInp"> <b>'+q.unit+'</b></div>';
+    $('gBoard').innerHTML=h;
+    setTimeout(()=>{const inp=$('gInp');if(inp)inp.focus()},50);
+}
+
+function chkGeo(){
+    if(gChecked)return;gChecked=true;
+    const inp=$('gInp');if(!inp)return;
+    const v=parseInt(inp.value);
+    inp.readOnly=true;
+    $('gChk').classList.add('hidden');
+    gAl++;
+
+    if(v===gQ.ans){
+        gOk++;
+        inp.style.borderColor='#4caf50';inp.style.background='#e8f5e9';inp.style.color='#2e7d32';
+        $('gDone').innerHTML='<div class="div-done-msg" style="color:#2e7d32">Đúng rồi! &#127881;</div>';
+        $('gDone').classList.remove('hidden');
+        $('gNxt').classList.remove('hidden');
+    }else{
+        stopTimer();gGameOver=true;
+        inp.style.borderColor='#f44336';inp.style.background='#ffebee';inp.style.color='#c62828';
+        const t=fmtTime();
+        let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
+        m+='<div class="go-title">Sai rồi! Dừng lại!</div>';
+        m+='<div class="go-answer">Đáp án: <b>'+gQ.ans+' '+gQ.unit+'</b></div>';
+        m+='<div class="go-stats">';
+        m+='Đúng: <b>'+gOk+'</b> bài<br>';
+        m+='Thời gian: <b>'+t+'</b></div></div>';
+        $('gDone').innerHTML=m;$('gDone').classList.remove('hidden');
+        $('gReplay').classList.remove('hidden');
+    }
+    $('gOk').textContent=gOk;
+}
+
 // ========== KEYBOARD ==========
 // Enter: bài hướng dẫn giữ nguyên, bài tự do KHÔNG cho Enter kiểm tra (tránh bé bấm nhầm)
 document.addEventListener('keydown',e=>{
@@ -942,6 +1101,10 @@ document.addEventListener('keydown',e=>{
     if(!$('measPage').classList.contains('hidden')){
         if(meGameOver){if(!$('meReplay').classList.contains('hidden'))startEx('meas');return}
         if(!$('meNxt').classList.contains('hidden'))nxtMeas();
+    }
+    if(!$('geoPage').classList.contains('hidden')){
+        if(gGameOver){if(!$('gReplay').classList.contains('hidden'))startEx('geo');return}
+        if(!$('gNxt').classList.contains('hidden'))nxtGeo();
     }
 });
 </script>
