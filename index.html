@@ -257,6 +257,7 @@ function nxtD(){
 }
 
 // ========== GUIDED MODE (first problem only) ==========
+// 2 phases per step: q (quotient digit) -> r (remainder, multiply & subtract mentally)
 function renGuided(){
     const aStr=cA+'',W=aStr.length,done=dSI>=dSteps.length;
     let qH='';
@@ -269,24 +270,22 @@ function renGuided(){
     }
     let wH='<div class="work-row">'+aStr+'</div>';
     for(let i=0;i<dSteps.length;i++){
-        const s=dSteps[i],pStr=s.p+'',pPad=s.di-pStr.length+1;
+        const s=dSteps[i];
         if(i<dSI||done){
-            wH+='<div class="work-row">'+S.repeat(pPad)+'<span class="c-blue">'+pStr+'</span></div>';
+            // Completed step: show remain+bringdown (no product row)
             if(s.nd!==null){
                 const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
                 wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>';
             }else{
                 wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
             }
-        }else if(i===dSI){
-            if(dPh==='p'){
-                wH+='<div class="work-row">'+S.repeat(pPad)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(pStr.length,1)*1.2+'ch"></div>';
-            }else if(dPh==='r'){
-                wH+='<div class="work-row">'+S.repeat(pPad)+'<span class="c-blue">'+pStr+'</span></div>';
-                if(s.nd!==null)
-                    wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.2ch"><span class="c-pink">'+s.nd+'</span></div>';
-                else
-                    wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.2ch"></div>';
+        }else if(i===dSI&&dPh==='r'){
+            // Show remain+bringdown input (bé tự nhẩm nhân rồi trừ)
+            if(s.nd!==null){
+                const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
+                wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(rbStr.length,2)*1.2+'ch"></div>';
+            }else{
+                wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.5ch"></div>';
             }
         }
     }
@@ -295,8 +294,11 @@ function renGuided(){
     if(!done){
         const s=dSteps[dSI];
         if(dPh==='q')inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
-        else if(dPh==='p')inst=s.q+' nhan '+cB+' bang <strong>may</strong>?';
-        else inst=s.take+' tru '+s.p+' bang <strong>may</strong>?';
+        else{
+            // Combined: multiply then subtract mentally
+            inst=s.q+'&times;'+cB+'='+s.p+', '+s.take+'&minus;'+s.p+'=<strong>?</strong>';
+            if(s.nd!==null)inst+=' (ha <b>'+s.nd+'</b>)';
+        }
     }
     $('dInst').innerHTML=inst;
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
@@ -306,10 +308,11 @@ function chkGuided(){
     const inp=$('ai');if(!inp)return;
     const v=parseInt(inp.value);if(isNaN(v)||v<0){inp.focus();return}
     const s=dSteps[dSI];
-    let exp=dPh==='q'?s.q:dPh==='p'?s.p:s.r;
+    let exp;
+    if(dPh==='q'){exp=s.q}
+    else{exp=s.nd!==null?s.r*10+s.nd:s.r}
     if(v===exp){
-        if(dPh==='q')dPh='p';
-        else if(dPh==='p')dPh='r';
+        if(dPh==='q')dPh='r';
         else{dSI++;dPh='q';if(dSI>=dSteps.length)finGuided()}
         renGuided();
     }else{
@@ -342,13 +345,10 @@ function renFree(){
     for(let i=0;i<dSteps.length;i++){
         qH+='<input type="number" class="q-free" id="fq'+i+'">';
     }
-    // Work area: blank inputs for product and remain rows
+    // Work area: only remain+bringdown rows (no product row - bé tự nhẩm nhân trừ)
     let wH='<div class="work-row">'+aStr+'</div>';
     for(let i=0;i<dSteps.length;i++){
-        const s=dSteps[i],pStr=s.p+'',pPad=s.di-pStr.length+1;
-        // Product input
-        wH+='<div class="work-row">'+S.repeat(pPad)+'<input type="number" class="w-free" id="fp'+i+'" style="width:'+Math.max(pStr.length,2)*1.1+'ch"></div>';
-        // Remain+bring or final remain input
+        const s=dSteps[i];
         if(s.nd!==null){
             const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
             wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:'+Math.max(rbStr.length,2)*1.1+'ch"></div>';
@@ -370,10 +370,6 @@ function chkDFree(){
         const qi=$('fq'+i),qv=parseInt(qi.value);
         if(qv===s.q){qi.classList.add('ok')}else{qi.classList.add('err');allOk=false}
         qi.readOnly=true;
-        // Product
-        const pi=$('fp'+i),pv=parseInt(pi.value);
-        if(pv===s.p){pi.classList.add('ok')}else{pi.classList.add('err');allOk=false}
-        pi.readOnly=true;
         // Remain+bring or final
         const rri=$('fr'+i),rv=parseInt(rri.value);
         const exp=s.nd!==null?s.r*10+s.nd:s.r;
@@ -393,14 +389,13 @@ function chkDFree(){
 }
 
 function showDSol(){
-    // Show completed layout with all correct values
+    // Show completed layout with all correct values (no product row)
     const aStr=cA+'',W=aStr.length;
     let qH='';
     for(let i=0;i<dSteps.length;i++) qH+='<span class="q-done">'+dSteps[i].q+'</span>';
     let wH='<div class="work-row">'+aStr+'</div>';
     for(let i=0;i<dSteps.length;i++){
-        const s=dSteps[i],pStr=s.p+'',pPad=s.di-pStr.length+1;
-        wH+='<div class="work-row">'+S.repeat(pPad)+'<span class="c-blue">'+pStr+'</span></div>';
+        const s=dSteps[i];
         if(s.nd!==null){
             const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
             wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>';
