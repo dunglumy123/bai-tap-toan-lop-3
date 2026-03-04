@@ -219,7 +219,7 @@
                 <tr><td>Khối lượng</td><td>1kg = 1000g</td></tr>
                 <tr><td>Dung tích</td><td>1l = 1000ml</td></tr>
                 <tr><td>Thời gian</td><td>1 giờ = 60 phút, 1 phút = 60 giây, 1 ngày = 24 giờ, 1 tuần = 7 ngày</td></tr>
-                <tr><td>Nhiệt độ</td><td>Đo bằng °C. Bình thường 37°C, trên 37°C là sốt</td></tr>
+                <tr><td>Nhiệt độ</td><td>°F = °C × 9 ÷ 5 + 32. °C = (°F − 32) × 5 ÷ 9</td></tr>
             </table>
         </div>
         <div class="div-instruction" id="meInst"></div>
@@ -886,8 +886,11 @@ function genConvert2(){
 }
 
 function genTimeMoney(){
+    // Các giá trị °C cho ra °F chẵn: °F = °C × 9/5 + 32
+    const cToF=[[0,32],[5,41],[10,50],[15,59],[20,68],[25,77],[30,86],[35,95],[40,104],[100,212]];
     const types=[
-        ()=>{const temp=ri(35,40);return{q:'Nhiệt kế chỉ '+temp+'°C. Người này bị sốt hay bình thường? <CMP2>',ans:temp>37?'sốt':'bình thường',type:'temp'}},
+        ()=>{const pair=cToF[ri(0,cToF.length-1)];return{q:pair[0]+'°C = <INP> °F',ans:[pair[1]]}},
+        ()=>{const pair=cToF[ri(0,cToF.length-1)];return{q:pair[1]+'°F = <INP> °C',ans:[pair[0]]}},
         ()=>{const a=ri(1,4),b=ri(1,59);return{q:a+' ngày '+b+' giờ = <INP> giờ',ans:[a*24+b]}},
         ()=>{const w=ri(2,5),d=ri(1,6);return{q:w+' tuần '+d+' ngày = <INP> ngày',ans:[w*7+d]}},
     ];
@@ -915,12 +918,6 @@ function renMeas(){
         h+='<button onclick="selCmp(\'=\')\" id="cmpEq">=</button>';
         h+='<button onclick="selCmp(\'>\')\" id="cmpGt">&gt;</button>';
         h+='</span>'+parts[1];
-    }else if(q.type==='temp'){
-        const parts=q.q.split('<CMP2>');
-        h+=parts[0]+'<span class="meas-cmp">';
-        h+='<button onclick="selCmp(\'bình thường\')\" id="cmpNorm" style="width:auto;padding:0 10px;font-size:.9em">Bình thường</button>';
-        h+='<button onclick="selCmp(\'sốt\')\" id="cmpFev" style="width:auto;padding:0 10px;font-size:.9em">Sốt</button>';
-        h+='</span>';
     }else{
         let idx=0;
         const parts=q.q.split('<INP>');
@@ -942,14 +939,12 @@ function selCmp(v){
     if(v==='<'&&$('cmpLt'))$('cmpLt').classList.add('sel');
     if(v==='='&&$('cmpEq'))$('cmpEq').classList.add('sel');
     if(v==='>'&&$('cmpGt'))$('cmpGt').classList.add('sel');
-    if(v==='bình thường'&&$('cmpNorm'))$('cmpNorm').classList.add('sel');
-    if(v==='sốt'&&$('cmpFev'))$('cmpFev').classList.add('sel');
 }
 
 function chkMeas(){
     if(meChecked)return;meChecked=true;
     const q=meCurQ;let ok=false;
-    if(q.type==='cmp'||q.type==='temp'){
+    if(q.type==='cmp'){
         ok=(meCmpSel===q.ans);
     }else{
         ok=true;
@@ -974,7 +969,7 @@ function chkMeas(){
     }else{
         stopTimer();meGameOver=true;
         const t=fmtTime();
-        let ans=q.type==='cmp'||q.type==='temp'?q.ans:q.ans.join(', ');
+        let ans=q.type==='cmp'?q.ans:q.ans.join(', ');
         let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
         m+='<div class="go-title">Sai rồi! Dừng lại!</div>';
         m+='<div class="go-answer">Đáp án: <b>'+ans+'</b></div>';
