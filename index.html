@@ -870,35 +870,9 @@ function chkMeas(){
 }
 
 // ========== KEYBOARD ==========
+// Chặn Enter trên input để tránh bé bấm nhầm - chỉ dùng nút bấm trên màn hình
 document.addEventListener('keydown',e=>{
-    if(e.key!=='Enter')return;
-    if(!$('multPage').classList.contains('hidden')){
-        if(mGameOver){if(!$('mReplay').classList.contains('hidden'))startEx('mult');return}
-        if(mFirst){if($('ai'))chkMG();else if(!$('mNxt').classList.contains('hidden'))nxtM()}
-        else{
-            if(mType===1&&$('ai')&&$('ai').value!=='')advMF();
-            else if(!mChecked&&!$('mChk').classList.contains('hidden'))chkMF();
-            else if(!$('mNxt').classList.contains('hidden'))nxtM();
-        }
-    }
-    if(!$('divPage').classList.contains('hidden')){
-        if(dGameOver){if(!$('dReplay').classList.contains('hidden'))startEx('div');return}
-        if(dFirst){if($('ai'))chkGuided();else if(!$('dNxt').classList.contains('hidden'))nxtD()}
-        else{
-            if(!dChecked&&!$('dChk').classList.contains('hidden'))chkDFree();
-            else if(!$('dNxt').classList.contains('hidden'))nxtD();
-        }
-    }
-    if(!$('fracPage').classList.contains('hidden')){
-        if(fGameOver){if(!$('fReplay').classList.contains('hidden'))startEx('frac');return}
-        if(!fChecked&&!$('fChk').classList.contains('hidden'))chkFrac();
-        else if(!$('fNxt').classList.contains('hidden'))nxtF();
-    }
-    if(!$('measPage').classList.contains('hidden')){
-        if(meGameOver){if(!$('meReplay').classList.contains('hidden'))startEx('meas');return}
-        if(!meChecked&&!$('meChk').classList.contains('hidden'))chkMeas();
-        else if(!$('meNxt').classList.contains('hidden'))nxtMeas();
-    }
+    if(e.key==='Enter') e.preventDefault();
 });
 </script>
 </body>
