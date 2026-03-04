@@ -296,8 +296,8 @@ function renGuided(){
         if(dPh==='q')inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
         else{
             // Combined: multiply then subtract mentally
-            inst=s.q+'&times;'+cB+'='+s.p+', '+s.take+'&minus;'+s.p+'=<strong>?</strong>';
-            if(s.nd!==null)inst+=' (ha <b>'+s.nd+'</b>)';
+            inst=s.take+' &minus; ('+s.q+'&times;'+cB+') = <strong>?</strong>';
+            if(s.nd!==null)inst+=' va ha = <strong>?</strong>';
         }
     }
     $('dInst').innerHTML=inst;
