@@ -273,8 +273,7 @@ function compMDigits(a,b){
 
 function nxtM(){
     if(mGameOver)return;
-    if(Math.random()<0.5){cA=ri(100,9999);cB=ri(2,9)}
-    else{cA=ri(1000,99999);cB=Math.random()<0.6?ri(2,9):ri(11,99)}
+    cA=ri(100,9999);cB=ri(2,9)
     mResult=cA*cB;mType=(cB+'').length;
 
     $('mDone').classList.add('hidden');$('mDone').className='hidden';
