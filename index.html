@@ -50,10 +50,11 @@
         .q-inp,.w-inp{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:2px dashed #e91e63;border-radius:4px;background:#fff9c4;text-align:center;padding:0;height:1.3em}
         .q-inp{width:1.1em}
         .q-inp:focus,.w-inp:focus{outline:none;border-style:solid;background:#fff}
-        .q-free,.w-free{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:none;border-bottom:2px dashed #999;border-radius:0;background:transparent;text-align:center;padding:0;height:1.3em}
+        .q-free,.w-free{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:none;border-bottom:2px solid #999;border-radius:0;background:transparent;text-align:center;padding:0;height:1.3em}
         .q-free{width:1.1em}
         .w-free{text-align:center}
-        .q-free:focus,.w-free:focus{outline:none;border-bottom-color:#e91e63;border-bottom-style:solid;background:#fff9c4}
+        .w-sep{border-bottom-style:dashed}
+        .q-free:focus,.w-free:focus{outline:none;border-bottom-color:#e91e63;background:#fff9c4}
         .q-free.ok,.w-free.ok{border-bottom-color:#4caf50;background:#e8f5e9;color:#2e7d32}
         .q-free.err,.w-free.err{border-bottom-color:#f44336;background:#ffebee;color:#c62828}
 
@@ -583,7 +584,10 @@ function renFree(){
         const s=dSteps[i];
         if(s.nd!==null){
             const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb,digs=rbStr.length;
-            let inp='';for(let d=0;d<digs;d++) inp+='<input type="tel" maxlength="1" class="w-free" id="fr'+i+'d'+d+'" style="width:1.1em" oninput="advDivW(this,'+i+','+d+','+digs+','+n+')">';
+            let inp='';for(let d=0;d<digs;d++){
+                const sep=digs>1&&d<digs-1?' w-sep':'';
+                inp+='<input type="tel" maxlength="1" class="w-free'+sep+'" id="fr'+i+'d'+d+'" style="width:1.1em" oninput="advDivW(this,'+i+','+d+','+digs+','+n+')">';
+            }
             wH+='<div class="work-row">'+S.repeat(s.di)+inp+'</div>';
         } else {
             wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="tel" maxlength="1" class="w-free" id="fr'+i+'d0" style="width:1.1em" oninput="advDivW(this,'+i+',0,1,'+n+')"></div>';
