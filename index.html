@@ -279,7 +279,7 @@ function startEx(t){
         $('meReplay').classList.add('hidden');
         startTimer();nxtMeas();
     }else if(t==='geo'){
-        gOk=0;gAl=0;gGameOver=false;
+        gOk=0;gAl=0;gGameOver=false;gFirst=true;
         $('geoPage').classList.remove('hidden');
         $('gReplay').classList.add('hidden');
         startTimer();nxtGeo();
@@ -952,37 +952,61 @@ function chkMeas(){
 }
 
 // ============ GEOMETRY (CHU VI) ============
-let gOk=0,gAl=0,gGameOver=false,gChecked=false;
-let gQ=null; // {type:'sq_peri'|'rect_peri'|'rect_find_side'|'sq_find_side', a, b, ans, unit}
+let gOk=0,gAl=0,gGameOver=false,gChecked=false,gFirst=true;
+let gQ=null;
+
+// Bài hướng dẫn ban đầu
+function renGeoTutorial(){
+    let h='<div style="text-align:left;padding:8px;line-height:2">';
+    h+='<div style="font-size:1.1em;font-weight:700;color:#1565c0;margin-bottom:8px">&#128218; Hướng dẫn cách tính chu vi</div>';
+    h+='<div class="geo-wrap"><div class="geo-shape" style="width:100px;height:100px">';
+    h+='<span class="geo-label top">a</span>';
+    h+='</div></div>';
+    h+='<div style="text-align:center;font-weight:600;margin:8px 0">&#9632; Hình vuông có 4 cạnh bằng nhau</div>';
+    h+='<div style="text-align:center;color:#e91e63;font-weight:700;font-size:1.1em">Chu vi hình vuông = cạnh × 4</div>';
+    h+='<div style="text-align:center;color:#888;font-size:.9em">Ví dụ: cạnh = 5 cm → Chu vi = 5 × 4 = 20 cm</div>';
+    h+='<br>';
+    h+='<div class="geo-wrap"><div class="geo-shape" style="width:140px;height:80px">';
+    h+='<span class="geo-label top">chiều dài</span>';
+    h+='<span class="geo-label left">chiều rộng</span>';
+    h+='</div></div>';
+    h+='<div style="text-align:center;font-weight:600;margin:8px 0">&#9644; Hình chữ nhật có 2 chiều dài bằng nhau, 2 chiều rộng bằng nhau</div>';
+    h+='<div style="text-align:center;color:#e91e63;font-weight:700;font-size:1.1em">Chu vi hình chữ nhật = (dài + rộng) × 2</div>';
+    h+='<div style="text-align:center;color:#888;font-size:.9em">Ví dụ: dài = 8 cm, rộng = 3 cm → Chu vi = (8 + 3) × 2 = 22 cm</div>';
+    h+='</div>';
+    $('gBoard').innerHTML=h;
+    $('gChk').classList.add('hidden');
+    $('gNxt').classList.remove('hidden');
+}
 
 function genGeoQ(){
     const lvl=gOk;
     let type,a,b,ans,unit='cm';
-    if(lvl<5){
-        // Hình vuông đơn giản
-        a=ri(2,20);
+    if(lvl<2){
+        // 2 bài hình vuông đơn giản
+        a=ri(3,15);
         type='sq_peri';ans=a*4;
-    }else if(lvl<10){
-        // HCN đơn giản
-        a=ri(3,30);b=ri(2,a-1);
+    }else if(lvl<4){
+        // 2 bài hình chữ nhật đơn giản
+        a=ri(5,20);b=ri(2,a-1);
         type='rect_peri';ans=(a+b)*2;
-    }else if(lvl<15){
-        // HCN/HV số lớn hơn
-        if(Math.random()<0.4){a=ri(10,100);type='sq_peri';ans=a*4;}
-        else{a=ri(10,100);b=ri(5,a-1);type='rect_peri';ans=(a+b)*2;}
+    }else if(lvl<8){
+        // Mix hình vuông + hình chữ nhật, số lớn hơn
+        if(Math.random()<0.4){a=ri(10,80);type='sq_peri';ans=a*4;}
+        else{a=ri(10,80);b=ri(5,a-1);type='rect_peri';ans=(a+b)*2;}
     }else{
-        // Mix + tìm cạnh
+        // Mix tất cả + tìm cạnh
         const r=Math.random();
-        if(r<0.25){
+        if(r<0.2){
             a=ri(10,100);type='sq_peri';ans=a*4;
-        }else if(r<0.5){
+        }else if(r<0.4){
             a=ri(10,100);b=ri(5,a-1);type='rect_peri';ans=(a+b)*2;
-        }else if(r<0.75){
-            // Cho chu vi HCN + dài, tìm rộng
+        }else if(r<0.65){
+            // Cho chu vi hình chữ nhật + dài, tìm rộng
             a=ri(10,50);b=ri(5,a-1);
             type='rect_find_side';ans=b;
         }else{
-            // Cho chu vi HV, tìm cạnh
+            // Cho chu vi hình vuông, tìm cạnh
             a=ri(5,50);
             type='sq_find_side';ans=a;
         }
@@ -992,6 +1016,13 @@ function genGeoQ(){
 
 function nxtGeo(){
     if(gGameOver)return;
+    // Bài đầu tiên: hiện hướng dẫn
+    if(gFirst){
+        gFirst=false;
+        renGeoTutorial();
+        $('gOk').textContent=gOk;
+        return;
+    }
     genGeoQ();
     $('gDone').classList.add('hidden');$('gDone').className='hidden';
     $('gNxt').classList.add('hidden');$('gReplay').classList.add('hidden');
@@ -1002,43 +1033,37 @@ function nxtGeo(){
 
 function renGeo(){
     const q=gQ;
-    let shapeW,shapeH,labelTop,labelLeft,labelRight,labelBottom;
+    let shapeW,shapeH,labelTop,labelLeft;
     let question,formula;
 
     if(q.type==='sq_peri'){
-        // Tính chu vi HV
         shapeW=100;shapeH=100;
-        labelTop=q.a+' '+q.unit;labelLeft='';labelRight='';labelBottom='';
-        question='Chu vi hình vuông có cạnh <b>'+q.a+' '+q.unit+'</b> = ?';
-        formula='Chu vi HV = cạnh × 4';
+        labelTop=q.a+' '+q.unit;labelLeft='';
+        question='Tính chu vi hình vuông có cạnh <b>'+q.a+' '+q.unit+'</b>';
+        formula='Chu vi hình vuông = cạnh × 4';
     }else if(q.type==='rect_peri'){
-        // Tính chu vi HCN
         shapeW=140;shapeH=80;
-        labelTop=q.a+' '+q.unit;labelLeft=q.b+' '+q.unit;labelRight='';labelBottom='';
-        question='Chu vi hình chữ nhật có chiều dài <b>'+q.a+' '+q.unit+'</b>, chiều rộng <b>'+q.b+' '+q.unit+'</b> = ?';
-        formula='Chu vi HCN = (dài + rộng) × 2';
+        labelTop=q.a+' '+q.unit;labelLeft=q.b+' '+q.unit;
+        question='Tính chu vi hình chữ nhật có chiều dài <b>'+q.a+' '+q.unit+'</b>, chiều rộng <b>'+q.b+' '+q.unit+'</b>';
+        formula='Chu vi hình chữ nhật = (dài + rộng) × 2';
     }else if(q.type==='rect_find_side'){
-        // Biết chu vi + dài, tìm rộng
         const peri=(q.a+q.b)*2;
         shapeW=140;shapeH=80;
-        labelTop=q.a+' '+q.unit;labelLeft='? '+q.unit;labelRight='';labelBottom='';
-        question='HCN có chu vi <b>'+peri+' '+q.unit+'</b>, chiều dài <b>'+q.a+' '+q.unit+'</b>. Chiều rộng = ?';
-        formula='Nửa chu vi = chu vi ÷ 2. Rộng = nửa chu vi − dài';
+        labelTop=q.a+' '+q.unit;labelLeft='? '+q.unit;
+        question='Hình chữ nhật có chu vi <b>'+peri+' '+q.unit+'</b>, chiều dài <b>'+q.a+' '+q.unit+'</b>. Tìm chiều rộng';
+        formula='Nửa chu vi = chu vi ÷ 2. Chiều rộng = nửa chu vi − chiều dài';
     }else{
-        // Biết chu vi HV, tìm cạnh
         const peri=q.a*4;
         shapeW=100;shapeH=100;
-        labelTop='? '+q.unit;labelLeft='';labelRight='';labelBottom='';
-        question='Hình vuông có chu vi <b>'+peri+' '+q.unit+'</b>. Cạnh = ?';
+        labelTop='? '+q.unit;labelLeft='';
+        question='Hình vuông có chu vi <b>'+peri+' '+q.unit+'</b>. Tìm cạnh';
         formula='Cạnh = chu vi ÷ 4';
     }
 
     let h='<div class="geo-wrap">';
     h+='<div class="geo-shape" style="width:'+shapeW+'px;height:'+shapeH+'px">';
-    if(labelTop) h+='<span class="geo-label top">'+labelTop+'</span>';
+    h+='<span class="geo-label top">'+labelTop+'</span>';
     if(labelLeft) h+='<span class="geo-label left">'+labelLeft+'</span>';
-    if(labelRight) h+='<span class="geo-label right">'+labelRight+'</span>';
-    if(labelBottom) h+='<span class="geo-label bottom">'+labelBottom+'</span>';
     h+='</div></div>';
     h+='<div class="geo-q">'+question+'</div>';
     h+='<div class="geo-formula">'+formula+'</div>';
