@@ -139,7 +139,7 @@
     <div id="fracPage" class="card hidden">
         <div class="exercise-header">
             <h2 id="fT">Phân số</h2>
-            <div class="score-box"><span>Đúng: <span id="fOk">0</span>/<span id="fAll">0</span></span><span class="timer" id="fTime">00:00</span></div>
+            <div class="score-box"><span>Đúng: <span id="fOk">0</span>/20</span><span class="timer" id="fTime">00:00</span></div>
         </div>
         <div class="div-instruction" id="fInst"></div>
         <div id="fBoard"></div>
@@ -597,7 +597,23 @@ let fNum,fDen,fColored;
 
 function nxtF(){
     if(fGameOver)return;
-    fDen=ri(2,10);
+    if(fOk>=20){
+        // WIN
+        stopTimer();fGameOver=true;
+        const t=fmtTime();
+        let m='<div class="game-over" style="background:#e8f5e9;color:#2e7d32">';
+        m+='<div class="go-title">Xuất sắc! Hoàn thành 20/20!</div>';
+        m+='<div class="go-stats">Thời gian: <b>'+t+'</b></div></div>';
+        $('fDone').innerHTML=m;$('fDone').classList.remove('hidden');
+        $('fChk').classList.add('hidden');$('fBoard').innerHTML='';$('fInst').innerHTML='';
+        $('fReplay').classList.remove('hidden');
+        return;
+    }
+    // difficulty based on fOk: 0-4 easy, 5-9 medium, 10-14 hard, 15-19 harder
+    if(fOk<5) fDen=ri(2,4);
+    else if(fOk<10) fDen=ri(3,6);
+    else if(fOk<15) fDen=ri(5,8);
+    else fDen=ri(6,10);
     fNum=ri(1,fDen-1);
     // random which cells are colored (pick fNum positions)
     let pos=[];for(let i=0;i<fDen;i++)pos.push(i);
@@ -608,8 +624,8 @@ function nxtF(){
     $('fDone').classList.add('hidden');$('fDone').className='hidden';
     $('fNxt').classList.add('hidden');$('fReplay').classList.add('hidden');
     $('fChk').classList.remove('hidden');
-    $('fOk').textContent=fOk;$('fAll').textContent=fAl;
-    $('fInst').innerHTML='Viết phân số chỉ phần đã tô màu:';
+    $('fOk').textContent=fOk;
+    $('fInst').innerHTML='Viết phân số chỉ phần đã tô màu: <span style="color:#888;font-size:.85em">(Bài '+(fOk+1)+'/20)</span>';
 
     let h='<div class="frac-rect"><div class="frac-cells">';
     for(let i=0;i<fDen;i++) h+='<div class="frac-cell'+(fColored.has(i)?' colored':'')+'"></div>';
@@ -623,9 +639,10 @@ function chkFrac(){
     if(fChecked)return;fChecked=true;
     const nv=parseInt($('fNumInp').value),dv=parseInt($('fDenInp').value);
     const ok=(nv===fNum&&dv===fDen);
-    fAl++;if(ok)fOk++;
+    if(ok)fOk++;
+    fAl++;
     $('fChk').classList.add('hidden');
-    $('fOk').textContent=fOk;$('fAll').textContent=fAl;
+    $('fOk').textContent=fOk;
     $('fNumInp').readOnly=true;$('fDenInp').readOnly=true;
 
     if(ok){
@@ -643,7 +660,7 @@ function chkFrac(){
         m+='<div class="go-title">Sai rồi! Dừng lại!</div>';
         m+='<div class="go-answer">Đáp án: <b>'+fNum+'/'+fDen+'</b></div>';
         m+='<div class="go-stats">';
-        m+='Đúng: <b>'+fOk+'</b> / '+fAl+' bài<br>';
+        m+='Đúng: <b>'+fOk+'</b> / 20 bài<br>';
         m+='Thời gian: <b>'+t+'</b></div></div>';
         $('fDone').innerHTML=m;$('fDone').classList.remove('hidden');
         $('fReplay').classList.remove('hidden');
