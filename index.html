@@ -41,6 +41,10 @@
         .work-row{white-space:pre;min-height:1em}
         .mult-inner{font-family:'Courier New',monospace;font-size:1.7em;font-weight:700;line-height:2;display:inline-block;text-align:right}
         .mult-inner .m-line{border-top:3px solid #333;margin:4px 0;padding-top:4px}
+        .carry-row{line-height:1;margin-bottom:-4px;font-size:.55em}
+        .carry-inp{font-family:'Courier New',monospace;font-weight:700;font-size:1em;width:1.3em;height:1.3em;border:1px dashed #bbb;border-radius:3px;background:transparent;text-align:center;padding:0;color:#e91e63;vertical-align:bottom}
+        .carry-inp:focus{outline:none;border-color:#e91e63;border-style:solid;background:#fff9c4}
+        .carry-inp::placeholder{color:#ddd;font-size:.8em}
 
         input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
         input[type=number]{-moz-appearance:textfield}
@@ -331,7 +335,15 @@ function renMF1(){
     const aStr=cA+'',bStr=cB+'',rStr=mResult+'';
     const mx=Math.max(aStr.length,bStr.length+1,rStr.length);
     const allFilled=mFI>=rStr.length;
-    let h=mHead(mx,aStr,bStr)+'<div class="m-line">'+S.repeat(mx-rStr.length);
+    // Carry row (ô nhớ) - không chấm điểm, chỉ giúp bé ghi nhớ
+    let cH='<div class="carry-row">'+S.repeat(mx-rStr.length);
+    for(let i=0;i<rStr.length;i++){
+        const pfr=rStr.length-1-i;
+        if(pfr===0) cH+=S; // vị trí đầu không cần nhớ
+        else cH+='<input type="tel" maxlength="1" class="carry-inp" tabindex="-1">';
+    }
+    cH+='</div>';
+    let h=mHead(mx,aStr,bStr)+cH+'<div class="m-line">'+S.repeat(mx-rStr.length);
     for(let i=0;i<rStr.length;i++){
         const pfr=rStr.length-1-i;
         if(pfr<mFI) h+='<span>'+mFD[pfr]+'</span>';
