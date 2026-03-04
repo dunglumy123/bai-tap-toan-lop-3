@@ -62,23 +62,34 @@
         .div-quotient{padding-top:4px;letter-spacing:2px}
         .work-row{white-space:pre;min-height:1em}
 
-        /* Remove number input spinners */
         input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
         input[type=number]{-moz-appearance:textfield}
 
         .q-done{color:#e91e63}
         .q-blank{color:#ccc}
+
+        /* Guided mode inputs (dashed pink border) */
         .q-inp,.w-inp{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:2px dashed #e91e63;border-radius:4px;background:#fff9c4;text-align:center;padding:0;height:1.3em}
         .q-inp{width:1.1em}
         .q-inp:focus,.w-inp:focus{outline:none;border-style:solid;background:#fff}
+
+        /* Free-form mode inputs (solid gray, like paper blanks) */
+        .q-free,.w-free{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:none;border-bottom:2px solid #999;border-radius:0;background:transparent;text-align:center;padding:0;height:1.3em}
+        .q-free{width:1.1em}
+        .w-free{text-align:right}
+        .q-free:focus,.w-free:focus{outline:none;border-bottom-color:#e91e63;background:#fff9c4}
+        .q-free.ok,.w-free.ok{border-bottom-color:#4caf50;background:#e8f5e9;color:#2e7d32}
+        .q-free.err,.w-free.err{border-bottom-color:#f44336;background:#ffebee;color:#c62828}
+
         .c-blue{color:#1565c0}
         .c-pink{color:#e91e63}
         .input-wrong{animation:shake .3s;border-color:red!important;background:#ffebee!important}
         @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
-        .div-instruction{text-align:center;font-size:1.1em;color:#555;margin-bottom:14px;min-height:1.5em}
+        .div-instruction{text-align:center;font-size:1.05em;color:#555;margin-bottom:14px;min-height:1.5em}
         .div-instruction strong{color:#e91e63}
         .div-done-msg{text-align:center;font-size:1.3em;font-weight:700;color:#2e7d32;background:#e8f5e9;padding:16px;border-radius:12px;margin:12px 0}
+        .div-mode-label{text-align:center;font-size:.9em;color:#888;margin-bottom:10px;font-style:italic}
 
         @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}header h1{font-size:1.5em}}
     </style>
@@ -120,10 +131,15 @@
     <!-- DIV PAGE -->
     <div id="divPage" class="card hidden">
         <div class="exercise-header"><h2 id="dT"></h2><div class="score-box">Dung: <span id="dOk">0</span>/<span id="dAll">0</span></div></div>
+        <div class="div-mode-label" id="dMode"></div>
         <div class="div-instruction" id="dInst"></div>
         <div class="div-board" id="dBoard"></div>
         <div id="dDone" class="div-done-msg hidden"></div>
-        <div class="btn-row"><button class="btn btn-primary hidden" id="dNxt" onclick="nxtD()">Bai tiep</button></div>
+        <div class="btn-row">
+            <button class="btn btn-green hidden" id="dChk" onclick="chkDFree()">Kiem tra</button>
+            <button class="btn btn-blue hidden" id="dSolBtn" onclick="showDSol()">Xem dap an</button>
+            <button class="btn btn-primary hidden" id="dNxt" onclick="nxtD()">Bai tiep</button>
+        </div>
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai</button></div>
     </div>
 </div>
@@ -131,7 +147,7 @@
 <script>
 let cType,cSem,cA,cB;
 const $=id=>document.getElementById(id);
-const S='\u00A0'; // non-breaking space
+const S='\u00A0';
 function goMenu(){$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden')}
 function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function pad(s,n){return s.padStart(n,S)}
@@ -140,7 +156,7 @@ function startEx(t,s){
     cType=t;cSem=s;
     $('menuPage').classList.add('hidden');
     if(t==='mult'){mOk=0;mAl=0;$('mT').textContent='Phep nhan - '+(s==='hk1'?'HK1':'HK2');$('multPage').classList.remove('hidden');nxtM()}
-    else{dOk=0;dAl=0;$('dT').textContent='Phep chia - '+(s==='hk1'?'HK1':'HK2');$('divPage').classList.remove('hidden');nxtD()}
+    else{dOk=0;dAl=0;dFirst=true;$('dT').textContent='Phep chia - '+(s==='hk1'?'HK1':'HK2');$('divPage').classList.remove('hidden');nxtD()}
 }
 
 // ============ MULTIPLICATION ============
@@ -195,8 +211,10 @@ function togMS(){
     $('mSS').innerHTML=h;b.classList.add('show');
 }
 
-// ============ DIVISION - INTERACTIVE ============
+// ============ DIVISION ============
 let dSteps=[],dSI=0,dPh='q',dNoErr=true,dOk=0,dAl=0;
+let dFirst=true; // first problem = guided, rest = free-form
+let dChecked=false;
 
 function compSteps(a,b){
     const digs=(a+'').split('').map(Number);
@@ -212,18 +230,35 @@ function compSteps(a,b){
     return steps;
 }
 
-function nxtD(){
+function genD(){
     if(cSem==='hk1'){cB=ri(2,9);cA=ri(1000,9999)}else{cB=ri(2,9);cA=ri(1000,99999)}
-    dSteps=compSteps(cA,cB);dSI=0;dPh='q';dNoErr=true;
-    $('dDone').classList.add('hidden');$('dNxt').classList.add('hidden');
-    $('dOk').textContent=dOk;$('dAll').textContent=dAl;
-    renD();
+    dSteps=compSteps(cA,cB);
 }
 
-function renD(){
-    const aStr=cA+'',W=aStr.length,done=dSI>=dSteps.length;
+function nxtD(){
+    genD();
+    $('dDone').classList.add('hidden');$('dNxt').classList.add('hidden');
+    $('dSolBtn').classList.add('hidden');$('dChk').classList.add('hidden');
+    $('dOk').textContent=dOk;$('dAll').textContent=dAl;
 
-    // === QUOTIENT ===
+    if(dFirst){
+        // GUIDED MODE - first problem
+        $('dMode').textContent='Bai mau - lam theo huong dan';
+        dSI=0;dPh='q';dNoErr=true;
+        renGuided();
+    }else{
+        // FREE-FORM MODE
+        $('dMode').textContent='Tu trinh bay phep chia';
+        $('dInst').innerHTML='Dien vao cac o trong, xong bam <b>Kiem tra</b>';
+        dChecked=false;
+        $('dChk').classList.remove('hidden');
+        renFree();
+    }
+}
+
+// ========== GUIDED MODE (first problem only) ==========
+function renGuided(){
+    const aStr=cA+'',W=aStr.length,done=dSI>=dSteps.length;
     let qH='';
     for(let i=0;i<dSteps.length;i++){
         if(i<dSI||(i===dSI&&dPh!=='q')||done)
@@ -232,61 +267,42 @@ function renD(){
             qH+='<input type="number" id="ai" class="q-inp">';
         else qH+='<span class="q-blank">_</span>';
     }
-
-    // === WORK ROWS ===
     let wH='<div class="work-row">'+aStr+'</div>';
-
     for(let i=0;i<dSteps.length;i++){
-        const s=dSteps[i];
-        const pStr=s.p+'';
-        const pPad=s.di-pStr.length+1;
-
+        const s=dSteps[i],pStr=s.p+'',pPad=s.di-pStr.length+1;
         if(i<dSI||done){
-            // Completed: product row
             wH+='<div class="work-row">'+S.repeat(pPad)+'<span class="c-blue">'+pStr+'</span></div>';
-            // Remain+bring or final
             if(s.nd!==null){
-                const rb=s.r*10+s.nd;
-                const rbStr=rb<10?'0'+rb:''+rb;
+                const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
                 wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>';
             }else{
                 wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
             }
         }else if(i===dSI){
             if(dPh==='p'){
-                // Product input
                 wH+='<div class="work-row">'+S.repeat(pPad)+'<input type="number" id="ai" class="w-inp" style="width:'+Math.max(pStr.length,1)*1.2+'ch"></div>';
             }else if(dPh==='r'){
-                // Product shown
                 wH+='<div class="work-row">'+S.repeat(pPad)+'<span class="c-blue">'+pStr+'</span></div>';
-                // Remainder input + bringdown
-                if(s.nd!==null){
+                if(s.nd!==null)
                     wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.2ch"><span class="c-pink">'+s.nd+'</span></div>';
-                }else{
+                else
                     wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" id="ai" class="w-inp" style="width:1.2ch"></div>';
-                }
             }
-            // phase 'q': no work rows yet
         }
     }
-
-    // === ASSEMBLE ===
     $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
-
-    // Instruction
     let inst='';
     if(!done){
         const s=dSteps[dSI];
-        if(dPh==='q') inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
-        else if(dPh==='p') inst=s.q+' nhan '+cB+' bang <strong>may</strong>?';
+        if(dPh==='q')inst=s.take+' chia '+cB+' duoc <strong>may</strong>?';
+        else if(dPh==='p')inst=s.q+' nhan '+cB+' bang <strong>may</strong>?';
         else inst=s.take+' tru '+s.p+' bang <strong>may</strong>?';
     }
     $('dInst').innerHTML=inst;
-
     setTimeout(()=>{const inp=$('ai');if(inp)inp.focus()},50);
 }
 
-function chkD(){
+function chkGuided(){
     const inp=$('ai');if(!inp)return;
     const v=parseInt(inp.value);if(isNaN(v)||v<0){inp.focus();return}
     const s=dSteps[dSI];
@@ -294,32 +310,121 @@ function chkD(){
     if(v===exp){
         if(dPh==='q')dPh='p';
         else if(dPh==='p')dPh='r';
-        else{dSI++;dPh='q';if(dSI>=dSteps.length)finD()}
-        renD();
+        else{dSI++;dPh='q';if(dSI>=dSteps.length)finGuided()}
+        renGuided();
     }else{
         dNoErr=false;inp.classList.add('input-wrong');
         setTimeout(()=>{inp.classList.remove('input-wrong');inp.value='';inp.focus()},400);
     }
 }
 
-function finD(){
+function finGuided(){
     dAl++;const q=Math.floor(cA/cB),r=cA%cB;
     if(dNoErr)dOk++;
     let m=dNoErr?'Gioi lam! &#127881;<br>':'Hoan thanh! &#128170;<br>';
     m+='<span style="font-size:.8em">'+cA+' : '+cB+' = <b>'+q+'</b>';
     if(r>0)m+=' (du <b>'+r+'</b>)';
     m+='</span><br><span style="font-size:.65em;color:#888">Thu lai: '+q+'&times;'+cB+'='+q*cB;
-    if(r>0)m+='+'+r+'='+cA;
-    m+=' &#10004;</span>';
-    $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');$('dNxt').classList.remove('hidden');
-    $('dOk').textContent=dOk;$('dAll').textContent=dAl;$('dInst').innerHTML='';renD();
+    if(r>0)m+='+'+r+'='+cA;m+=' &#10004;</span>';
+    m+='<br><span style="font-size:.75em;color:#1565c0">Cac bai sau con tu lam nhe!</span>';
+    $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
+    $('dNxt').classList.remove('hidden');$('dInst').innerHTML='';
+    $('dOk').textContent=dOk;$('dAll').textContent=dAl;
+    dFirst=false; // next problems are free-form
+    renGuided();
 }
 
-// === KEYBOARD ===
+// ========== FREE-FORM MODE (subsequent problems) ==========
+function renFree(){
+    const aStr=cA+'',W=aStr.length;
+    // Quotient: all blank inputs
+    let qH='';
+    for(let i=0;i<dSteps.length;i++){
+        qH+='<input type="number" class="q-free" id="fq'+i+'">';
+    }
+    // Work area: blank inputs for product and remain rows
+    let wH='<div class="work-row">'+aStr+'</div>';
+    for(let i=0;i<dSteps.length;i++){
+        const s=dSteps[i],pStr=s.p+'',pPad=s.di-pStr.length+1;
+        // Product input
+        wH+='<div class="work-row">'+S.repeat(pPad)+'<input type="number" class="w-free" id="fp'+i+'" style="width:'+Math.max(pStr.length,2)*1.1+'ch"></div>';
+        // Remain+bring or final remain input
+        if(s.nd!==null){
+            const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
+            wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:'+Math.max(rbStr.length,2)*1.1+'ch"></div>';
+        }else{
+            wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:1.5ch"></div>';
+        }
+    }
+    $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
+    setTimeout(()=>{const f=$('fq0');if(f)f.focus()},50);
+}
+
+function chkDFree(){
+    if(dChecked)return;
+    dChecked=true;
+    let allOk=true;
+    for(let i=0;i<dSteps.length;i++){
+        const s=dSteps[i];
+        // Quotient digit
+        const qi=$('fq'+i),qv=parseInt(qi.value);
+        if(qv===s.q){qi.classList.add('ok')}else{qi.classList.add('err');allOk=false}
+        qi.readOnly=true;
+        // Product
+        const pi=$('fp'+i),pv=parseInt(pi.value);
+        if(pv===s.p){pi.classList.add('ok')}else{pi.classList.add('err');allOk=false}
+        pi.readOnly=true;
+        // Remain+bring or final
+        const rri=$('fr'+i),rv=parseInt(rri.value);
+        const exp=s.nd!==null?s.r*10+s.nd:s.r;
+        if(rv===exp){rri.classList.add('ok')}else{rri.classList.add('err');allOk=false}
+        rri.readOnly=true;
+    }
+    dAl++;if(allOk)dOk++;
+    const q=Math.floor(cA/cB),r=cA%cB;
+    let m=allOk?'Dung het! Gioi lam! &#127881;<br>':'Co cho sai (do). Xem dap an de hoc nhe! &#128170;<br>';
+    m+='<span style="font-size:.8em">'+cA+' : '+cB+' = <b>'+q+'</b>';
+    if(r>0)m+=' (du <b>'+r+'</b>)';m+='</span>';
+    $('dDone').innerHTML=m;$('dDone').classList.remove('hidden');
+    $('dChk').classList.add('hidden');
+    if(!allOk)$('dSolBtn').classList.remove('hidden');
+    $('dNxt').classList.remove('hidden');$('dInst').innerHTML='';
+    $('dOk').textContent=dOk;$('dAll').textContent=dAl;
+}
+
+function showDSol(){
+    // Show completed layout with all correct values
+    const aStr=cA+'',W=aStr.length;
+    let qH='';
+    for(let i=0;i<dSteps.length;i++) qH+='<span class="q-done">'+dSteps[i].q+'</span>';
+    let wH='<div class="work-row">'+aStr+'</div>';
+    for(let i=0;i<dSteps.length;i++){
+        const s=dSteps[i],pStr=s.p+'',pPad=s.di-pStr.length+1;
+        wH+='<div class="work-row">'+S.repeat(pPad)+'<span class="c-blue">'+pStr+'</span></div>';
+        if(s.nd!==null){
+            const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;
+            wH+='<div class="work-row">'+S.repeat(s.di)+rbStr+'</div>';
+        }else{
+            wH+='<div class="work-row">'+S.repeat(s.di)+'<span class="c-pink">'+s.r+'</span></div>';
+        }
+    }
+    $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
+    $('dSolBtn').classList.add('hidden');
+}
+
+// ========== KEYBOARD ==========
 document.addEventListener('keydown',e=>{
     if(e.key!=='Enter')return;
     if(!$('multPage').classList.contains('hidden')){if(!mDn)chkM();else nxtM()}
-    if(!$('divPage').classList.contains('hidden')){if($('ai'))chkD();else if(!$('dNxt').classList.contains('hidden'))nxtD()}
+    if(!$('divPage').classList.contains('hidden')){
+        if(dFirst){
+            if($('ai'))chkGuided();
+            else if(!$('dNxt').classList.contains('hidden'))nxtD();
+        }else{
+            if(!dChecked&&!$('dChk').classList.contains('hidden'))chkDFree();
+            else if(!$('dNxt').classList.contains('hidden'))nxtD();
+        }
+    }
 });
 </script>
 </body>
