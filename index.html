@@ -870,17 +870,20 @@ function chkMeas(){
 }
 
 // ========== KEYBOARD ==========
-// Enter chỉ cho "Bài tiếp" / "Chơi lại", KHÔNG cho "Kiểm tra" (tránh bé bấm nhầm)
+// Enter: bài hướng dẫn giữ nguyên, bài tự do KHÔNG cho Enter kiểm tra (tránh bé bấm nhầm)
 document.addEventListener('keydown',e=>{
     if(e.key!=='Enter')return;
     if(!$('multPage').classList.contains('hidden')){
         if(mGameOver){if(!$('mReplay').classList.contains('hidden'))startEx('mult');return}
-        if(mFirst){if(!$('mNxt').classList.contains('hidden'))nxtM()}
-        else{if(!$('mNxt').classList.contains('hidden'))nxtM()}
+        if(mFirst){if($('ai'))chkMG();else if(!$('mNxt').classList.contains('hidden'))nxtM()}
+        else{
+            if(mType===1&&$('ai')&&$('ai').value!=='')advMF();
+            else if(!$('mNxt').classList.contains('hidden'))nxtM();
+        }
     }
     if(!$('divPage').classList.contains('hidden')){
         if(dGameOver){if(!$('dReplay').classList.contains('hidden'))startEx('div');return}
-        if(dFirst){if(!$('dNxt').classList.contains('hidden'))nxtD()}
+        if(dFirst){if($('ai'))chkGuided();else if(!$('dNxt').classList.contains('hidden'))nxtD()}
         else{if(!$('dNxt').classList.contains('hidden'))nxtD()}
     }
     if(!$('fracPage').classList.contains('hidden')){
