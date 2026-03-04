@@ -41,11 +41,36 @@
             background: #fff3e0; border-radius: 10px; padding: 8px 14px;
             font-weight: 600; color: #e65100; font-size: 0.95em;
         }
+
+        /* Buttons */
+        .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+        .btn {
+            padding: 12px 24px; border: none; border-radius: 12px;
+            font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background: #e91e63; color: white; }
+        .btn-primary:hover { background: #c2185b; }
+        .btn-green { background: #4caf50; color: white; }
+        .btn-green:hover { background: #388e3c; }
+        .btn-blue { background: #2196f3; color: white; }
+        .btn-blue:hover { background: #1565c0; }
+        .btn-back { background: #9e9e9e; color: white; }
+        .btn-back:hover { background: #616161; }
+        .result-msg {
+            text-align: center; font-size: 1.3em; font-weight: 700;
+            padding: 12px; border-radius: 12px; margin: 12px 0;
+        }
+        .result-msg.correct { background: #e8f5e9; color: #2e7d32; }
+        .result-msg.wrong { background: #ffebee; color: #c62828; }
+        .hidden { display: none !important; }
+
+        /* ===== MULTIPLICATION ===== */
         .problem-display {
             background: #fafafa; border: 2px solid #e0e0e0; border-radius: 14px;
             padding: 20px; margin-bottom: 16px;
-            font-family: 'Courier New', Courier, monospace; font-size: 1.5em;
-            line-height: 1.6; overflow-x: auto;
+            font-family: 'Courier New', monospace; font-size: 1.5em; line-height: 1.6;
+            overflow-x: auto;
         }
         .mult-layout { display: inline-block; text-align: right; }
         .mult-row { text-align: right; min-height: 1.5em; }
@@ -63,20 +88,6 @@
         .answer-input:focus { outline: none; border-color: #e91e63; }
         .answer-input.correct { border-color: #4caf50; background: #e8f5e9; }
         .answer-input.wrong { border-color: #f44336; background: #ffebee; }
-        .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
-        .btn {
-            padding: 12px 24px; border: none; border-radius: 12px;
-            font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s;
-        }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-primary { background: #e91e63; color: white; }
-        .btn-primary:hover { background: #c2185b; }
-        .btn-green { background: #4caf50; color: white; }
-        .btn-green:hover { background: #388e3c; }
-        .btn-blue { background: #2196f3; color: white; }
-        .btn-blue:hover { background: #1565c0; }
-        .btn-back { background: #9e9e9e; color: white; }
-        .btn-back:hover { background: #616161; }
         .solution-box {
             background: #f3e5f5; border: 2px solid #ce93d8; border-radius: 14px;
             padding: 20px; margin-top: 16px; display: none;
@@ -88,138 +99,137 @@
             font-family: 'Segoe UI', sans-serif; font-size: 0.75em; color: #7b1fa2;
             margin: 2px 0 8px; padding-left: 8px; border-left: 3px solid #ce93d8;
         }
-        .result-msg {
-            text-align: center; font-size: 1.3em; font-weight: 700;
-            padding: 12px; border-radius: 12px; margin: 12px 0;
-        }
-        .result-msg.correct { background: #e8f5e9; color: #2e7d32; }
-        .result-msg.wrong { background: #ffebee; color: #c62828; }
-        .hidden { display: none !important; }
 
-        /* ===== INTERACTIVE DIVISION ===== */
-        .div-workspace {
-            font-family: 'Courier New', monospace;
-            font-size: 1.4em;
-            padding: 16px;
+        /* ===== INTERACTIVE DIVISION LAYOUT ===== */
+        .div-board {
             background: #fffde7;
-            border: 2px solid #ffd54f;
-            border-radius: 14px;
+            border: 3px solid #ffd54f;
+            border-radius: 16px;
+            padding: 24px;
             margin-bottom: 16px;
             overflow-x: auto;
+            display: flex;
+            justify-content: center;
         }
         .div-frame {
-            display: inline-block;
-            min-width: 280px;
-        }
-        .div-top {
-            display: flex;
-            align-items: flex-start;
-        }
-        .div-dividend {
-            padding-right: 12px;
-            letter-spacing: 4px;
+            display: inline-flex;
+            font-family: 'Courier New', monospace;
+            font-size: 1.6em;
             font-weight: bold;
+            line-height: 1.8;
         }
-        .div-separator {
+        .div-left {
+            text-align: right;
+            padding-right: 0;
+            min-width: 100px;
+        }
+        .div-right {
             border-left: 3px solid #333;
-            padding-left: 12px;
+            padding-left: 14px;
+            min-width: 80px;
         }
         .div-divisor {
-            padding-bottom: 6px;
             border-bottom: 3px solid #333;
-            font-weight: bold;
-            min-width: 60px;
+            padding-bottom: 4px;
         }
         .div-quotient {
-            padding-top: 6px;
-            min-height: 1.4em;
-            letter-spacing: 4px;
-            color: #e91e63;
-            font-weight: bold;
-        }
-        .div-work-area {
-            margin-top: 10px;
-            padding-left: 0;
+            padding-top: 4px;
+            display: flex;
+            gap: 2px;
         }
         .div-work-row {
-            display: flex;
-            align-items: center;
-            min-height: 1.8em;
+            min-height: 1.6em;
         }
-        .div-work-num {
-            min-width: 80px;
-            text-align: right;
-            padding-right: 16px;
+        .div-hline {
+            border-bottom: 2px solid #555;
+            margin: 0;
+            min-height: 4px;
         }
-        .div-work-line {
-            border-bottom: 2px solid #333;
-            min-width: 60px;
-            margin: 2px 0;
-            display: inline-block;
-        }
-        .div-completed-num { color: #333; }
-        .div-completed-sub { color: #1565c0; }
-        .div-remainder-final { color: #e91e63; font-weight: bold; }
+        .completed-val { color: #1565c0; }
+        .remainder-val { color: #333; }
+        .bringdown { color: #e91e63; font-weight: bold; }
+        .final-remainder { color: #e91e63; }
 
-        /* Step input area */
-        .step-panel {
-            background: #e3f2fd;
-            border: 2px solid #90caf9;
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 14px;
-        }
-        .step-panel h3 {
-            color: #1565c0;
-            margin-bottom: 12px;
-            font-size: 1.05em;
-        }
-        .step-question {
-            font-size: 1.15em;
-            margin: 10px 0;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .step-input {
-            width: 80px;
-            font-size: 1.2em;
-            padding: 6px 10px;
-            border: 3px solid #90caf9;
-            border-radius: 10px;
-            text-align: center;
+        /* Inline inputs inside the layout */
+        .q-digit-input {
+            width: 1.2em;
+            height: 1.4em;
+            font-size: 1em;
             font-family: 'Courier New', monospace;
             font-weight: bold;
+            text-align: center;
+            border: 2px dashed #e91e63;
+            border-radius: 6px;
+            background: #fff9c4;
+            color: #333;
+            padding: 0;
+            animation: blink-border 1s infinite;
         }
-        .step-input:focus { outline: none; border-color: #1565c0; }
-        .step-input.correct { border-color: #4caf50; background: #e8f5e9; }
-        .step-input.wrong { border-color: #f44336; background: #ffebee; animation: shake 0.3s; }
+        .q-digit-input:focus { outline: none; border-style: solid; border-color: #e91e63; background: white; }
+        .q-digit-done {
+            display: inline-block;
+            width: 1.2em;
+            text-align: center;
+            color: #e91e63;
+        }
+        .q-digit-blank {
+            display: inline-block;
+            width: 1.2em;
+            text-align: center;
+            color: #ccc;
+        }
+        .work-input {
+            width: 3.5em;
+            height: 1.4em;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: right;
+            border: 2px dashed #e91e63;
+            border-radius: 6px;
+            background: #fff9c4;
+            color: #333;
+            padding: 0 4px;
+            animation: blink-border 1s infinite;
+        }
+        .work-input:focus { outline: none; border-style: solid; border-color: #e91e63; background: white; }
+
+        @keyframes blink-border {
+            0%,100% { border-color: #e91e63; }
+            50% { border-color: #f8bbd0; }
+        }
+        .input-wrong {
+            animation: shake 0.3s !important;
+            border-color: #f44336 !important;
+            background: #ffebee !important;
+        }
         @keyframes shake {
             0%,100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
         }
-        .step-ok { color: #4caf50; font-weight: bold; font-size: 1.2em; }
-        .step-hint {
-            font-size: 0.85em; color: #f57c00; margin-top: 4px;
-            display: none; font-style: italic;
+
+        /* Instruction line */
+        .div-instruction {
+            text-align: center;
+            font-size: 1.05em;
+            color: #555;
+            margin-bottom: 12px;
+            min-height: 1.5em;
         }
-        .step-hint.show { display: block; }
+        .div-instruction strong { color: #e91e63; }
 
         .div-done-msg {
-            text-align: center; font-size: 1.4em; font-weight: 700;
+            text-align: center; font-size: 1.3em; font-weight: 700;
             color: #2e7d32; background: #e8f5e9; padding: 16px;
             border-radius: 12px; margin: 12px 0;
         }
 
         @media (max-width: 500px) {
             .menu-grid { grid-template-columns: 1fr; }
-            .problem-display { font-size: 1.2em; padding: 14px; }
-            .div-workspace { font-size: 1.1em; }
+            .div-frame { font-size: 1.25em; }
+            .problem-display { font-size: 1.2em; }
             header h1 { font-size: 1.5em; }
-            .answer-input { width: 160px; font-size: 1.3em; }
         }
     </style>
 </head>
@@ -257,7 +267,7 @@
         </div>
     </div>
 
-    <!-- MULTIPLICATION EXERCISE -->
+    <!-- MULTIPLICATION -->
     <div id="multPage" class="card hidden">
         <div class="exercise-header">
             <h2 id="multTitle"></h2>
@@ -281,22 +291,15 @@
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai menu</button></div>
     </div>
 
-    <!-- DIVISION EXERCISE (interactive step-by-step) -->
+    <!-- DIVISION (interactive) -->
     <div id="divPage" class="card hidden">
         <div class="exercise-header">
             <h2 id="divTitle"></h2>
             <div class="score-box">Dung: <span id="divCorrect">0</span> / <span id="divTotal">0</span></div>
         </div>
-
-        <!-- Visual division layout -->
-        <div class="div-workspace" id="divWorkspace"></div>
-
-        <!-- Step-by-step input panel -->
-        <div id="stepPanel" class="step-panel"></div>
-
-        <!-- Done message -->
+        <div class="div-instruction" id="divInstruction"></div>
+        <div class="div-board" id="divBoard"></div>
         <div id="divDone" class="div-done-msg hidden"></div>
-
         <div class="btn-row">
             <button class="btn btn-primary hidden" id="divBtnNext" onclick="nextDiv()">Bai tiep theo</button>
         </div>
@@ -305,448 +308,287 @@
 </div>
 
 <script>
-// ===== SHARED STATE =====
-let currentType, currentSemester;
-let currentA, currentB;
+let currentType, currentSemester, currentA, currentB;
 
-// ===== MULT STATE =====
-let multAnswer, multAnswered;
-let multScoreOk = 0, multScoreAll = 0;
-
-// ===== DIV STATE =====
-let divSteps = [];       // computed steps
-let divStepIndex = 0;    // which step we're on
-let divSubStep = 0;      // 0=quotient digit, 1=product, 2=remainder
-let divQuotientSoFar = '';
-let divWorkRows = [];    // completed rows for the visual
-let divNoMistake = true; // track if any mistake in this problem
-let divScoreOk = 0, divScoreAll = 0;
-
+// ===== MENU =====
 function goMenu() {
     document.getElementById('menuPage').classList.remove('hidden');
     document.getElementById('multPage').classList.add('hidden');
     document.getElementById('divPage').classList.add('hidden');
 }
+function randInt(a,b) { return Math.floor(Math.random()*(b-a+1))+a; }
+function pad(s,n) { return s.padStart(n,'\u00A0'); }
 
-function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
-function pad(s, n) { return s.padStart(n, '\u00A0'); }
-
-// ===== START =====
-function startExercise(type, semester) {
+function startExercise(type, sem) {
     currentType = type;
-    currentSemester = semester;
+    currentSemester = sem;
+    document.getElementById('menuPage').classList.add('hidden');
     if (type === 'mult') {
-        multScoreOk = 0; multScoreAll = 0;
-        let t = 'Phep nhan' + (semester === 'hk1' ? ' - Hoc ky 1' : ' - Hoc ky 2');
-        document.getElementById('multTitle').textContent = t;
-        document.getElementById('menuPage').classList.add('hidden');
+        mScoreOk=0; mScoreAll=0;
+        document.getElementById('multTitle').textContent = 'Phep nhan - ' + (sem==='hk1'?'Hoc ky 1':'Hoc ky 2');
         document.getElementById('multPage').classList.remove('hidden');
         nextMult();
     } else {
-        divScoreOk = 0; divScoreAll = 0;
-        let t = 'Phep chia' + (semester === 'hk1' ? ' - Hoc ky 1' : ' - Hoc ky 2');
-        document.getElementById('divTitle').textContent = t;
-        document.getElementById('menuPage').classList.add('hidden');
+        dScoreOk=0; dScoreAll=0;
+        document.getElementById('divTitle').textContent = 'Phep chia - ' + (sem==='hk1'?'Hoc ky 1':'Hoc ky 2');
         document.getElementById('divPage').classList.remove('hidden');
         nextDiv();
     }
 }
 
 // ============================================================
-//  MULTIPLICATION (keep simple: input answer + show solution)
+//  MULTIPLICATION
 // ============================================================
-function genMult() {
-    if (currentSemester === 'hk1') {
-        currentA = randInt(100, 9999);
-        currentB = randInt(2, 9);
-    } else {
-        currentA = randInt(1000, 99999);
-        currentB = Math.random() < 0.6 ? randInt(2, 9) : randInt(11, 99);
-    }
-    multAnswer = currentA * currentB;
-}
-
-function renderMult(a, b, show) {
-    const aS = a.toString(), bS = b.toString(), rS = (a*b).toString();
-    const mx = Math.max(aS.length, bS.length+1, rS.length);
-    let h = '<div class="mult-layout">';
-    h += `<div class="mult-row">${pad(aS,mx)}</div>`;
-    h += `<div class="mult-row"><span class="mult-sign">&times;</span>${pad(bS,mx-1)}</div>`;
-    h += `<div class="mult-line" style="width:${mx*0.65+1}em"></div>`;
-    if (show) {
-        if (bS.length===1) {
-            h += `<div class="mult-row mult-result">${pad(rS,mx)}</div>`;
-        } else {
-            const p1=a*parseInt(bS[1]), p2=a*parseInt(bS[0]);
-            const dl = Math.max(mx, p2.toString().length+1);
-            h += `<div class="mult-row mult-partial">${pad(p1.toString(),dl)}</div>`;
-            h += `<div class="mult-row mult-partial">${pad(p2.toString(),dl-1)}</div>`;
-            h += `<div class="mult-line" style="width:${dl*0.65+1}em"></div>`;
-            h += `<div class="mult-row mult-result">${pad(rS,dl)}</div>`;
-        }
-    } else {
-        h += `<div class="mult-row" style="color:#ccc">${pad('?',mx)}</div>`;
-    }
-    h += '</div>';
-    return h;
-}
+let mAnswer, mDone, mScoreOk=0, mScoreAll=0;
 
 function nextMult() {
-    multAnswered = false;
-    genMult();
-    document.getElementById('multDisplay').innerHTML = renderMult(currentA, currentB, false);
-    document.getElementById('multAnswer').value = '';
-    document.getElementById('multAnswer').className = 'answer-input';
+    mDone = false;
+    if (currentSemester==='hk1') { currentA=randInt(100,9999); currentB=randInt(2,9); }
+    else { currentA=randInt(1000,99999); currentB=Math.random()<0.6?randInt(2,9):randInt(11,99); }
+    mAnswer = currentA*currentB;
+    document.getElementById('multDisplay').innerHTML = renderMult(currentA,currentB,false);
+    document.getElementById('multAnswer').value='';
+    document.getElementById('multAnswer').className='answer-input';
     document.getElementById('multResult').classList.add('hidden');
     document.getElementById('multSolBox').classList.remove('show');
     document.getElementById('multBtnCheck').classList.remove('hidden');
     document.getElementById('multBtnSol').classList.add('hidden');
     document.getElementById('multBtnNext').classList.add('hidden');
-    document.getElementById('multCorrect').textContent = multScoreOk;
-    document.getElementById('multTotal').textContent = multScoreAll;
+    document.getElementById('multCorrect').textContent=mScoreOk;
+    document.getElementById('multTotal').textContent=mScoreAll;
     document.getElementById('multAnswer').focus();
 }
-
+function renderMult(a,b,show) {
+    const aS=a+'',bS=b+'',rS=(a*b)+'';
+    const mx=Math.max(aS.length,bS.length+1,rS.length);
+    let h='<div class="mult-layout">';
+    h+=`<div class="mult-row">${pad(aS,mx)}</div>`;
+    h+=`<div class="mult-row"><span class="mult-sign">&times;</span>${pad(bS,mx-1)}</div>`;
+    h+=`<div class="mult-line" style="width:${mx*0.65+1}em"></div>`;
+    if(show){
+        if(bS.length===1){h+=`<div class="mult-row mult-result">${pad(rS,mx)}</div>`;}
+        else{const p1=a*+bS[1],p2=a*+bS[0],dl=Math.max(mx,p2.toString().length+1);
+        h+=`<div class="mult-row mult-partial">${pad(p1+'',dl)}</div>`;
+        h+=`<div class="mult-row mult-partial">${pad(p2+'',dl-1)}</div>`;
+        h+=`<div class="mult-line" style="width:${dl*0.65+1}em"></div>`;
+        h+=`<div class="mult-row mult-result">${pad(rS,dl)}</div>`;}
+    } else { h+=`<div class="mult-row" style="color:#ccc">${pad('?',mx)}</div>`; }
+    h+='</div>'; return h;
+}
 function checkMult() {
-    if (multAnswered) return;
-    const v = parseInt(document.getElementById('multAnswer').value);
-    if (isNaN(v)) return;
-    multAnswered = true;
-    multScoreAll++;
-    const ok = v === multAnswer;
-    if (ok) multScoreOk++;
-    const inp = document.getElementById('multAnswer');
-    const msg = document.getElementById('multResult');
-    inp.className = 'answer-input ' + (ok ? 'correct' : 'wrong');
-    msg.className = 'result-msg ' + (ok ? 'correct' : 'wrong');
-    msg.innerHTML = ok ? 'Dung roi! &#127881;' : `Chua dung. Dap an: <strong>${multAnswer}</strong>`;
-    msg.classList.remove('hidden');
+    if(mDone)return; const v=parseInt(document.getElementById('multAnswer').value);
+    if(isNaN(v))return; mDone=true; mScoreAll++;
+    const ok=v===mAnswer; if(ok)mScoreOk++;
+    document.getElementById('multAnswer').className='answer-input '+(ok?'correct':'wrong');
+    const m=document.getElementById('multResult');
+    m.className='result-msg '+(ok?'correct':'wrong');
+    m.innerHTML=ok?'Dung roi! &#127881;':`Chua dung. Dap an: <b>${mAnswer}</b>`;
+    m.classList.remove('hidden');
     document.getElementById('multBtnCheck').classList.add('hidden');
     document.getElementById('multBtnSol').classList.remove('hidden');
     document.getElementById('multBtnNext').classList.remove('hidden');
-    document.getElementById('multCorrect').textContent = multScoreOk;
-    document.getElementById('multTotal').textContent = multScoreAll;
+    document.getElementById('multCorrect').textContent=mScoreOk;
+    document.getElementById('multTotal').textContent=mScoreAll;
 }
-
 function toggleMultSol() {
-    const box = document.getElementById('multSolBox');
-    if (box.classList.contains('show')) { box.classList.remove('show'); return; }
-    document.getElementById('multSolSteps').innerHTML = renderMultSol(currentA, currentB);
-    box.classList.add('show');
-}
-
-function renderMultSol(a, b) {
-    const aS=a.toString(), bS=b.toString(), r=a*b;
-    let h = renderMult(a,b,true) + '<br>';
-    h += '<div style="font-family:Segoe UI,sans-serif;font-size:0.75em;color:#555;line-height:2">';
-    if (bS.length===1) {
-        const bd=parseInt(bS), ds=aS.split('').map(Number).reverse();
-        let carry=0;
-        for(let i=0;i<ds.length;i++){
-            const p=ds[i]*bd+carry, w=p%10, nc=Math.floor(p/10);
-            h+=`<div class="step-explain"><strong>Buoc ${i+1}:</strong> ${bd} &times; ${ds[i]}`;
-            if(carry>0) h+=` + ${carry} (nho)`;
-            h+=` = ${p}, viet <strong>${w}</strong>`;
-            if(nc>0) h+=`, nho <strong>${nc}</strong>`;
-            h+=`</div>`;
-            carry=nc;
-        }
-        if(carry>0) h+=`<div class="step-explain">Viet <strong>${carry}</strong> (nho con lai)</div>`;
-    } else {
-        const b1=parseInt(bS[1]),b0=parseInt(bS[0]),p1=a*b1,p2=a*b0;
-        h+=`<div class="step-explain"><strong>Buoc 1:</strong> ${aS} &times; ${b1} = <strong>${p1}</strong></div>`;
-        h+=`<div class="step-explain"><strong>Buoc 2:</strong> ${aS} &times; ${b0} = <strong>${p2}</strong> (lech trai)</div>`;
-        h+=`<div class="step-explain"><strong>Buoc 3:</strong> ${p1} + ${p2}0 = <strong>${r}</strong></div>`;
-    }
-    h+=`<div style="background:#e8f5e9;padding:10px;border-radius:8px;text-align:center;font-size:1.1em;margin-top:8px"><strong>${aS} &times; ${bS} = ${r}</strong></div>`;
-    h+='</div>';
-    return h;
+    const box=document.getElementById('multSolBox');
+    if(box.classList.contains('show')){box.classList.remove('show');return;}
+    const a=currentA,b=currentB,aS=a+'',bS=b+'',r=a*b;
+    let h=renderMult(a,b,true)+'<br><div style="font-family:Segoe UI,sans-serif;font-size:0.75em;color:#555;line-height:2">';
+    if(bS.length===1){const bd=+bS;let carry=0;aS.split('').map(Number).reverse().forEach((d,i)=>{
+        const p=d*bd+carry,w=p%10,nc=Math.floor(p/10);
+        h+=`<div class="step-explain"><b>B${i+1}:</b> ${bd}&times;${d}`;
+        if(carry>0)h+=`+${carry}(nho)`;h+=`=${p}, viet <b>${w}</b>`;
+        if(nc>0)h+=`, nho <b>${nc}</b>`;h+='</div>';carry=nc;});
+        if(carry>0)h+=`<div class="step-explain">Viet <b>${carry}</b> (nho)</div>`;
+    }else{const b1=+bS[1],b0=+bS[0],p1=a*b1,p2=a*b0;
+        h+=`<div class="step-explain"><b>B1:</b> ${aS}&times;${b1}=<b>${p1}</b></div>`;
+        h+=`<div class="step-explain"><b>B2:</b> ${aS}&times;${b0}=<b>${p2}</b> (lech trai)</div>`;
+        h+=`<div class="step-explain"><b>B3:</b> ${p1}+${p2}0=<b>${r}</b></div>`;}
+    h+=`<div style="background:#e8f5e9;padding:10px;border-radius:8px;text-align:center;margin-top:8px"><b>${aS}&times;${bS}=${r}</b></div></div>`;
+    document.getElementById('multSolSteps').innerHTML=h; box.classList.add('show');
 }
 
 // ============================================================
-//  DIVISION - INTERACTIVE STEP BY STEP
+//  DIVISION - INTERACTIVE IN-LAYOUT
 // ============================================================
-function genDiv() {
-    if (currentSemester === 'hk1') {
-        currentB = randInt(2, 9);
-        currentA = randInt(1000, 9999);
-    } else {
-        currentB = randInt(2, 9);
-        currentA = randInt(1000, 99999);
-    }
-}
+let dSteps=[], dStepIdx=0, dPhase='q'; // q=quotient, p=product, r=remainder
+let dNoMistake=true, dScoreOk=0, dScoreAll=0;
 
-function computeDivSteps(a, b) {
-    const digits = a.toString().split('').map(Number);
-    let steps = [];
-    let workingNum = 0;
-    let started = false;
-
-    for (let i = 0; i < digits.length; i++) {
-        workingNum = workingNum * 10 + digits[i];
-
-        if (!started && workingNum < b && i < digits.length - 1) {
-            continue; // first group not enough, take more
-        }
-
+function computeSteps(a, b) {
+    const digits = (a+'').split('').map(Number);
+    let steps=[], wn=0, started=false;
+    for (let i=0; i<digits.length; i++) {
+        wn = wn*10 + digits[i];
+        if (!started && wn<b && i<digits.length-1) continue;
         started = true;
-        const qDigit = Math.floor(workingNum / b);
-        const product = qDigit * b;
-        const remainder = workingNum - product;
-
-        steps.push({
-            takeNum: workingNum,
-            qDigit: qDigit,
-            product: product,
-            remainder: remainder,
-            digitIndex: i,
-            nextDigit: (i < digits.length - 1) ? digits[i + 1] : null
-        });
-
-        workingNum = remainder;
+        const q = Math.floor(wn/b), p = q*b, rem = wn-p;
+        steps.push({ takeNum:wn, qDigit:q, product:p, remainder:rem,
+            digitIndex:i, nextDigit: i<digits.length-1 ? digits[i+1] : null });
+        wn = rem;
     }
     return steps;
 }
 
 function nextDiv() {
-    genDiv();
-    divSteps = computeDivSteps(currentA, currentB);
-    divStepIndex = 0;
-    divSubStep = 0;
-    divQuotientSoFar = '';
-    divWorkRows = [];
-    divNoMistake = true;
-
+    if (currentSemester==='hk1') { currentB=randInt(2,9); currentA=randInt(1000,9999); }
+    else { currentB=randInt(2,9); currentA=randInt(1000,99999); }
+    dSteps = computeSteps(currentA, currentB);
+    dStepIdx=0; dPhase='q'; dNoMistake=true;
     document.getElementById('divDone').classList.add('hidden');
     document.getElementById('divBtnNext').classList.add('hidden');
-    document.getElementById('divCorrect').textContent = divScoreOk;
-    document.getElementById('divTotal').textContent = divScoreAll;
-
-    renderDivWorkspace();
-    renderStepPanel();
+    document.getElementById('divCorrect').textContent=dScoreOk;
+    document.getElementById('divTotal').textContent=dScoreAll;
+    renderDiv();
 }
 
-function renderDivWorkspace() {
-    const aStr = currentA.toString();
-    const bStr = currentB.toString();
+function renderDiv() {
+    const aStr = currentA+'', bStr = currentB+'';
+    const allDone = dStepIdx >= dSteps.length;
 
-    let qDisplay = divQuotientSoFar;
-    // Pad quotient placeholder
-    const totalQDigits = divSteps.length;
-    while (qDisplay.length < totalQDigits) qDisplay += '_';
-
-    let html = '<div class="div-frame">';
-
-    // Top: dividend | divisor / quotient
-    html += '<div class="div-top">';
-    html += `<div class="div-dividend">${aStr}</div>`;
-    html += '<div class="div-separator">';
-    html += `<div class="div-divisor">${bStr}</div>`;
-    html += `<div class="div-quotient">${qDisplay}</div>`;
-    html += '</div></div>';
-
-    // Work rows (completed steps)
-    if (divWorkRows.length > 0) {
-        html += '<div class="div-work-area">';
-        for (const row of divWorkRows) {
-            html += row;
+    // ---- QUOTIENT ROW ----
+    let qHtml = '';
+    for (let i=0; i<dSteps.length; i++) {
+        if (i < dStepIdx || (i===dStepIdx && dPhase!=='q') || allDone) {
+            qHtml += `<span class="q-digit-done">${dSteps[i].qDigit}</span>`;
+        } else if (i===dStepIdx && dPhase==='q') {
+            qHtml += `<input type="number" class="q-digit-input" id="activeInp" maxlength="1">`;
+        } else {
+            qHtml += `<span class="q-digit-blank">_</span>`;
         }
-        html += '</div>';
     }
 
-    html += '</div>';
-    document.getElementById('divWorkspace').innerHTML = html;
-}
+    // ---- WORK ROWS (left column) ----
+    let workHtml = '';
+    // Dividend row
+    workHtml += `<div class="div-work-row">${aStr}</div>`;
 
-function getIndent(num, aLen) {
-    // Right-align numbers relative to dividend width
-    const numStr = num.toString();
-    const spaces = aLen - numStr.length;
-    return '\u00A0'.repeat(Math.max(0, spaces * 2));
-}
+    for (let i=0; i<dSteps.length; i++) {
+        const s = dSteps[i];
 
-function renderStepPanel() {
-    const panel = document.getElementById('stepPanel');
-    if (divStepIndex >= divSteps.length) {
-        // All steps done!
-        panel.innerHTML = '';
-        finishDiv();
-        return;
+        if (i < dStepIdx) {
+            // ---- COMPLETED STEP ----
+            // Product row (right-aligned under the takeNum)
+            workHtml += `<div class="div-work-row completed-val">${s.product}</div>`;
+            // Line
+            workHtml += `<div class="div-hline" style="width:${Math.max((s.takeNum+'').length,(s.product+'').length)*0.65+0.3}em"></div>`;
+            // Remainder + bring down
+            if (s.nextDigit !== null) {
+                const nextNum = s.remainder * 10 + s.nextDigit;
+                workHtml += `<div class="div-work-row remainder-val">${nextNum}</div>`;
+            } else {
+                workHtml += `<div class="div-work-row final-remainder">${s.remainder}</div>`;
+            }
+        } else if (i === dStepIdx && !allDone) {
+            // ---- CURRENT STEP ----
+            if (dPhase === 'q') {
+                // Waiting for quotient digit - nothing in work area yet
+            } else if (dPhase === 'p') {
+                // Quotient entered, waiting for product
+                workHtml += `<div class="div-work-row"><input type="number" class="work-input" id="activeInp"></div>`;
+            } else if (dPhase === 'r') {
+                // Product entered, waiting for remainder
+                workHtml += `<div class="div-work-row completed-val">${s.product}</div>`;
+                workHtml += `<div class="div-hline" style="width:${Math.max((s.takeNum+'').length,(s.product+'').length)*0.65+0.3}em"></div>`;
+                workHtml += `<div class="div-work-row"><input type="number" class="work-input" id="activeInp"></div>`;
+            }
+        }
     }
 
-    const step = divSteps[divStepIndex];
-    const stepNum = divStepIndex + 1;
-    const b = currentB;
-    let html = `<h3>Buoc ${stepNum} / ${divSteps.length}</h3>`;
-
-    if (divSubStep === 0) {
-        // Ask: takeNum ÷ b = ?
-        html += `<div class="step-question">`;
-        html += `<strong>${step.takeNum}</strong> chia <strong>${b}</strong> duoc`;
-        html += ` <input type="number" class="step-input" id="stepInput" placeholder="?">`;
-        html += `</div>`;
-        html += `<div class="step-hint" id="stepHint">Goi y: ${step.takeNum} &divide; ${b} = ?</div>`;
-        html += `<div class="btn-row"><button class="btn btn-green" onclick="checkDivStep()">Kiem tra</button>`;
-        html += `<button class="btn btn-back" onclick="showHint()" style="font-size:0.85em">Goi y</button></div>`;
-    } else if (divSubStep === 1) {
-        // Ask: qDigit × b = ?
-        html += `<div class="step-question">`;
-        html += `<strong>${step.qDigit}</strong> nhan <strong>${b}</strong> bang`;
-        html += ` <input type="number" class="step-input" id="stepInput" placeholder="?">`;
-        html += `</div>`;
-        html += `<div class="step-hint" id="stepHint">Goi y: ${step.qDigit} &times; ${b} = ?</div>`;
-        html += `<div class="btn-row"><button class="btn btn-green" onclick="checkDivStep()">Kiem tra</button>`;
-        html += `<button class="btn btn-back" onclick="showHint()" style="font-size:0.85em">Goi y</button></div>`;
-    } else if (divSubStep === 2) {
-        // Ask: takeNum - product = ?
-        html += `<div class="step-question">`;
-        html += `<strong>${step.takeNum}</strong> tru <strong>${step.product}</strong> bang`;
-        html += ` <input type="number" class="step-input" id="stepInput" placeholder="?">`;
-        html += `</div>`;
-        html += `<div class="step-hint" id="stepHint">Goi y: ${step.takeNum} - ${step.product} = ?</div>`;
-        html += `<div class="btn-row"><button class="btn btn-green" onclick="checkDivStep()">Kiem tra</button>`;
-        html += `<button class="btn btn-back" onclick="showHint()" style="font-size:0.85em">Goi y</button></div>`;
+    // Final remainder for completed division
+    if (allDone) {
+        // already rendered in loop
     }
 
-    panel.innerHTML = html;
-    setTimeout(() => {
-        const inp = document.getElementById('stepInput');
-        if (inp) inp.focus();
-    }, 50);
+    // ---- ASSEMBLE ----
+    let html = `<div class="div-frame">`;
+    html += `<div class="div-left">${workHtml}</div>`;
+    html += `<div class="div-right">`;
+    html += `<div class="div-divisor">${bStr}</div>`;
+    html += `<div class="div-quotient">${qHtml}</div>`;
+    html += `</div></div>`;
+
+    document.getElementById('divBoard').innerHTML = html;
+
+    // ---- INSTRUCTION ----
+    let inst = '';
+    if (!allDone) {
+        const s = dSteps[dStepIdx];
+        if (dPhase==='q') inst = `<strong>${s.takeNum}</strong> chia <strong>${currentB}</strong> duoc may?`;
+        else if (dPhase==='p') inst = `<strong>${s.qDigit}</strong> nhan <strong>${currentB}</strong> bang may?`;
+        else inst = `<strong>${s.takeNum}</strong> tru <strong>${s.product}</strong> bang may?`;
+    }
+    document.getElementById('divInstruction').innerHTML = inst;
+
+    // Focus input
+    setTimeout(() => { const inp = document.getElementById('activeInp'); if(inp) inp.focus(); }, 50);
 }
 
-function showHint() {
-    const h = document.getElementById('stepHint');
-    if (h) h.classList.add('show');
-}
-
-function checkDivStep() {
-    const inp = document.getElementById('stepInput');
+function checkDivInput() {
+    const inp = document.getElementById('activeInp');
     if (!inp) return;
     const val = parseInt(inp.value);
     if (isNaN(val)) { inp.focus(); return; }
 
-    const step = divSteps[divStepIndex];
+    const s = dSteps[dStepIdx];
     let expected;
-
-    if (divSubStep === 0) expected = step.qDigit;
-    else if (divSubStep === 1) expected = step.product;
-    else expected = step.remainder;
+    if (dPhase==='q') expected = s.qDigit;
+    else if (dPhase==='p') expected = s.product;
+    else expected = s.remainder;
 
     if (val === expected) {
-        inp.className = 'step-input correct';
-        setTimeout(() => advanceDivStep(), 400);
-    } else {
-        inp.className = 'step-input wrong';
-        divNoMistake = false;
-        // Show hint after wrong answer
-        showHint();
-        setTimeout(() => {
-            inp.className = 'step-input';
-            inp.value = '';
-            inp.focus();
-        }, 600);
-    }
-}
-
-function advanceDivStep() {
-    const step = divSteps[divStepIndex];
-    const aLen = currentA.toString().length;
-
-    if (divSubStep === 0) {
-        // Quotient digit confirmed - add to quotient display
-        divQuotientSoFar += step.qDigit.toString();
-        renderDivWorkspace();
-        divSubStep = 1;
-        renderStepPanel();
-    } else if (divSubStep === 1) {
-        // Product confirmed - add product row to work area
-        const pStr = step.product.toString();
-        const tStr = step.takeNum.toString();
-        // Align product under takeNum
-        const indent = '\u00A0'.repeat(Math.max(0, (tStr.length - pStr.length)) * 1);
-        let row = `<div class="div-work-row"><div class="div-work-num div-completed-sub">${indent}${pStr}</div></div>`;
-        row += `<div class="div-work-row"><div class="div-work-num"><span class="div-work-line" style="width:${Math.max(tStr.length, pStr.length) * 0.7}em">&nbsp;</span></div></div>`;
-        divWorkRows.push(row);
-        renderDivWorkspace();
-        divSubStep = 2;
-        renderStepPanel();
-    } else {
-        // Remainder confirmed - add remainder row, prepare next step
-        const rStr = step.remainder.toString();
-        let displayStr = rStr;
-
-        if (step.nextDigit !== null) {
-            // Show remainder with next digit brought down
-            displayStr = (step.remainder === 0 ? '' : rStr) + '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
-            if (step.remainder === 0) displayStr = '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
-            // Actually show the full next working number
-            const nextNum = step.remainder * 10 + step.nextDigit;
-            displayStr = nextNum.toString().slice(0, -1) + '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
-            if (nextNum < 10) displayStr = '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
+        // Correct! Advance
+        if (dPhase==='q') { dPhase='p'; }
+        else if (dPhase==='p') { dPhase='r'; }
+        else {
+            // Remainder done, go to next step
+            dStepIdx++;
+            dPhase = 'q';
+            if (dStepIdx >= dSteps.length) {
+                finishDiv();
+            }
         }
-
-        let row = `<div class="div-work-row"><div class="div-work-num div-completed-num">${displayStr}</div></div>`;
-        divWorkRows.push(row);
-        renderDivWorkspace();
-
-        // Move to next step
-        divStepIndex++;
-        divSubStep = 0;
-        renderStepPanel();
+        renderDiv();
+    } else {
+        // Wrong - shake
+        dNoMistake = false;
+        inp.classList.add('input-wrong');
+        setTimeout(() => { inp.classList.remove('input-wrong'); inp.value=''; inp.focus(); }, 400);
     }
 }
 
 function finishDiv() {
-    divScoreAll++;
-    const quotient = Math.floor(currentA / currentB);
-    const remainder = currentA % currentB;
-    let msg = '';
+    dScoreAll++;
+    const q = Math.floor(currentA/currentB), rem = currentA%currentB;
+    if (dNoMistake) dScoreOk++;
 
-    if (divNoMistake) {
-        divScoreOk++;
-        msg = `Gioi lam! Khong sai buoc nao! &#127881;<br>`;
-    } else {
-        msg = `Hoan thanh! Lan sau co gang hon nhe! &#128170;<br>`;
-    }
-
-    msg += `<span style="font-size:0.8em">${currentA} : ${currentB} = <strong>${quotient}</strong>`;
-    if (remainder > 0) msg += ` (du <strong>${remainder}</strong>)`;
-    msg += `</span>`;
-
-    // Verification
-    msg += `<br><span style="font-size:0.65em;color:#888">Thu lai: ${quotient} &times; ${currentB} = ${quotient * currentB}`;
-    if (remainder > 0) msg += ` + ${remainder} = ${currentA}`;
+    let msg = dNoMistake
+        ? `Gioi lam! Khong sai buoc nao! &#127881;<br>`
+        : `Hoan thanh! Co gang hon nhe! &#128170;<br>`;
+    msg += `<span style="font-size:0.8em">${currentA} : ${currentB} = <b>${q}</b>`;
+    if (rem>0) msg += ` (du <b>${rem}</b>)`;
+    msg += `</span><br><span style="font-size:0.65em;color:#888">Thu lai: ${q} &times; ${currentB} = ${q*currentB}`;
+    if (rem>0) msg += ` + ${rem} = ${currentA}`;
     msg += ` &#10004;</span>`;
 
     document.getElementById('divDone').innerHTML = msg;
     document.getElementById('divDone').classList.remove('hidden');
     document.getElementById('divBtnNext').classList.remove('hidden');
-    document.getElementById('divCorrect').textContent = divScoreOk;
-    document.getElementById('divTotal').textContent = divScoreAll;
-
-    // Add final remainder to workspace if > 0
-    if (remainder > 0) {
-        // Already shown in last step
-    }
+    document.getElementById('divCorrect').textContent = dScoreOk;
+    document.getElementById('divTotal').textContent = dScoreAll;
+    document.getElementById('divInstruction').innerHTML = '';
+    renderDiv(); // final render shows all completed
 }
 
-// Enter key handler
+// ===== KEYBOARD =====
 document.addEventListener('keydown', function(e) {
     if (e.key !== 'Enter') return;
-    // Check which page is visible
     if (!document.getElementById('multPage').classList.contains('hidden')) {
-        if (!multAnswered) checkMult();
-        else nextMult();
+        if (!mDone) checkMult(); else nextMult();
     }
     if (!document.getElementById('divPage').classList.contains('hidden')) {
-        const inp = document.getElementById('stepInput');
-        if (inp) {
-            checkDivStep();
-        } else {
-            // Done state - go next
-            if (!document.getElementById('divBtnNext').classList.contains('hidden')) nextDiv();
-        }
+        if (document.getElementById('activeInp')) checkDivInput();
+        else if (!document.getElementById('divBtnNext').classList.contains('hidden')) nextDiv();
     }
 });
 </script>
