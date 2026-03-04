@@ -73,18 +73,30 @@
         .game-over .go-stats b{font-size:1.2em}
         .game-over .go-answer{font-size:.95em;margin-top:12px;color:#555}
 
-        @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}.mult-inner{font-size:1.3em}header h1{font-size:1.5em}.score-box{font-size:.8em;gap:8px}}
+        .frac-rect{display:flex;justify-content:center;margin:16px 0}
+        .frac-cells{display:flex;border:3px solid #333;border-radius:4px;overflow:hidden}
+        .frac-cell{width:52px;height:60px;border-right:2px solid #333;background:#fff}
+        .frac-cell:last-child{border-right:none}
+        .frac-cell.colored{background:#42a5f5}
+        .frac-question{text-align:center;font-size:1.2em;margin:16px 0}
+        .frac-inp-wrap{display:inline-flex;flex-direction:column;align-items:center;margin:0 4px}
+        .frac-inp{width:2.5em;text-align:center;font-size:1.3em;font-weight:700;border:2px solid #e91e63;border-radius:6px;padding:4px;background:#fff9c4}
+        .frac-inp:focus{outline:none;border-color:#1565c0;background:#fff}
+        .frac-line{width:2.5em;height:3px;background:#333;margin:2px 0}
+
+        @media(max-width:500px){.menu-grid{grid-template-columns:1fr}.div-frame{font-size:1.3em}.mult-inner{font-size:1.3em}header h1{font-size:1.5em}.score-box{font-size:.8em;gap:8px}.frac-cell{width:40px;height:48px}}
     </style>
 </head>
 <body>
 <div class="container">
-    <header><h1>Phép nhân, phép chia</h1></header>
+    <header><h1>Bài Tập Toán Lớp 3</h1></header>
 
     <div id="menuPage" class="card">
         <h2>Chọn bài tập</h2>
-        <div class="menu-grid">
+        <div class="menu-grid" style="grid-template-columns:1fr 1fr 1fr">
             <button class="menu-btn" onclick="startEx('mult')"><span class="icon">&#10006;</span>Phép nhân</button>
             <button class="menu-btn" onclick="startEx('div')"><span class="icon">&#247;</span>Phép chia</button>
+            <button class="menu-btn" onclick="startEx('frac')"><span class="icon">&#189;</span>Phân số</button>
         </div>
     </div>
 
@@ -123,6 +135,22 @@
         </div>
         <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
     </div>
+
+    <div id="fracPage" class="card hidden">
+        <div class="exercise-header">
+            <h2 id="fT">Phân số</h2>
+            <div class="score-box"><span>Đúng: <span id="fOk">0</span>/<span id="fAll">0</span></span><span class="timer" id="fTime">00:00</span></div>
+        </div>
+        <div class="div-instruction" id="fInst"></div>
+        <div id="fBoard"></div>
+        <div id="fDone" class="hidden"></div>
+        <div class="btn-row">
+            <button class="btn btn-green hidden" id="fChk" onclick="chkFrac()">Kiểm tra</button>
+            <button class="btn btn-primary hidden" id="fNxt" onclick="nxtF()">Bài tiếp</button>
+            <button class="btn btn-orange hidden" id="fReplay" onclick="startEx('frac')">Chơi lại</button>
+        </div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lại</button></div>
+    </div>
 </div>
 
 <script>
@@ -142,7 +170,7 @@ function startTimer(){
 }
 function stopTimer(){if(tmInterval){clearInterval(tmInterval);tmInterval=null}}
 function updTimer(){
-    const el=cType==='mult'?$('mTime'):$('dTime');
+    const el=cType==='mult'?$('mTime'):cType==='div'?$('dTime'):$('fTime');
     if(el)el.textContent=fmtTime();
 }
 function fmtTime(){
@@ -151,7 +179,7 @@ function fmtTime(){
     return (m<10?'0'+m:m)+':'+(ss<10?'0'+ss:ss);
 }
 
-function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden')}
+function goMenu(){stopTimer();$('menuPage').classList.remove('hidden');$('multPage').classList.add('hidden');$('divPage').classList.add('hidden');$('fracPage').classList.add('hidden')}
 
 function startEx(t){
     cType=t;
@@ -161,11 +189,16 @@ function startEx(t){
         $('mT').textContent='Phép nhân';$('multPage').classList.remove('hidden');
         $('mReplay').classList.add('hidden');
         startTimer();nxtM();
-    }else{
+    }else if(t==='div'){
         dOk=0;dAl=0;dFirst=true;dGameOver=false;
         $('dT').textContent='Phép chia';$('divPage').classList.remove('hidden');
         $('dReplay').classList.add('hidden');
         startTimer();nxtD();
+    }else{
+        fOk=0;fAl=0;fGameOver=false;
+        $('fracPage').classList.remove('hidden');
+        $('fReplay').classList.add('hidden');
+        startTimer();nxtF();
     }
 }
 
@@ -558,6 +591,65 @@ function showDSol(){
     $('dSolBtn').classList.add('hidden');
 }
 
+// ============ FRACTION ============
+let fOk=0,fAl=0,fGameOver=false,fChecked=false;
+let fNum,fDen,fColored;
+
+function nxtF(){
+    if(fGameOver)return;
+    fDen=ri(2,10);
+    fNum=ri(1,fDen-1);
+    // random which cells are colored (pick fNum positions)
+    let pos=[];for(let i=0;i<fDen;i++)pos.push(i);
+    for(let i=pos.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pos[i],pos[j]]=[pos[j],pos[i]]}
+    fColored=new Set(pos.slice(0,fNum));
+    fChecked=false;
+
+    $('fDone').classList.add('hidden');$('fDone').className='hidden';
+    $('fNxt').classList.add('hidden');$('fReplay').classList.add('hidden');
+    $('fChk').classList.remove('hidden');
+    $('fOk').textContent=fOk;$('fAll').textContent=fAl;
+    $('fInst').innerHTML='Hình chữ nhật được chia thành <b>'+fDen+'</b> phần bằng nhau, đã tô màu <b>'+fNum+'</b> phần.<br>Viết phân số chỉ phần đã tô màu:';
+
+    let h='<div class="frac-rect"><div class="frac-cells">';
+    for(let i=0;i<fDen;i++) h+='<div class="frac-cell'+(fColored.has(i)?' colored':'')+'"></div>';
+    h+='</div></div>';
+    h+='<div class="frac-question">Đã tô màu <div class="frac-inp-wrap"><input type="number" id="fNumInp" class="frac-inp"><div class="frac-line"></div><input type="number" id="fDenInp" class="frac-inp"></div> hình chữ nhật.</div>';
+    $('fBoard').innerHTML=h;
+    setTimeout(()=>{const inp=$('fNumInp');if(inp)inp.focus()},50);
+}
+
+function chkFrac(){
+    if(fChecked)return;fChecked=true;
+    const nv=parseInt($('fNumInp').value),dv=parseInt($('fDenInp').value);
+    const ok=(nv===fNum&&dv===fDen);
+    fAl++;if(ok)fOk++;
+    $('fChk').classList.add('hidden');
+    $('fOk').textContent=fOk;$('fAll').textContent=fAl;
+    $('fNumInp').readOnly=true;$('fDenInp').readOnly=true;
+
+    if(ok){
+        $('fNumInp').style.borderColor='#4caf50';$('fNumInp').style.background='#e8f5e9';
+        $('fDenInp').style.borderColor='#4caf50';$('fDenInp').style.background='#e8f5e9';
+        $('fDone').innerHTML='<div class="div-done-msg">Đúng rồi! &#127881; '+fNum+'/'+fDen+'</div>';
+        $('fDone').classList.remove('hidden');
+        $('fNxt').classList.remove('hidden');
+    }else{
+        $('fNumInp').style.borderColor='#f44336';$('fNumInp').style.background='#ffebee';
+        $('fDenInp').style.borderColor='#f44336';$('fDenInp').style.background='#ffebee';
+        stopTimer();fGameOver=true;
+        const t=fmtTime();
+        let m='<div class="game-over" style="background:#ffebee;color:#c62828">';
+        m+='<div class="go-title">Sai rồi! Dừng lại!</div>';
+        m+='<div class="go-answer">Đáp án: <b>'+fNum+'/'+fDen+'</b></div>';
+        m+='<div class="go-stats">';
+        m+='Đúng: <b>'+fOk+'</b> / '+fAl+' bài<br>';
+        m+='Thời gian: <b>'+t+'</b></div></div>';
+        $('fDone').innerHTML=m;$('fDone').classList.remove('hidden');
+        $('fReplay').classList.remove('hidden');
+    }
+}
+
 // ========== KEYBOARD ==========
 document.addEventListener('keydown',e=>{
     if(e.key!=='Enter')return;
@@ -577,6 +669,11 @@ document.addEventListener('keydown',e=>{
             if(!dChecked&&!$('dChk').classList.contains('hidden'))chkDFree();
             else if(!$('dNxt').classList.contains('hidden'))nxtD();
         }
+    }
+    if(!$('fracPage').classList.contains('hidden')){
+        if(fGameOver){if(!$('fReplay').classList.contains('hidden'))startEx('frac');return}
+        if(!fChecked&&!$('fChk').classList.contains('hidden'))chkFrac();
+        else if(!$('fNxt').classList.contains('hidden'))nxtF();
     }
 });
 </script>
