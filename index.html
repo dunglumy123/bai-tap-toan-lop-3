@@ -50,10 +50,10 @@
         .q-inp,.w-inp{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:2px dashed #e91e63;border-radius:4px;background:#fff9c4;text-align:center;padding:0;height:1.3em}
         .q-inp{width:1.1em}
         .q-inp:focus,.w-inp:focus{outline:none;border-style:solid;background:#fff}
-        .q-free,.w-free{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:none;border-bottom:2px solid #999;border-radius:0;background:transparent;text-align:center;padding:0;height:1.3em}
+        .q-free,.w-free{font-family:'Courier New',monospace;font-weight:700;font-size:1em;border:none;border-bottom:2px dashed #999;border-radius:0;background:transparent;text-align:center;padding:0;height:1.3em}
         .q-free{width:1.1em}
-        .w-free{text-align:right}
-        .q-free:focus,.w-free:focus{outline:none;border-bottom-color:#e91e63;background:#fff9c4}
+        .w-free{text-align:center}
+        .q-free:focus,.w-free:focus{outline:none;border-bottom-color:#e91e63;border-bottom-style:solid;background:#fff9c4}
         .q-free.ok,.w-free.ok{border-bottom-color:#4caf50;background:#e8f5e9;color:#2e7d32}
         .q-free.err,.w-free.err{border-bottom-color:#f44336;background:#ffebee;color:#c62828}
 
@@ -574,16 +574,34 @@ function finGuided(){
 }
 
 function renFree(){
-    const aStr=cA+'',W=aStr.length;
-    let qH='';for(let i=0;i<dSteps.length;i++) qH+='<input type="number" class="q-free" id="fq'+i+'">';
+    const aStr=cA+'',W=aStr.length,n=dSteps.length;
+    // Thương: mỗi ô 1 chữ số
+    let qH='';for(let i=0;i<n;i++) qH+='<input type="tel" maxlength="1" class="q-free" id="fq'+i+'" oninput="advDiv(this,'+i+','+n+')">';
+    // Dư/hạ: mỗi ô nhập từng chữ số
     let wH='<div class="work-row">'+aStr+'</div>';
-    for(let i=0;i<dSteps.length;i++){
+    for(let i=0;i<n;i++){
         const s=dSteps[i];
-        if(s.nd!==null){const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb;wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:'+Math.max(rbStr.length,2)*1.1+'ch"></div>'}
-        else wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="number" class="w-free" id="fr'+i+'" style="width:1.5ch"></div>';
+        if(s.nd!==null){
+            const rb=s.r*10+s.nd,rbStr=rb<10?'0'+rb:''+rb,digs=rbStr.length;
+            let inp='';for(let d=0;d<digs;d++) inp+='<input type="tel" maxlength="1" class="w-free" id="fr'+i+'d'+d+'" style="width:1.1em" oninput="advDivW(this,'+i+','+d+','+digs+','+n+')">';
+            wH+='<div class="work-row">'+S.repeat(s.di)+inp+'</div>';
+        } else {
+            wH+='<div class="work-row">'+S.repeat(s.di)+'<input type="tel" maxlength="1" class="w-free" id="fr'+i+'d0" style="width:1.1em" oninput="advDivW(this,'+i+',0,1,'+n+')"></div>';
+        }
     }
     $('dBoard').innerHTML='<div class="div-frame"><div class="div-left" style="min-width:'+W+'ch">'+wH+'</div><div class="div-right"><div class="div-divisor">'+cB+'</div><div class="div-quotient">'+qH+'</div></div></div>';
     setTimeout(()=>{const f=$('fq0');if(f)f.focus()},50);
+}
+// Auto-advance thương
+function advDiv(el,i,n){
+    if(el.value.length>=1){const nxt=$('fr'+i+'d0');if(nxt)nxt.focus();else{const nq=$('fq'+(i+1));if(nq)nq.focus()}}
+}
+// Auto-advance dư/hạ
+function advDivW(el,i,d,digs,n){
+    if(el.value.length>=1){
+        if(d+1<digs){const nxt=$('fr'+i+'d'+(d+1));if(nxt)nxt.focus()}
+        else{const nq=$('fq'+(i+1));if(nq)nq.focus()}
+    }
 }
 
 function chkDFree(){
@@ -594,10 +612,24 @@ function chkDFree(){
         const qi=$('fq'+i),qv=parseInt(qi.value);
         if(qv===s.q){qi.classList.add('ok')}else{qi.classList.add('err');allOk=false}
         qi.readOnly=true;
-        const rri=$('fr'+i),rv=parseInt(rri.value);
+        // Đọc giá trị dư/hạ từ nhiều ô 1 chữ số
         const exp=s.nd!==null?s.r*10+s.nd:s.r;
-        if(rv===exp){rri.classList.add('ok')}else{rri.classList.add('err');allOk=false}
-        rri.readOnly=true;
+        const expStr=s.nd!==null?(exp<10?'0'+exp:''+exp):''+exp;
+        let rVal='';
+        for(let d=0;d<expStr.length;d++){
+            const di=$('fr'+i+'d'+d);
+            if(di) rVal+=di.value;
+        }
+        const rv=parseInt(rVal);
+        // Tô màu từng ô
+        for(let d=0;d<expStr.length;d++){
+            const di=$('fr'+i+'d'+d);
+            if(di){
+                if(rv===exp)di.classList.add('ok');else di.classList.add('err');
+                di.readOnly=true;
+            }
+        }
+        if(rv!==exp){allOk=false}
     }
     dAl++;if(allOk)dOk++;
     const q=Math.floor(cA/cB),r=cA%cB;
