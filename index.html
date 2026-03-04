@@ -13,205 +13,60 @@
             padding: 16px;
         }
         .container { max-width: 800px; margin: 0 auto; }
-
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+        header { text-align: center; color: white; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         header h1 { font-size: 2em; margin-bottom: 4px; }
         header p { font-size: 1em; opacity: 0.9; }
-
         .card {
-            background: white;
-            border-radius: 18px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+            background: white; border-radius: 18px; padding: 24px;
+            margin-bottom: 16px; box-shadow: 0 6px 25px rgba(0,0,0,0.15);
         }
-        .card h2 {
-            color: #e91e63;
-            margin-bottom: 16px;
-            font-size: 1.3em;
-            text-align: center;
-        }
-
-        /* Menu buttons */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .card h2 { color: #e91e63; margin-bottom: 16px; font-size: 1.3em; text-align: center; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .menu-btn {
-            padding: 18px 12px;
-            border: 3px solid #e91e63;
-            border-radius: 14px;
-            background: white;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            color: #333;
-            transition: all 0.2s;
-            text-align: center;
+            padding: 18px 12px; border: 3px solid #e91e63; border-radius: 14px;
+            background: white; cursor: pointer; font-size: 1em; font-weight: 600;
+            color: #333; transition: all 0.2s; text-align: center;
         }
-        .menu-btn:hover {
-            background: #e91e63;
-            color: white;
-            transform: translateY(-2px);
-        }
+        .menu-btn:hover { background: #e91e63; color: white; transform: translateY(-2px); }
         .menu-btn .icon { font-size: 2em; display: block; margin-bottom: 6px; }
         .menu-btn .desc { font-size: 0.78em; color: #888; font-weight: 400; margin-top: 4px; }
         .menu-btn:hover .desc { color: #ffcdd2; }
-
-        .semester-title {
-            text-align: center;
-            font-weight: 700;
-            color: #e91e63;
-            margin: 14px 0 10px;
-            font-size: 1.05em;
-        }
-
-        /* Exercise area */
+        .semester-title { text-align: center; font-weight: 700; color: #e91e63; margin: 14px 0 10px; font-size: 1.05em; }
         .exercise-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
         }
         .exercise-header h2 { margin-bottom: 0; text-align: left; }
         .score-box {
-            background: #fff3e0;
-            border-radius: 10px;
-            padding: 8px 14px;
-            font-weight: 600;
-            color: #e65100;
-            font-size: 0.95em;
+            background: #fff3e0; border-radius: 10px; padding: 8px 14px;
+            font-weight: 600; color: #e65100; font-size: 0.95em;
         }
-
         .problem-display {
-            background: #fafafa;
-            border: 2px solid #e0e0e0;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 16px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.5em;
-            line-height: 1.6;
-            overflow-x: auto;
+            background: #fafafa; border: 2px solid #e0e0e0; border-radius: 14px;
+            padding: 20px; margin-bottom: 16px;
+            font-family: 'Courier New', Courier, monospace; font-size: 1.5em;
+            line-height: 1.6; overflow-x: auto;
         }
-
-        /* Long division Vietnamese style */
-        .division-layout {
-            display: inline-block;
-            text-align: left;
-            position: relative;
-        }
-        .div-row {
-            display: flex;
-            align-items: flex-start;
-            min-height: 1.5em;
-        }
-        .div-left {
-            min-width: 160px;
-            text-align: right;
-            padding-right: 16px;
-        }
-        .div-vline {
-            border-left: 3px solid #333;
-            padding-left: 14px;
-            min-width: 80px;
-        }
-        .div-hline {
-            border-top: 3px solid #333;
-            display: inline-block;
-        }
-        .div-sub {
-            color: #e91e63;
-            font-size: 0.85em;
-        }
-        .div-step { margin: 2px 0; }
-        .div-underline {
-            border-bottom: 2px solid #333;
-            display: inline-block;
-            margin: 0px 0 2px;
-        }
-
-        /* Multiplication layout */
-        .mult-layout {
-            display: inline-block;
-            text-align: right;
-        }
+        .mult-layout { display: inline-block; text-align: right; }
         .mult-row { text-align: right; min-height: 1.5em; }
         .mult-sign { margin-right: 4px; }
         .mult-line { border-top: 3px solid #333; margin: 4px 0; }
         .mult-partial { color: #1565c0; }
         .mult-result { font-weight: bold; color: #e91e63; }
-
-        /* Answer input */
-        .answer-section {
-            margin: 16px 0;
-            text-align: center;
-        }
-        .answer-section label {
-            font-weight: 600;
-            font-size: 1.1em;
-            color: #333;
-            display: block;
-            margin-bottom: 8px;
-        }
+        .answer-section { margin: 16px 0; text-align: center; }
+        .answer-section label { font-weight: 600; font-size: 1.1em; color: #333; display: block; margin-bottom: 8px; }
         .answer-input {
-            font-size: 1.5em;
-            padding: 10px 16px;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            width: 200px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
+            font-size: 1.5em; padding: 10px 16px; border: 3px solid #e0e0e0;
+            border-radius: 12px; width: 200px; text-align: center;
+            font-family: 'Courier New', monospace; font-weight: bold;
         }
-        .answer-input:focus {
-            outline: none;
-            border-color: #e91e63;
-        }
+        .answer-input:focus { outline: none; border-color: #e91e63; }
         .answer-input.correct { border-color: #4caf50; background: #e8f5e9; }
         .answer-input.wrong { border-color: #f44336; background: #ffebee; }
-
-        .remainder-section {
-            margin-top: 10px;
-        }
-        .remainder-input {
-            font-size: 1.2em;
-            padding: 8px 12px;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            width: 100px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-        }
-        .remainder-input:focus { outline: none; border-color: #e91e63; }
-        .remainder-input.correct { border-color: #4caf50; background: #e8f5e9; }
-        .remainder-input.wrong { border-color: #f44336; background: #ffebee; }
-
-        /* Buttons */
-        .btn-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 16px 0;
-        }
+        .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
         .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 12px 24px; border: none; border-radius: 12px;
+            font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
         .btn:hover { transform: translateY(-2px); }
         .btn-primary { background: #e91e63; color: white; }
@@ -220,58 +75,149 @@
         .btn-green:hover { background: #388e3c; }
         .btn-blue { background: #2196f3; color: white; }
         .btn-blue:hover { background: #1565c0; }
-        .btn-outline { background: white; color: #e91e63; border: 2px solid #e91e63; }
-        .btn-outline:hover { background: #fce4ec; }
         .btn-back { background: #9e9e9e; color: white; }
         .btn-back:hover { background: #616161; }
-
-        /* Solution display */
         .solution-box {
-            background: #f3e5f5;
-            border: 2px solid #ce93d8;
-            border-radius: 14px;
-            padding: 20px;
-            margin-top: 16px;
-            display: none;
+            background: #f3e5f5; border: 2px solid #ce93d8; border-radius: 14px;
+            padding: 20px; margin-top: 16px; display: none;
         }
         .solution-box.show { display: block; }
-        .solution-box h3 {
-            color: #7b1fa2;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-        .solution-steps {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.15em;
-            line-height: 1.7;
-            overflow-x: auto;
-        }
-
+        .solution-box h3 { color: #7b1fa2; margin-bottom: 12px; text-align: center; }
+        .solution-steps { font-family: 'Courier New', monospace; font-size: 1.15em; line-height: 1.7; overflow-x: auto; }
         .step-explain {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            font-size: 0.75em;
-            color: #7b1fa2;
-            margin: 2px 0 8px;
-            padding-left: 8px;
-            border-left: 3px solid #ce93d8;
+            font-family: 'Segoe UI', sans-serif; font-size: 0.75em; color: #7b1fa2;
+            margin: 2px 0 8px; padding-left: 8px; border-left: 3px solid #ce93d8;
         }
-
         .result-msg {
-            text-align: center;
-            font-size: 1.3em;
-            font-weight: 700;
-            padding: 12px;
-            border-radius: 12px;
-            margin: 12px 0;
+            text-align: center; font-size: 1.3em; font-weight: 700;
+            padding: 12px; border-radius: 12px; margin: 12px 0;
         }
         .result-msg.correct { background: #e8f5e9; color: #2e7d32; }
         .result-msg.wrong { background: #ffebee; color: #c62828; }
-
         .hidden { display: none !important; }
+
+        /* ===== INTERACTIVE DIVISION ===== */
+        .div-workspace {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4em;
+            padding: 16px;
+            background: #fffde7;
+            border: 2px solid #ffd54f;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+        .div-frame {
+            display: inline-block;
+            min-width: 280px;
+        }
+        .div-top {
+            display: flex;
+            align-items: flex-start;
+        }
+        .div-dividend {
+            padding-right: 12px;
+            letter-spacing: 4px;
+            font-weight: bold;
+        }
+        .div-separator {
+            border-left: 3px solid #333;
+            padding-left: 12px;
+        }
+        .div-divisor {
+            padding-bottom: 6px;
+            border-bottom: 3px solid #333;
+            font-weight: bold;
+            min-width: 60px;
+        }
+        .div-quotient {
+            padding-top: 6px;
+            min-height: 1.4em;
+            letter-spacing: 4px;
+            color: #e91e63;
+            font-weight: bold;
+        }
+        .div-work-area {
+            margin-top: 10px;
+            padding-left: 0;
+        }
+        .div-work-row {
+            display: flex;
+            align-items: center;
+            min-height: 1.8em;
+        }
+        .div-work-num {
+            min-width: 80px;
+            text-align: right;
+            padding-right: 16px;
+        }
+        .div-work-line {
+            border-bottom: 2px solid #333;
+            min-width: 60px;
+            margin: 2px 0;
+            display: inline-block;
+        }
+        .div-completed-num { color: #333; }
+        .div-completed-sub { color: #1565c0; }
+        .div-remainder-final { color: #e91e63; font-weight: bold; }
+
+        /* Step input area */
+        .step-panel {
+            background: #e3f2fd;
+            border: 2px solid #90caf9;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
+        }
+        .step-panel h3 {
+            color: #1565c0;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        .step-question {
+            font-size: 1.15em;
+            margin: 10px 0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .step-input {
+            width: 80px;
+            font-size: 1.2em;
+            padding: 6px 10px;
+            border: 3px solid #90caf9;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .step-input:focus { outline: none; border-color: #1565c0; }
+        .step-input.correct { border-color: #4caf50; background: #e8f5e9; }
+        .step-input.wrong { border-color: #f44336; background: #ffebee; animation: shake 0.3s; }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .step-ok { color: #4caf50; font-weight: bold; font-size: 1.2em; }
+        .step-hint {
+            font-size: 0.85em; color: #f57c00; margin-top: 4px;
+            display: none; font-style: italic;
+        }
+        .step-hint.show { display: block; }
+
+        .div-done-msg {
+            text-align: center; font-size: 1.4em; font-weight: 700;
+            color: #2e7d32; background: #e8f5e9; padding: 16px;
+            border-radius: 12px; margin: 12px 0;
+        }
 
         @media (max-width: 500px) {
             .menu-grid { grid-template-columns: 1fr; }
             .problem-display { font-size: 1.2em; padding: 14px; }
+            .div-workspace { font-size: 1.1em; }
             header h1 { font-size: 1.5em; }
             .answer-input { width: 160px; font-size: 1.3em; }
         }
@@ -287,480 +233,520 @@
     <!-- MENU -->
     <div id="menuPage" class="card">
         <h2>Chon bai tap</h2>
-
         <div class="semester-title">Hoc ky 1</div>
         <div class="menu-grid">
             <button class="menu-btn" onclick="startExercise('mult','hk1')">
-                <span class="icon">&#10006;</span>
-                Phep nhan
+                <span class="icon">&#10006;</span>Phep nhan
                 <span class="desc">3-4 chu so &times; 1 chu so</span>
             </button>
             <button class="menu-btn" onclick="startExercise('div','hk1')">
-                <span class="icon">&#247;</span>
-                Phep chia
+                <span class="icon">&#247;</span>Phep chia
                 <span class="desc">4 chu so &divide; 1 chu so</span>
             </button>
         </div>
-
         <div class="semester-title" style="margin-top:20px">Hoc ky 2</div>
         <div class="menu-grid">
             <button class="menu-btn" onclick="startExercise('mult','hk2')">
-                <span class="icon">&#10006;</span>
-                Phep nhan
+                <span class="icon">&#10006;</span>Phep nhan
                 <span class="desc">4-5 chu so &times; 1-2 chu so</span>
             </button>
             <button class="menu-btn" onclick="startExercise('div','hk2')">
-                <span class="icon">&#247;</span>
-                Phep chia
+                <span class="icon">&#247;</span>Phep chia
                 <span class="desc">4-5 chu so &divide; 1 chu so</span>
             </button>
         </div>
     </div>
 
-    <!-- EXERCISE -->
-    <div id="exercisePage" class="card hidden">
+    <!-- MULTIPLICATION EXERCISE -->
+    <div id="multPage" class="card hidden">
         <div class="exercise-header">
-            <h2 id="exTitle"></h2>
-            <div class="score-box">
-                Dung: <span id="scoreCorrect">0</span> / <span id="scoreTotal">0</span>
-            </div>
+            <h2 id="multTitle"></h2>
+            <div class="score-box">Dung: <span id="multCorrect">0</span> / <span id="multTotal">0</span></div>
         </div>
-
-        <div class="problem-display" id="problemDisplay"></div>
-
+        <div class="problem-display" id="multDisplay"></div>
         <div class="answer-section">
             <label>Ket qua:</label>
-            <input type="number" class="answer-input" id="answerInput" placeholder="?" autofocus>
-            <div class="remainder-section hidden" id="remainderSection">
-                <label style="font-size:0.95em; margin-top:8px">Du:</label>
-                <input type="number" class="remainder-input" id="remainderInput" placeholder="?">
-            </div>
+            <input type="number" class="answer-input" id="multAnswer" placeholder="?">
+        </div>
+        <div id="multResult" class="result-msg hidden"></div>
+        <div class="btn-row">
+            <button class="btn btn-green" id="multBtnCheck" onclick="checkMult()">Kiem tra</button>
+            <button class="btn btn-blue hidden" id="multBtnSol" onclick="toggleMultSol()">Xem cach lam</button>
+            <button class="btn btn-primary hidden" id="multBtnNext" onclick="nextMult()">Bai tiep theo</button>
+        </div>
+        <div class="solution-box" id="multSolBox">
+            <h3>Cach trinh bay</h3>
+            <div class="solution-steps" id="multSolSteps"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai menu</button></div>
+    </div>
+
+    <!-- DIVISION EXERCISE (interactive step-by-step) -->
+    <div id="divPage" class="card hidden">
+        <div class="exercise-header">
+            <h2 id="divTitle"></h2>
+            <div class="score-box">Dung: <span id="divCorrect">0</span> / <span id="divTotal">0</span></div>
         </div>
 
-        <div id="resultMsg" class="result-msg hidden"></div>
+        <!-- Visual division layout -->
+        <div class="div-workspace" id="divWorkspace"></div>
+
+        <!-- Step-by-step input panel -->
+        <div id="stepPanel" class="step-panel"></div>
+
+        <!-- Done message -->
+        <div id="divDone" class="div-done-msg hidden"></div>
 
         <div class="btn-row">
-            <button class="btn btn-green" id="btnCheck" onclick="checkAnswer()">Kiem tra</button>
-            <button class="btn btn-blue hidden" id="btnSolution" onclick="toggleSolution()">Xem cach lam</button>
-            <button class="btn btn-primary hidden" id="btnNext" onclick="nextProblem()">Bai tiep theo</button>
+            <button class="btn btn-primary hidden" id="divBtnNext" onclick="nextDiv()">Bai tiep theo</button>
         </div>
-
-        <div class="solution-box" id="solutionBox">
-            <h3>Cach trinh bay</h3>
-            <div class="solution-steps" id="solutionSteps"></div>
-        </div>
-
-        <div class="btn-row" style="margin-top:20px">
-            <button class="btn btn-back" onclick="goMenu()">Quay lai menu</button>
-        </div>
+        <div class="btn-row"><button class="btn btn-back" onclick="goMenu()">Quay lai menu</button></div>
     </div>
 </div>
 
 <script>
-let currentType = '';
-let currentSemester = '';
-let currentA = 0;
-let currentB = 0;
-let correctAnswer = 0;
-let correctRemainder = 0;
-let scoreCorrect = 0;
-let scoreTotal = 0;
-let answered = false;
+// ===== SHARED STATE =====
+let currentType, currentSemester;
+let currentA, currentB;
+
+// ===== MULT STATE =====
+let multAnswer, multAnswered;
+let multScoreOk = 0, multScoreAll = 0;
+
+// ===== DIV STATE =====
+let divSteps = [];       // computed steps
+let divStepIndex = 0;    // which step we're on
+let divSubStep = 0;      // 0=quotient digit, 1=product, 2=remainder
+let divQuotientSoFar = '';
+let divWorkRows = [];    // completed rows for the visual
+let divNoMistake = true; // track if any mistake in this problem
+let divScoreOk = 0, divScoreAll = 0;
 
 function goMenu() {
     document.getElementById('menuPage').classList.remove('hidden');
-    document.getElementById('exercisePage').classList.add('hidden');
+    document.getElementById('multPage').classList.add('hidden');
+    document.getElementById('divPage').classList.add('hidden');
 }
 
+function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function pad(s, n) { return s.padStart(n, '\u00A0'); }
+
+// ===== START =====
 function startExercise(type, semester) {
     currentType = type;
     currentSemester = semester;
-    scoreCorrect = 0;
-    scoreTotal = 0;
-    updateScore();
-
-    let title = '';
     if (type === 'mult') {
-        title = 'Phep nhan';
+        multScoreOk = 0; multScoreAll = 0;
+        let t = 'Phep nhan' + (semester === 'hk1' ? ' - Hoc ky 1' : ' - Hoc ky 2');
+        document.getElementById('multTitle').textContent = t;
+        document.getElementById('menuPage').classList.add('hidden');
+        document.getElementById('multPage').classList.remove('hidden');
+        nextMult();
     } else {
-        title = 'Phep chia';
+        divScoreOk = 0; divScoreAll = 0;
+        let t = 'Phep chia' + (semester === 'hk1' ? ' - Hoc ky 1' : ' - Hoc ky 2');
+        document.getElementById('divTitle').textContent = t;
+        document.getElementById('menuPage').classList.add('hidden');
+        document.getElementById('divPage').classList.remove('hidden');
+        nextDiv();
     }
-    title += semester === 'hk1' ? ' - Hoc ky 1' : ' - Hoc ky 2';
-    document.getElementById('exTitle').textContent = title;
-
-    document.getElementById('menuPage').classList.add('hidden');
-    document.getElementById('exercisePage').classList.remove('hidden');
-
-    nextProblem();
 }
 
-function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+// ============================================================
+//  MULTIPLICATION (keep simple: input answer + show solution)
+// ============================================================
+function genMult() {
+    if (currentSemester === 'hk1') {
+        currentA = randInt(100, 9999);
+        currentB = randInt(2, 9);
+    } else {
+        currentA = randInt(1000, 99999);
+        currentB = Math.random() < 0.6 ? randInt(2, 9) : randInt(11, 99);
+    }
+    multAnswer = currentA * currentB;
 }
 
-function generateProblem() {
-    if (currentType === 'mult') {
-        if (currentSemester === 'hk1') {
-            currentA = randInt(100, 9999);
-            currentB = randInt(2, 9);
+function renderMult(a, b, show) {
+    const aS = a.toString(), bS = b.toString(), rS = (a*b).toString();
+    const mx = Math.max(aS.length, bS.length+1, rS.length);
+    let h = '<div class="mult-layout">';
+    h += `<div class="mult-row">${pad(aS,mx)}</div>`;
+    h += `<div class="mult-row"><span class="mult-sign">&times;</span>${pad(bS,mx-1)}</div>`;
+    h += `<div class="mult-line" style="width:${mx*0.65+1}em"></div>`;
+    if (show) {
+        if (bS.length===1) {
+            h += `<div class="mult-row mult-result">${pad(rS,mx)}</div>`;
         } else {
-            currentA = randInt(1000, 99999);
-            // 60% chance 1-digit, 40% chance 2-digit
-            currentB = Math.random() < 0.6 ? randInt(2, 9) : randInt(11, 99);
-        }
-        correctAnswer = currentA * currentB;
-        correctRemainder = 0;
-    } else {
-        if (currentSemester === 'hk1') {
-            currentB = randInt(2, 9);
-            currentA = randInt(1000, 9999);
-        } else {
-            currentB = randInt(2, 9);
-            currentA = randInt(1000, 99999);
-        }
-        correctAnswer = Math.floor(currentA / currentB);
-        correctRemainder = currentA % currentB;
-    }
-}
-
-function renderProblemDisplay() {
-    const display = document.getElementById('problemDisplay');
-    if (currentType === 'mult') {
-        display.innerHTML = renderMultiplication(currentA, currentB, false);
-    } else {
-        display.innerHTML = renderDivisionProblem(currentA, currentB);
-    }
-}
-
-// ========== MULTIPLICATION DISPLAY ==========
-function renderMultiplication(a, b, showResult) {
-    const aStr = a.toString();
-    const bStr = b.toString();
-    const result = a * b;
-    const resultStr = result.toString();
-    const maxLen = Math.max(aStr.length, bStr.length + 1, resultStr.length);
-
-    let html = '<div class="mult-layout">';
-    html += `<div class="mult-row">${pad(aStr, maxLen)}</div>`;
-    html += `<div class="mult-row"><span class="mult-sign">&times;</span>${pad(bStr, maxLen - 1)}</div>`;
-    html += `<div class="mult-line" style="width:${maxLen * 0.65 + 1}em"></div>`;
-
-    if (showResult) {
-        if (bStr.length === 1) {
-            html += `<div class="mult-row mult-result">${pad(resultStr, maxLen)}</div>`;
-        } else {
-            // partial products
-            const p1 = a * parseInt(bStr[1]);
-            const p2 = a * parseInt(bStr[0]);
-            const p1Str = p1.toString();
-            const p2Str = p2.toString();
-            const p2Shifted = p2Str + '0';
-            const dispLen = Math.max(maxLen, p2Shifted.length);
-            html += `<div class="mult-row mult-partial">${pad(p1Str, dispLen)}</div>`;
-            html += `<div class="mult-row mult-partial">${pad(p2Str, dispLen - 1)}<span style="color:#aaa;font-size:0.7em"></span></div>`;
-            html += `<div class="mult-line" style="width:${dispLen * 0.65 + 1}em"></div>`;
-            html += `<div class="mult-row mult-result">${pad(resultStr, dispLen)}</div>`;
+            const p1=a*parseInt(bS[1]), p2=a*parseInt(bS[0]);
+            const dl = Math.max(mx, p2.toString().length+1);
+            h += `<div class="mult-row mult-partial">${pad(p1.toString(),dl)}</div>`;
+            h += `<div class="mult-row mult-partial">${pad(p2.toString(),dl-1)}</div>`;
+            h += `<div class="mult-line" style="width:${dl*0.65+1}em"></div>`;
+            h += `<div class="mult-row mult-result">${pad(rS,dl)}</div>`;
         }
     } else {
-        html += `<div class="mult-row" style="color:#ccc">${pad('?', maxLen)}</div>`;
+        h += `<div class="mult-row" style="color:#ccc">${pad('?',mx)}</div>`;
     }
-    html += '</div>';
-    return html;
+    h += '</div>';
+    return h;
 }
 
-function pad(str, len) {
-    return str.padStart(len, '\u00A0');
+function nextMult() {
+    multAnswered = false;
+    genMult();
+    document.getElementById('multDisplay').innerHTML = renderMult(currentA, currentB, false);
+    document.getElementById('multAnswer').value = '';
+    document.getElementById('multAnswer').className = 'answer-input';
+    document.getElementById('multResult').classList.add('hidden');
+    document.getElementById('multSolBox').classList.remove('show');
+    document.getElementById('multBtnCheck').classList.remove('hidden');
+    document.getElementById('multBtnSol').classList.add('hidden');
+    document.getElementById('multBtnNext').classList.add('hidden');
+    document.getElementById('multCorrect').textContent = multScoreOk;
+    document.getElementById('multTotal').textContent = multScoreAll;
+    document.getElementById('multAnswer').focus();
 }
 
-// ========== DIVISION DISPLAY ==========
-function renderDivisionProblem(a, b) {
-    const aStr = a.toString();
-    const bStr = b.toString();
-    return `
-        <div class="division-layout">
-            <div class="div-row">
-                <div class="div-left">${aStr}</div>
-                <div class="div-vline" style="border-bottom: 3px solid #333; padding-bottom: 4px;">${bStr}</div>
-            </div>
-            <div class="div-row">
-                <div class="div-left"></div>
-                <div class="div-vline" style="font-weight:bold; color:#ccc; padding-top: 4px;">?</div>
-            </div>
-        </div>`;
+function checkMult() {
+    if (multAnswered) return;
+    const v = parseInt(document.getElementById('multAnswer').value);
+    if (isNaN(v)) return;
+    multAnswered = true;
+    multScoreAll++;
+    const ok = v === multAnswer;
+    if (ok) multScoreOk++;
+    const inp = document.getElementById('multAnswer');
+    const msg = document.getElementById('multResult');
+    inp.className = 'answer-input ' + (ok ? 'correct' : 'wrong');
+    msg.className = 'result-msg ' + (ok ? 'correct' : 'wrong');
+    msg.innerHTML = ok ? 'Dung roi! &#127881;' : `Chua dung. Dap an: <strong>${multAnswer}</strong>`;
+    msg.classList.remove('hidden');
+    document.getElementById('multBtnCheck').classList.add('hidden');
+    document.getElementById('multBtnSol').classList.remove('hidden');
+    document.getElementById('multBtnNext').classList.remove('hidden');
+    document.getElementById('multCorrect').textContent = multScoreOk;
+    document.getElementById('multTotal').textContent = multScoreAll;
 }
 
-function renderDivisionSolution(a, b) {
-    const aStr = a.toString();
-    const bStr = b.toString();
-    const quotient = Math.floor(a / b);
-    const remainder = a % b;
-    const qStr = quotient.toString();
-
-    // Build step-by-step long division
-    let steps = [];
-    let carry = 0;
-    let position = 0;
-    let currentNum = 0;
-    let started = false;
-
-    // Process digit by digit
-    const digits = aStr.split('').map(Number);
-    let workingNum = 0;
-    let quotientDigits = [];
-    let stepDetails = [];
-
-    for (let i = 0; i < digits.length; i++) {
-        workingNum = workingNum * 10 + digits[i];
-        let qDigit = Math.floor(workingNum / b);
-        let product = qDigit * b;
-        let newRemainder = workingNum - product;
-
-        if (qDigit > 0 || started) {
-            started = true;
-            quotientDigits.push(qDigit);
-            stepDetails.push({
-                take: workingNum,
-                qDigit: qDigit,
-                product: product,
-                remainder: newRemainder,
-                digitIndex: i
-            });
-        } else {
-            // leading zero case: if first digit < divisor, take two digits
-            if (i === 0) {
-                continue; // will be handled in next iteration with larger workingNum
-            }
-            quotientDigits.push(0);
-            stepDetails.push({
-                take: workingNum,
-                qDigit: 0,
-                product: 0,
-                remainder: workingNum,
-                digitIndex: i
-            });
-        }
-        workingNum = newRemainder;
-    }
-
-    // Build visual HTML
-    let html = '';
-
-    // Top row: dividend | divisor
-    html += `<div class="division-layout">`;
-    html += `<div class="div-row">`;
-    html += `<div class="div-left">${aStr}</div>`;
-    html += `<div class="div-vline" style="border-bottom: 3px solid #333; padding-bottom: 4px;">${bStr}</div>`;
-    html += `</div>`;
-    html += `<div class="div-row">`;
-    html += `<div class="div-left"></div>`;
-    html += `<div class="div-vline" style="font-weight:bold; color:#e91e63; padding-top: 4px;">${qStr}</div>`;
-    html += `</div>`;
-    html += `</div>`;
-
-    html += `<br>`;
-    html += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; color: #555; line-height: 2;">`;
-    html += `<strong style="color:#7b1fa2; font-size:1.15em;">Cac buoc thuc hien:</strong><br><br>`;
-
-    for (let i = 0; i < stepDetails.length; i++) {
-        const s = stepDetails[i];
-        const stepNum = i + 1;
-        html += `<div class="step-explain">`;
-        html += `<strong>Buoc ${stepNum}:</strong> `;
-        html += `${s.take} chia ${b} duoc <strong style="color:#e91e63">${s.qDigit}</strong>`;
-        html += `, viet <strong>${s.qDigit}</strong> vao thuong.<br>`;
-        html += `${s.qDigit} &times; ${b} = ${s.product}; `;
-        html += `${s.take} - ${s.product} = ${s.remainder}`;
-        if (i < stepDetails.length - 1) {
-            const nextDigit = digits[s.digitIndex + 1];
-            html += `; ha <strong>${nextDigit}</strong> xuong duoc <strong>${s.remainder * 10 + nextDigit}</strong>`;
-        }
-        html += `</div>`;
-    }
-
-    if (remainder > 0) {
-        html += `<div class="step-explain"><strong>Du ${remainder}</strong></div>`;
-    }
-
-    html += `<br><div style="background:#e8f5e9; padding:10px; border-radius:8px; font-size:1.1em; text-align:center;">`;
-    html += `<strong>${aStr} : ${bStr} = ${qStr}`;
-    if (remainder > 0) html += ` (du ${remainder})`;
-    html += `</strong></div>`;
-
-    // Verification
-    html += `<div style="margin-top:8px; text-align:center; color:#888; font-size:0.95em;">`;
-    html += `Thu lai: ${qStr} &times; ${bStr} = ${quotient * b}`;
-    if (remainder > 0) html += ` + ${remainder} = ${a}`;
-    html += ` &#10004;`;
-    html += `</div>`;
-
-    html += `</div>`;
-    return html;
-}
-
-function renderMultiplicationSolution(a, b) {
-    const aStr = a.toString();
-    const bStr = b.toString();
-    const result = a * b;
-    const resultStr = result.toString();
-
-    let html = renderMultiplication(a, b, true);
-    html += `<br>`;
-    html += `<div style="font-family: 'Segoe UI', sans-serif; font-size: 0.75em; color: #555; line-height: 2;">`;
-    html += `<strong style="color:#7b1fa2; font-size:1.15em;">Cac buoc thuc hien:</strong><br><br>`;
-
-    if (bStr.length === 1) {
-        const bDigit = parseInt(bStr);
-        const aDigits = aStr.split('').map(Number).reverse();
-        let carry = 0;
-        let stepNum = 0;
-        for (let i = 0; i < aDigits.length; i++) {
-            stepNum++;
-            const d = aDigits[i];
-            const prod = d * bDigit + carry;
-            const writeDigit = prod % 10;
-            const newCarry = Math.floor(prod / 10);
-            html += `<div class="step-explain">`;
-            html += `<strong>Buoc ${stepNum}:</strong> `;
-            html += `${bDigit} &times; ${d}`;
-            if (carry > 0) html += ` + ${carry} (nho)`;
-            html += ` = ${prod}`;
-            html += `, viet <strong>${writeDigit}</strong>`;
-            if (newCarry > 0) html += `, nho <strong>${newCarry}</strong>`;
-            html += `</div>`;
-            carry = newCarry;
-        }
-        if (carry > 0) {
-            html += `<div class="step-explain">Viet <strong>${carry}</strong> (nho con lai)</div>`;
-        }
-    } else {
-        // 2-digit multiplier
-        const b1 = parseInt(bStr[1]); // ones digit
-        const b0 = parseInt(bStr[0]); // tens digit
-        const p1 = a * b1;
-        const p2 = a * b0;
-
-        html += `<div class="step-explain">`;
-        html += `<strong>Buoc 1:</strong> Nhan ${aStr} voi hang don vi (${b1}):<br>`;
-        html += `${aStr} &times; ${b1} = <strong>${p1}</strong>`;
-        html += `</div>`;
-
-        html += `<div class="step-explain">`;
-        html += `<strong>Buoc 2:</strong> Nhan ${aStr} voi hang chuc (${b0}):<br>`;
-        html += `${aStr} &times; ${b0} = <strong>${p2}</strong> (viet lech sang trai 1 vi tri)`;
-        html += `</div>`;
-
-        html += `<div class="step-explain">`;
-        html += `<strong>Buoc 3:</strong> Cong hai tich rieng:<br>`;
-        html += `${p1} + ${p2}0 = <strong>${result}</strong>`;
-        html += `</div>`;
-    }
-
-    html += `<br><div style="background:#e8f5e9; padding:10px; border-radius:8px; font-size:1.1em; text-align:center;">`;
-    html += `<strong>${aStr} &times; ${bStr} = ${resultStr}</strong>`;
-    html += `</div>`;
-    html += `</div>`;
-
-    return html;
-}
-
-// ========== GAME LOGIC ==========
-function nextProblem() {
-    answered = false;
-    generateProblem();
-    renderProblemDisplay();
-
-    // Show/hide remainder input
-    const remSection = document.getElementById('remainderSection');
-    if (currentType === 'div') {
-        remSection.classList.remove('hidden');
-        document.getElementById('remainderInput').value = '';
-        document.getElementById('remainderInput').className = 'remainder-input';
-    } else {
-        remSection.classList.add('hidden');
-    }
-
-    document.getElementById('answerInput').value = '';
-    document.getElementById('answerInput').className = 'answer-input';
-    document.getElementById('answerInput').focus();
-    document.getElementById('resultMsg').classList.add('hidden');
-    document.getElementById('solutionBox').classList.remove('show');
-    document.getElementById('btnCheck').classList.remove('hidden');
-    document.getElementById('btnSolution').classList.add('hidden');
-    document.getElementById('btnNext').classList.add('hidden');
-}
-
-function checkAnswer() {
-    if (answered) return;
-
-    const userAnswer = parseInt(document.getElementById('answerInput').value);
-    if (isNaN(userAnswer)) {
-        document.getElementById('answerInput').focus();
-        return;
-    }
-
-    let isCorrect = (userAnswer === correctAnswer);
-
-    if (currentType === 'div') {
-        const userRemainder = parseInt(document.getElementById('remainderInput').value) || 0;
-        isCorrect = isCorrect && (userRemainder === correctRemainder);
-
-        const remInput = document.getElementById('remainderInput');
-        remInput.className = 'remainder-input ' + ((userRemainder === correctRemainder) ? 'correct' : 'wrong');
-    }
-
-    answered = true;
-    scoreTotal++;
-
-    const ansInput = document.getElementById('answerInput');
-    const resultMsg = document.getElementById('resultMsg');
-
-    if (isCorrect) {
-        scoreCorrect++;
-        ansInput.className = 'answer-input correct';
-        resultMsg.className = 'result-msg correct';
-        resultMsg.innerHTML = 'Dung roi! Gioi lam! &#127881;';
-    } else {
-        ansInput.className = 'answer-input wrong';
-        resultMsg.className = 'result-msg wrong';
-        let correctText = correctAnswer.toString();
-        if (currentType === 'div' && correctRemainder > 0) {
-            correctText += ` (du ${correctRemainder})`;
-        }
-        resultMsg.innerHTML = `Chua dung. Dap an: <strong>${correctText}</strong>`;
-    }
-
-    resultMsg.classList.remove('hidden');
-    document.getElementById('btnCheck').classList.add('hidden');
-    document.getElementById('btnSolution').classList.remove('hidden');
-    document.getElementById('btnNext').classList.remove('hidden');
-    updateScore();
-}
-
-function toggleSolution() {
-    const box = document.getElementById('solutionBox');
-    if (box.classList.contains('show')) {
-        box.classList.remove('show');
-        return;
-    }
-    const steps = document.getElementById('solutionSteps');
-    if (currentType === 'mult') {
-        steps.innerHTML = renderMultiplicationSolution(currentA, currentB);
-    } else {
-        steps.innerHTML = renderDivisionSolution(currentA, currentB);
-    }
+function toggleMultSol() {
+    const box = document.getElementById('multSolBox');
+    if (box.classList.contains('show')) { box.classList.remove('show'); return; }
+    document.getElementById('multSolSteps').innerHTML = renderMultSol(currentA, currentB);
     box.classList.add('show');
 }
 
-function updateScore() {
-    document.getElementById('scoreCorrect').textContent = scoreCorrect;
-    document.getElementById('scoreTotal').textContent = scoreTotal;
+function renderMultSol(a, b) {
+    const aS=a.toString(), bS=b.toString(), r=a*b;
+    let h = renderMult(a,b,true) + '<br>';
+    h += '<div style="font-family:Segoe UI,sans-serif;font-size:0.75em;color:#555;line-height:2">';
+    if (bS.length===1) {
+        const bd=parseInt(bS), ds=aS.split('').map(Number).reverse();
+        let carry=0;
+        for(let i=0;i<ds.length;i++){
+            const p=ds[i]*bd+carry, w=p%10, nc=Math.floor(p/10);
+            h+=`<div class="step-explain"><strong>Buoc ${i+1}:</strong> ${bd} &times; ${ds[i]}`;
+            if(carry>0) h+=` + ${carry} (nho)`;
+            h+=` = ${p}, viet <strong>${w}</strong>`;
+            if(nc>0) h+=`, nho <strong>${nc}</strong>`;
+            h+=`</div>`;
+            carry=nc;
+        }
+        if(carry>0) h+=`<div class="step-explain">Viet <strong>${carry}</strong> (nho con lai)</div>`;
+    } else {
+        const b1=parseInt(bS[1]),b0=parseInt(bS[0]),p1=a*b1,p2=a*b0;
+        h+=`<div class="step-explain"><strong>Buoc 1:</strong> ${aS} &times; ${b1} = <strong>${p1}</strong></div>`;
+        h+=`<div class="step-explain"><strong>Buoc 2:</strong> ${aS} &times; ${b0} = <strong>${p2}</strong> (lech trai)</div>`;
+        h+=`<div class="step-explain"><strong>Buoc 3:</strong> ${p1} + ${p2}0 = <strong>${r}</strong></div>`;
+    }
+    h+=`<div style="background:#e8f5e9;padding:10px;border-radius:8px;text-align:center;font-size:1.1em;margin-top:8px"><strong>${aS} &times; ${bS} = ${r}</strong></div>`;
+    h+='</div>';
+    return h;
 }
 
-// Enter key to check or next
+// ============================================================
+//  DIVISION - INTERACTIVE STEP BY STEP
+// ============================================================
+function genDiv() {
+    if (currentSemester === 'hk1') {
+        currentB = randInt(2, 9);
+        currentA = randInt(1000, 9999);
+    } else {
+        currentB = randInt(2, 9);
+        currentA = randInt(1000, 99999);
+    }
+}
+
+function computeDivSteps(a, b) {
+    const digits = a.toString().split('').map(Number);
+    let steps = [];
+    let workingNum = 0;
+    let started = false;
+
+    for (let i = 0; i < digits.length; i++) {
+        workingNum = workingNum * 10 + digits[i];
+
+        if (!started && workingNum < b && i < digits.length - 1) {
+            continue; // first group not enough, take more
+        }
+
+        started = true;
+        const qDigit = Math.floor(workingNum / b);
+        const product = qDigit * b;
+        const remainder = workingNum - product;
+
+        steps.push({
+            takeNum: workingNum,
+            qDigit: qDigit,
+            product: product,
+            remainder: remainder,
+            digitIndex: i,
+            nextDigit: (i < digits.length - 1) ? digits[i + 1] : null
+        });
+
+        workingNum = remainder;
+    }
+    return steps;
+}
+
+function nextDiv() {
+    genDiv();
+    divSteps = computeDivSteps(currentA, currentB);
+    divStepIndex = 0;
+    divSubStep = 0;
+    divQuotientSoFar = '';
+    divWorkRows = [];
+    divNoMistake = true;
+
+    document.getElementById('divDone').classList.add('hidden');
+    document.getElementById('divBtnNext').classList.add('hidden');
+    document.getElementById('divCorrect').textContent = divScoreOk;
+    document.getElementById('divTotal').textContent = divScoreAll;
+
+    renderDivWorkspace();
+    renderStepPanel();
+}
+
+function renderDivWorkspace() {
+    const aStr = currentA.toString();
+    const bStr = currentB.toString();
+
+    let qDisplay = divQuotientSoFar;
+    // Pad quotient placeholder
+    const totalQDigits = divSteps.length;
+    while (qDisplay.length < totalQDigits) qDisplay += '_';
+
+    let html = '<div class="div-frame">';
+
+    // Top: dividend | divisor / quotient
+    html += '<div class="div-top">';
+    html += `<div class="div-dividend">${aStr}</div>`;
+    html += '<div class="div-separator">';
+    html += `<div class="div-divisor">${bStr}</div>`;
+    html += `<div class="div-quotient">${qDisplay}</div>`;
+    html += '</div></div>';
+
+    // Work rows (completed steps)
+    if (divWorkRows.length > 0) {
+        html += '<div class="div-work-area">';
+        for (const row of divWorkRows) {
+            html += row;
+        }
+        html += '</div>';
+    }
+
+    html += '</div>';
+    document.getElementById('divWorkspace').innerHTML = html;
+}
+
+function getIndent(num, aLen) {
+    // Right-align numbers relative to dividend width
+    const numStr = num.toString();
+    const spaces = aLen - numStr.length;
+    return '\u00A0'.repeat(Math.max(0, spaces * 2));
+}
+
+function renderStepPanel() {
+    const panel = document.getElementById('stepPanel');
+    if (divStepIndex >= divSteps.length) {
+        // All steps done!
+        panel.innerHTML = '';
+        finishDiv();
+        return;
+    }
+
+    const step = divSteps[divStepIndex];
+    const stepNum = divStepIndex + 1;
+    const b = currentB;
+    let html = `<h3>Buoc ${stepNum} / ${divSteps.length}</h3>`;
+
+    if (divSubStep === 0) {
+        // Ask: takeNum ÷ b = ?
+        html += `<div class="step-question">`;
+        html += `<strong>${step.takeNum}</strong> chia <strong>${b}</strong> duoc`;
+        html += ` <input type="number" class="step-input" id="stepInput" placeholder="?">`;
+        html += `</div>`;
+        html += `<div class="step-hint" id="stepHint">Goi y: ${step.takeNum} &divide; ${b} = ?</div>`;
+        html += `<div class="btn-row"><button class="btn btn-green" onclick="checkDivStep()">Kiem tra</button>`;
+        html += `<button class="btn btn-back" onclick="showHint()" style="font-size:0.85em">Goi y</button></div>`;
+    } else if (divSubStep === 1) {
+        // Ask: qDigit × b = ?
+        html += `<div class="step-question">`;
+        html += `<strong>${step.qDigit}</strong> nhan <strong>${b}</strong> bang`;
+        html += ` <input type="number" class="step-input" id="stepInput" placeholder="?">`;
+        html += `</div>`;
+        html += `<div class="step-hint" id="stepHint">Goi y: ${step.qDigit} &times; ${b} = ?</div>`;
+        html += `<div class="btn-row"><button class="btn btn-green" onclick="checkDivStep()">Kiem tra</button>`;
+        html += `<button class="btn btn-back" onclick="showHint()" style="font-size:0.85em">Goi y</button></div>`;
+    } else if (divSubStep === 2) {
+        // Ask: takeNum - product = ?
+        html += `<div class="step-question">`;
+        html += `<strong>${step.takeNum}</strong> tru <strong>${step.product}</strong> bang`;
+        html += ` <input type="number" class="step-input" id="stepInput" placeholder="?">`;
+        html += `</div>`;
+        html += `<div class="step-hint" id="stepHint">Goi y: ${step.takeNum} - ${step.product} = ?</div>`;
+        html += `<div class="btn-row"><button class="btn btn-green" onclick="checkDivStep()">Kiem tra</button>`;
+        html += `<button class="btn btn-back" onclick="showHint()" style="font-size:0.85em">Goi y</button></div>`;
+    }
+
+    panel.innerHTML = html;
+    setTimeout(() => {
+        const inp = document.getElementById('stepInput');
+        if (inp) inp.focus();
+    }, 50);
+}
+
+function showHint() {
+    const h = document.getElementById('stepHint');
+    if (h) h.classList.add('show');
+}
+
+function checkDivStep() {
+    const inp = document.getElementById('stepInput');
+    if (!inp) return;
+    const val = parseInt(inp.value);
+    if (isNaN(val)) { inp.focus(); return; }
+
+    const step = divSteps[divStepIndex];
+    let expected;
+
+    if (divSubStep === 0) expected = step.qDigit;
+    else if (divSubStep === 1) expected = step.product;
+    else expected = step.remainder;
+
+    if (val === expected) {
+        inp.className = 'step-input correct';
+        setTimeout(() => advanceDivStep(), 400);
+    } else {
+        inp.className = 'step-input wrong';
+        divNoMistake = false;
+        // Show hint after wrong answer
+        showHint();
+        setTimeout(() => {
+            inp.className = 'step-input';
+            inp.value = '';
+            inp.focus();
+        }, 600);
+    }
+}
+
+function advanceDivStep() {
+    const step = divSteps[divStepIndex];
+    const aLen = currentA.toString().length;
+
+    if (divSubStep === 0) {
+        // Quotient digit confirmed - add to quotient display
+        divQuotientSoFar += step.qDigit.toString();
+        renderDivWorkspace();
+        divSubStep = 1;
+        renderStepPanel();
+    } else if (divSubStep === 1) {
+        // Product confirmed - add product row to work area
+        const pStr = step.product.toString();
+        const tStr = step.takeNum.toString();
+        // Align product under takeNum
+        const indent = '\u00A0'.repeat(Math.max(0, (tStr.length - pStr.length)) * 1);
+        let row = `<div class="div-work-row"><div class="div-work-num div-completed-sub">${indent}${pStr}</div></div>`;
+        row += `<div class="div-work-row"><div class="div-work-num"><span class="div-work-line" style="width:${Math.max(tStr.length, pStr.length) * 0.7}em">&nbsp;</span></div></div>`;
+        divWorkRows.push(row);
+        renderDivWorkspace();
+        divSubStep = 2;
+        renderStepPanel();
+    } else {
+        // Remainder confirmed - add remainder row, prepare next step
+        const rStr = step.remainder.toString();
+        let displayStr = rStr;
+
+        if (step.nextDigit !== null) {
+            // Show remainder with next digit brought down
+            displayStr = (step.remainder === 0 ? '' : rStr) + '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
+            if (step.remainder === 0) displayStr = '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
+            // Actually show the full next working number
+            const nextNum = step.remainder * 10 + step.nextDigit;
+            displayStr = nextNum.toString().slice(0, -1) + '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
+            if (nextNum < 10) displayStr = '<strong style="color:#e91e63">' + step.nextDigit + '</strong>';
+        }
+
+        let row = `<div class="div-work-row"><div class="div-work-num div-completed-num">${displayStr}</div></div>`;
+        divWorkRows.push(row);
+        renderDivWorkspace();
+
+        // Move to next step
+        divStepIndex++;
+        divSubStep = 0;
+        renderStepPanel();
+    }
+}
+
+function finishDiv() {
+    divScoreAll++;
+    const quotient = Math.floor(currentA / currentB);
+    const remainder = currentA % currentB;
+    let msg = '';
+
+    if (divNoMistake) {
+        divScoreOk++;
+        msg = `Gioi lam! Khong sai buoc nao! &#127881;<br>`;
+    } else {
+        msg = `Hoan thanh! Lan sau co gang hon nhe! &#128170;<br>`;
+    }
+
+    msg += `<span style="font-size:0.8em">${currentA} : ${currentB} = <strong>${quotient}</strong>`;
+    if (remainder > 0) msg += ` (du <strong>${remainder}</strong>)`;
+    msg += `</span>`;
+
+    // Verification
+    msg += `<br><span style="font-size:0.65em;color:#888">Thu lai: ${quotient} &times; ${currentB} = ${quotient * currentB}`;
+    if (remainder > 0) msg += ` + ${remainder} = ${currentA}`;
+    msg += ` &#10004;</span>`;
+
+    document.getElementById('divDone').innerHTML = msg;
+    document.getElementById('divDone').classList.remove('hidden');
+    document.getElementById('divBtnNext').classList.remove('hidden');
+    document.getElementById('divCorrect').textContent = divScoreOk;
+    document.getElementById('divTotal').textContent = divScoreAll;
+
+    // Add final remainder to workspace if > 0
+    if (remainder > 0) {
+        // Already shown in last step
+    }
+}
+
+// Enter key handler
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        if (!answered) checkAnswer();
-        else nextProblem();
+    if (e.key !== 'Enter') return;
+    // Check which page is visible
+    if (!document.getElementById('multPage').classList.contains('hidden')) {
+        if (!multAnswered) checkMult();
+        else nextMult();
+    }
+    if (!document.getElementById('divPage').classList.contains('hidden')) {
+        const inp = document.getElementById('stepInput');
+        if (inp) {
+            checkDivStep();
+        } else {
+            // Done state - go next
+            if (!document.getElementById('divBtnNext').classList.contains('hidden')) nextDiv();
+        }
     }
 });
 </script>
